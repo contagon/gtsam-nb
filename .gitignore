@@ -1,0 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oci]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Cpp files
+compile_commands.json
+.clangd/
+
+# IDE files
+.vscode/
