@@ -33,9 +33,9 @@ using namespace std;
 
 namespace nb = nanobind;
 
-// void base(nb::module_ &);
-// void inference(nb::module_ &);
-// void discrete(nb::module_ &);
+void base(nb::module_ &);
+void inference(nb::module_ &);
+void discrete(nb::module_ &);
 // void geometry(nb::module_ &);
 // void linear(nb::module_ &);
 // void nonlinear(nb::module_ &);
@@ -57,9 +57,9 @@ NB_MODULE(_core, m_) {
 
   bind_specializations(m_);
 
-  //   base(m_);
-  //   inference(m_);
-  //   discrete(m_);
+  base(m_);
+  inference(m_);
+  discrete(m_);
   //   geometry(m_);
   //   linear(m_);
   //   nonlinear(m_);

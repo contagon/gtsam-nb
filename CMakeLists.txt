@@ -26,8 +26,8 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/borglab/gtsam.git
     GIT_TAG        4.2.0
     GIT_SHALLOW TRUE
-    GIT_PROGRESS   TRUE
-    FIND_PACKAGE_ARGS # uses find_package first, git if it fails
+    # GIT_PROGRESS   TRUE
+    # FIND_PACKAGE_ARGS # uses find_package first, git if it fails
 )
 FetchContent_MakeAvailable(GTSAM)
 
@@ -46,7 +46,7 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/wjakob/nanobind
     GIT_TAG v2.9.2
     GIT_SHALLOW TRUE
-    GIT_PROGRESS   TRUE
+    # GIT_PROGRESS   TRUE
     # FIND_PACKAGE_ARGS CONFIG # uses find_package first, git if it fails
     # Should always be found though, provided via skbuild
 )
@@ -54,7 +54,21 @@ FetchContent_MakeAvailable(nanobind)
 
 nanobind_add_module(_core 
     STABLE_ABI NB_STATIC 
-        cpp/gtsam.cpp
+        cpp/main.cpp
+        cpp/base.cpp
+        cpp/inference.cpp
+        cpp/discrete.cpp
+        # cpp/geometry.cpp
+        # cpp/linear.cpp
+        # cpp/nonlinear.cpp
+        # cpp/custom.cpp
+        # cpp/symbolic.cpp
+        # cpp/sam.cpp
+        # cpp/slam.cpp
+        # cpp/sfm.cpp
+        # cpp/navigation.cpp
+        # cpp/basis.cpp
+        # cpp/hybrid.cpp
 )
 target_link_libraries(_core PRIVATE Eigen3::Eigen gtsam)
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})

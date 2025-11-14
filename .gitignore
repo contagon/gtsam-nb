@@ -16,3 +16,6 @@ compile_commands.json
 
 # IDE files
 .vscode/
+
+cpp/preamble
+cpp/specializations
