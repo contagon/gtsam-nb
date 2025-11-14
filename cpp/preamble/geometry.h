@@ -14,10 +14,12 @@
 
 // Support for binding boost::optional types in C++11.
 // https://pybind11.readthedocs.io/en/stable/advanced/cast/stl.html
-namespace pybind11 { namespace detail {
-    template <typename T>
-    struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
-}}
+namespace pybind11 {
+namespace detail {
+template <typename T>
+struct type_caster<boost::optional<T>> : optional_caster<boost::optional<T>> {};
+} // namespace detail
+} // namespace pybind11
 
 PYBIND11_MAKE_OPAQUE(
     std::vector<gtsam::Point2, Eigen::aligned_allocator<gtsam::Point2>>);

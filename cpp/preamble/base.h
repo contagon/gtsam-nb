@@ -15,4 +15,4 @@ PYBIND11_MAKE_OPAQUE(gtsam::IndexPairVector);
 
 PYBIND11_MAKE_OPAQUE(gtsam::IndexPairSet);
 
-PYBIND11_MAKE_OPAQUE(std::vector<gtsam::Matrix>);  // JacobianVector
+PYBIND11_MAKE_OPAQUE(std::vector<gtsam::Matrix>); // JacobianVector
