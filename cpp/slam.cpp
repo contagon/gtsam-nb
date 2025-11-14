@@ -164,13 +164,13 @@ void slam(nb::module_ &m_) {
       // // .def("serialize", [](gtsam::GeneralSFMFactor2<gtsam::Cal3Unified> *self) { return gtsam::serialize(*self); })
       // // .def("deserialize", [](gtsam::GeneralSFMFactor2<gtsam::Cal3Unified> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
       // // .def(nb::pickle([](const gtsam::GeneralSFMFactor2<gtsam::Cal3Unified> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GeneralSFMFactor2<gtsam::Cal3Unified> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
-      nb::enum_<gtsam::LinearizationMode>(m_, "LinearizationMode", nb::arithmetic())
+      nb::enum_<gtsam::LinearizationMode>(m_, "LinearizationMode", nb::is_arithmetic())
       .value("HESSIAN", gtsam::LinearizationMode::HESSIAN)
       .value("IMPLICIT_SCHUR", gtsam::LinearizationMode::IMPLICIT_SCHUR)
       .value("JACOBIAN_Q", gtsam::LinearizationMode::JACOBIAN_Q)
       .value("JACOBIAN_SVD", gtsam::LinearizationMode::JACOBIAN_SVD);
 
-  nb::enum_<gtsam::DegeneracyMode>(m_, "DegeneracyMode", nb::arithmetic())
+  nb::enum_<gtsam::DegeneracyMode>(m_, "DegeneracyMode", nb::is_arithmetic())
       .value("IGNORE_DEGENERACY", gtsam::DegeneracyMode::IGNORE_DEGENERACY)
       .value("ZERO_ON_DEGENERACY", gtsam::DegeneracyMode::ZERO_ON_DEGENERACY)
       .value("HANDLE_INFINITY", gtsam::DegeneracyMode::HANDLE_INFINITY);
@@ -204,14 +204,14 @@ void slam(nb::module_ &m_) {
       .def("equals", [](gtsam::EssentialMatrixConstraint *self, const gtsam::EssentialMatrixConstraint &other, double tol) { return self->equals(other, tol); }, nb::arg("other"), nb::arg("tol"))
       .def("evaluateError", [](gtsam::EssentialMatrixConstraint *self, const gtsam::Pose3 &p1, const gtsam::Pose3 &p2) { return self->evaluateError(p1, p2); }, nb::arg("p1"), nb::arg("p2"))
       .def("measured", [](gtsam::EssentialMatrixConstraint *self) { return self->measured(); });
-  nb::enum_<gtsam::NoiseFormat>(m_, "NoiseFormat", nb::arithmetic())
+  nb::enum_<gtsam::NoiseFormat>(m_, "NoiseFormat", nb::is_arithmetic())
       .value("NoiseFormatG2O", gtsam::NoiseFormat::NoiseFormatG2O)
       .value("NoiseFormatTORO", gtsam::NoiseFormat::NoiseFormatTORO)
       .value("NoiseFormatGRAPH", gtsam::NoiseFormat::NoiseFormatGRAPH)
       .value("NoiseFormatCOV", gtsam::NoiseFormat::NoiseFormatCOV)
       .value("NoiseFormatAUTO", gtsam::NoiseFormat::NoiseFormatAUTO);
 
-  nb::enum_<gtsam::KernelFunctionType>(m_, "KernelFunctionType", nb::arithmetic())
+  nb::enum_<gtsam::KernelFunctionType>(m_, "KernelFunctionType", nb::is_arithmetic())
       .value("KernelFunctionTypeNONE", gtsam::KernelFunctionType::KernelFunctionTypeNONE)
       .value("KernelFunctionTypeHUBER", gtsam::KernelFunctionType::KernelFunctionTypeHUBER)
       .value("KernelFunctionTypeTUKEY", gtsam::KernelFunctionType::KernelFunctionTypeTUKEY);
@@ -268,7 +268,7 @@ void slam(nb::module_ &m_) {
       .def(nb::init<size_t, size_t, const gtsam::SO4 &>(), nb::arg("key1"), nb::arg("key2"), nb::arg("R12"))
       .def(nb::init<size_t, size_t, const gtsam::SO4 &, boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key1"), nb::arg("key2"), nb::arg("R12"), nb::arg("model"))
       .def("evaluateError", [](gtsam::FrobeniusBetweenFactor<gtsam::SO4> *self, const gtsam::SO4 &R1, const gtsam::SO4 &R2) { return self->evaluateError(R1, R2); }, nb::arg("R1"), nb::arg("R2"));
-  pybind11::module m_lago = m_.def_submodule("lago", "lago submodule");
+  auto m_lago = m_.def_submodule("lago", "lago submodule");
 
   m_lago.def("initialize", [](const gtsam::NonlinearFactorGraph &graph, bool useOdometricPath) { return gtsam::lago::initialize(graph, useOdometricPath); }, nb::arg("graph"), nb::arg("useOdometricPath") = true);
   m_lago.def("initialize", [](const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &initialGuess) { return gtsam::lago::initialize(graph, initialGuess); }, nb::arg("graph"), nb::arg("initialGuess"));

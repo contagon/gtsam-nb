@@ -200,7 +200,7 @@ void sfm(nb::module_ &m_) {
       .def("run", [](gtsam::TranslationRecovery *self, const gtsam::BinaryMeasurementsUnit3 &relativeTranslations, const double scale, const gtsam::BinaryMeasurementsPoint3 &betweenTranslations) { return self->run(relativeTranslations, scale, betweenTranslations); }, nb::arg("relativeTranslations"), nb::arg("scale"), nb::arg("betweenTranslations"))
       .def("run", [](gtsam::TranslationRecovery *self, const gtsam::BinaryMeasurementsUnit3 &relativeTranslations, const double scale) { return self->run(relativeTranslations, scale); }, nb::arg("relativeTranslations"), nb::arg("scale"))
       .def("run", [](gtsam::TranslationRecovery *self, const gtsam::BinaryMeasurementsUnit3 &relativeTranslations) { return self->run(relativeTranslations); }, nb::arg("relativeTranslations"));
-  pybind11::module m_gtsfm = m_.def_submodule("gtsfm", "gtsfm submodule");
+  auto m_gtsfm = m_.def_submodule("gtsfm", "gtsfm submodule");
 
   nb::class_<gtsam::gtsfm::Keypoints>(m_gtsfm, "Keypoints")
       .def(nb::init<const Eigen::MatrixX2d &>(), nb::arg("coordinates"))

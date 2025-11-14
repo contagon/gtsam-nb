@@ -58,10 +58,10 @@ nanobind_add_module(_core
         cpp/base.cpp
         cpp/inference.cpp
         cpp/discrete.cpp
-        # cpp/geometry.cpp
-        # cpp/linear.cpp
-        # cpp/nonlinear.cpp
-        # cpp/custom.cpp
+        cpp/geometry.cpp
+        cpp/linear.cpp
+        cpp/nonlinear.cpp
+        cpp/custom.cpp
         # cpp/symbolic.cpp
         # cpp/sam.cpp
         # cpp/slam.cpp

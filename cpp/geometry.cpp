@@ -466,12 +466,12 @@ void geometry(nb::module_ &m_) {
       .def("uncalibrate", [](gtsam::Cal3DS2_Base *self, const gtsam::Point2 &p) { return self->uncalibrate(p); }, nb::arg("p"))
       .def("uncalibrate", [](gtsam::Cal3DS2_Base *self, const gtsam::Point2 &p, Eigen::Ref<Eigen::MatrixXd> Dcal, Eigen::Ref<Eigen::MatrixXd> Dp) { return self->uncalibrate(p, Dcal, Dp); }, nb::arg("p"), nb::arg("Dcal"), nb::arg("Dp"))
       .def("calibrate", [](gtsam::Cal3DS2_Base *self, const gtsam::Point2 &p) { return self->calibrate(p); }, nb::arg("p"))
-      .def("calibrate", [](gtsam::Cal3DS2_Base *self, const gtsam::Point2 &p, Eigen::Ref<Eigen::MatrixXd> Dcal, Eigen::Ref<Eigen::MatrixXd> Dp) { return self->calibrate(p, Dcal, Dp); }, nb::arg("p"), nb::arg("Dcal"), nb::arg("Dp"))
-      // // .def("serialize", [](gtsam::Cal3DS2_Base *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::Cal3DS2_Base *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::Cal3DS2_Base &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::Cal3DS2_Base obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("calibrate", [](gtsam::Cal3DS2_Base *self, const gtsam::Point2 &p, Eigen::Ref<Eigen::MatrixXd> Dcal, Eigen::Ref<Eigen::MatrixXd> Dp) { return self->calibrate(p, Dcal, Dp); }, nb::arg("p"), nb::arg("Dcal"), nb::arg("Dp"));
+  // // .def("serialize", [](gtsam::Cal3DS2_Base *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::Cal3DS2_Base *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::Cal3DS2_Base &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::Cal3DS2_Base obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::Cal3DS2, gtsam::Cal3DS2_Base>(m_, "Cal3DS2")
+  nb::class_<gtsam::Cal3DS2, gtsam::Cal3DS2_Base>(m_, "Cal3DS2")
       .def(nb::init<>())
       .def(nb::init<double, double, double, double, double, double, double>(), nb::arg("fx"), nb::arg("fy"), nb::arg("s"), nb::arg("u0"), nb::arg("v0"), nb::arg("k1"), nb::arg("k2"))
       .def(nb::init<double, double, double, double, double, double, double, double, double>(), nb::arg("fx"), nb::arg("fy"), nb::arg("s"), nb::arg("u0"), nb::arg("v0"), nb::arg("k1"), nb::arg("k2"), nb::arg("p1"), nb::arg("p2"))
@@ -692,7 +692,7 @@ void geometry(nb::module_ &m_) {
       .def_static("BehindCamera", []() { return gtsam::TriangulationResult::BehindCamera(); })
       .def_rw("status", &gtsam::TriangulationResult::status);
 
-  nb::enum_<gtsam::TriangulationResult::Status>(triangulationresult, "Status", nb::arithmetic())
+  nb::enum_<gtsam::TriangulationResult::Status>(triangulationresult, "Status", nb::is_arithmetic())
       .value("VALID", gtsam::TriangulationResult::Status::VALID)
       .value("DEGENERATE", gtsam::TriangulationResult::Status::DEGENERATE)
       .value("BEHIND_CAMERA", gtsam::TriangulationResult::Status::BEHIND_CAMERA)
@@ -707,7 +707,7 @@ void geometry(nb::module_ &m_) {
       .def_rw("dynamicOutlierRejectionThreshold", &gtsam::TriangulationParameters::dynamicOutlierRejectionThreshold)
       .def_rw("noiseModel", &gtsam::TriangulationParameters::noiseModel);
 
-  nb::class_<gtsam::PinholeCamera<gtsam::Cal3_S2>, boost::shared_ptr<gtsam::PinholeCamera<gtsam::Cal3_S2>>>(m_, "PinholeCameraCal3_S2")
+  nb::class_<gtsam::PinholeCamera<gtsam::Cal3_S2>>(m_, "PinholeCameraCal3_S2")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholeCamera<gtsam::Cal3_S2>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -742,7 +742,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholeCamera<gtsam::Cal3_S2>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholeCamera<gtsam::Cal3_S2>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholeCamera<gtsam::Cal3DS2>, boost::shared_ptr<gtsam::PinholeCamera<gtsam::Cal3DS2>>>(m_, "PinholeCameraCal3DS2")
+  nb::class_<gtsam::PinholeCamera<gtsam::Cal3DS2>>(m_, "PinholeCameraCal3DS2")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholeCamera<gtsam::Cal3DS2>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -777,7 +777,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholeCamera<gtsam::Cal3DS2>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholeCamera<gtsam::Cal3DS2>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Unified>, boost::shared_ptr<gtsam::PinholeCamera<gtsam::Cal3Unified>>>(m_, "PinholeCameraCal3Unified")
+  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Unified>>(m_, "PinholeCameraCal3Unified")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholeCamera<gtsam::Cal3Unified>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -812,7 +812,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholeCamera<gtsam::Cal3Unified>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholeCamera<gtsam::Cal3Unified>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Bundler>, boost::shared_ptr<gtsam::PinholeCamera<gtsam::Cal3Bundler>>>(m_, "PinholeCameraCal3Bundler")
+  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Bundler>>(m_, "PinholeCameraCal3Bundler")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholeCamera<gtsam::Cal3Bundler>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -847,7 +847,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholeCamera<gtsam::Cal3Bundler>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholeCamera<gtsam::Cal3Bundler>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Fisheye>, boost::shared_ptr<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>>(m_, "PinholeCameraCal3Fisheye")
+  nb::class_<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>(m_, "PinholeCameraCal3Fisheye")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholeCamera<gtsam::Cal3Fisheye>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -882,7 +882,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholeCamera<gtsam::Cal3Fisheye>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholeCamera<gtsam::Cal3Fisheye>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholePose<gtsam::Cal3_S2>, boost::shared_ptr<gtsam::PinholePose<gtsam::Cal3_S2>>>(m_, "PinholePoseCal3_S2")
+  nb::class_<gtsam::PinholePose<gtsam::Cal3_S2>>(m_, "PinholePoseCal3_S2")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholePose<gtsam::Cal3_S2>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -915,7 +915,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholePose<gtsam::Cal3_S2>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholePose<gtsam::Cal3_S2>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholePose<gtsam::Cal3DS2>, boost::shared_ptr<gtsam::PinholePose<gtsam::Cal3DS2>>>(m_, "PinholePoseCal3DS2")
+  nb::class_<gtsam::PinholePose<gtsam::Cal3DS2>>(m_, "PinholePoseCal3DS2")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholePose<gtsam::Cal3DS2>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -948,7 +948,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholePose<gtsam::Cal3DS2>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholePose<gtsam::Cal3DS2>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholePose<gtsam::Cal3Unified>, boost::shared_ptr<gtsam::PinholePose<gtsam::Cal3Unified>>>(m_, "PinholePoseCal3Unified")
+  nb::class_<gtsam::PinholePose<gtsam::Cal3Unified>>(m_, "PinholePoseCal3Unified")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholePose<gtsam::Cal3Unified>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -981,7 +981,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholePose<gtsam::Cal3Unified>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholePose<gtsam::Cal3Unified>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholePose<gtsam::Cal3Bundler>, boost::shared_ptr<gtsam::PinholePose<gtsam::Cal3Bundler>>>(m_, "PinholePoseCal3Bundler")
+  nb::class_<gtsam::PinholePose<gtsam::Cal3Bundler>>(m_, "PinholePoseCal3Bundler")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholePose<gtsam::Cal3Bundler>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -1014,7 +1014,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholePose<gtsam::Cal3Bundler>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholePose<gtsam::Cal3Bundler>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::PinholePose<gtsam::Cal3Fisheye>, boost::shared_ptr<gtsam::PinholePose<gtsam::Cal3Fisheye>>>(m_, "PinholePoseCal3Fisheye")
+  nb::class_<gtsam::PinholePose<gtsam::Cal3Fisheye>>(m_, "PinholePoseCal3Fisheye")
       .def(nb::init<>())
       .def(nb::init<const gtsam::PinholePose<gtsam::Cal3Fisheye>>(), nb::arg("other"))
       .def(nb::init<const gtsam::Pose3 &>(), nb::arg("pose"))
@@ -1047,7 +1047,7 @@ void geometry(nb::module_ &m_) {
       .def_static("Dim", []() { return gtsam::PinholePose<gtsam::Cal3Fisheye>::Dim(); })
       .def_static("Project", [](const gtsam::Point3 &cameraPoint) { return gtsam::PinholePose<gtsam::Cal3Fisheye>::Project(cameraPoint); }, nb::arg("cameraPoint"));
 
-  nb::class_<gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double>, boost::shared_ptr<gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double>>>(m_, "BearingRange2D")
+  nb::class_<gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double>>(m_, "BearingRange2D")
       .def(nb::init<const gtsam::Rot2 &, const double &>(), nb::arg("b"), nb::arg("r"))
       .def("bearing", [](gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> *self) { return self->bearing(); })
       .def("range", [](gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double> *self) { return self->range(); })
@@ -1060,7 +1060,7 @@ void geometry(nb::module_ &m_) {
       .def_static("MeasureBearing", [](const gtsam::Pose2 &pose, const gtsam::Point2 &point) { return gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double>::MeasureBearing(pose, point); }, nb::arg("pose"), nb::arg("point"))
       .def_static("MeasureRange", [](const gtsam::Pose2 &pose, const gtsam::Point2 &point) { return gtsam::BearingRange<gtsam::Pose2, gtsam::Point2, gtsam::Rot2, double>::MeasureRange(pose, point); }, nb::arg("pose"), nb::arg("point"));
 
-  nb::class_<gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double>, boost::shared_ptr<gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double>>>(m_, "BearingRangePose2")
+  nb::class_<gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double>>(m_, "BearingRangePose2")
       .def(nb::init<const gtsam::Rot2 &, const double &>(), nb::arg("b"), nb::arg("r"))
       .def("bearing", [](gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double> *self) { return self->bearing(); })
       .def("range", [](gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double> *self) { return self->range(); })
@@ -1073,7 +1073,7 @@ void geometry(nb::module_ &m_) {
       .def_static("MeasureBearing", [](const gtsam::Pose2 &pose, const gtsam::Pose2 &point) { return gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double>::MeasureBearing(pose, point); }, nb::arg("pose"), nb::arg("point"))
       .def_static("MeasureRange", [](const gtsam::Pose2 &pose, const gtsam::Pose2 &point) { return gtsam::BearingRange<gtsam::Pose2, gtsam::Pose2, gtsam::Rot2, double>::MeasureRange(pose, point); }, nb::arg("pose"), nb::arg("point"));
 
-  nb::class_<gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double>, boost::shared_ptr<gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double>>>(m_, "BearingRange3D")
+  nb::class_<gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double>>(m_, "BearingRange3D")
       .def(nb::init<const gtsam::Unit3 &, const double &>(), nb::arg("b"), nb::arg("r"))
       .def("bearing", [](gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double> *self) { return self->bearing(); })
       .def("range", [](gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double> *self) { return self->range(); })
@@ -1086,7 +1086,7 @@ void geometry(nb::module_ &m_) {
       .def_static("MeasureBearing", [](const gtsam::Pose3 &pose, const gtsam::Point3 &point) { return gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double>::MeasureBearing(pose, point); }, nb::arg("pose"), nb::arg("point"))
       .def_static("MeasureRange", [](const gtsam::Pose3 &pose, const gtsam::Point3 &point) { return gtsam::BearingRange<gtsam::Pose3, gtsam::Point3, gtsam::Unit3, double>::MeasureRange(pose, point); }, nb::arg("pose"), nb::arg("point"));
 
-  nb::class_<gtsam::BearingRange<gtsam::Pose3, gtsam::Pose3, gtsam::Unit3, double>, boost::shared_ptr<gtsam::BearingRange<gtsam::Pose3, gtsam::Pose3, gtsam::Unit3, double>>>(m_, "BearingRangePose3")
+  nb::class_<gtsam::BearingRange<gtsam::Pose3, gtsam::Pose3, gtsam::Unit3, double>>(m_, "BearingRangePose3")
       .def(nb::init<const gtsam::Unit3 &, const double &>(), nb::arg("b"), nb::arg("r"))
       .def("bearing", [](gtsam::BearingRange<gtsam::Pose3, gtsam::Pose3, gtsam::Unit3, double> *self) { return self->bearing(); })
       .def("range", [](gtsam::BearingRange<gtsam::Pose3, gtsam::Pose3, gtsam::Unit3, double> *self) { return self->range(); })

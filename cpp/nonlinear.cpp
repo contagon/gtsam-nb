@@ -76,7 +76,7 @@ void nonlinear(nb::module_ &m_) {
       .def_rw("scale", &gtsam::GraphvizFormatting::scale)
       .def_rw("mergeSimilarFactors", &gtsam::GraphvizFormatting::mergeSimilarFactors);
 
-  nb::enum_<gtsam::GraphvizFormatting::Axis>(graphvizformatting, "Axis", nb::arithmetic())
+  nb::enum_<gtsam::GraphvizFormatting::Axis>(graphvizformatting, "Axis", nb::is_arithmetic())
       .value("X", gtsam::GraphvizFormatting::Axis::X)
       .value("Y", gtsam::GraphvizFormatting::Axis::Y)
       .value("Z", gtsam::GraphvizFormatting::Axis::Z)
@@ -133,12 +133,12 @@ void nonlinear(nb::module_ &m_) {
       .def("linearize", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values) { return self->linearize(values); }, nb::arg("values"))
       .def("clone", [](gtsam::NonlinearFactorGraph *self) { return self->clone(); })
       .def("dot", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { return self->dot(values, keyFormatter, writer); }, nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting())
-      .def("saveGraph", [](gtsam::NonlinearFactorGraph *self, const string &s, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { self->saveGraph(s, values, keyFormatter, writer); }, nb::arg("s"), nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting())
-      // // .def("serialize", [](gtsam::NonlinearFactorGraph *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearFactorGraph *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearFactorGraph &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearFactorGraph obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("saveGraph", [](gtsam::NonlinearFactorGraph *self, const string &s, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { self->saveGraph(s, values, keyFormatter, writer); }, nb::arg("s"), nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting());
+  // // .def("serialize", [](gtsam::NonlinearFactorGraph *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearFactorGraph *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearFactorGraph &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearFactorGraph obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearFactor, gtsam::Factor>(m_, "NonlinearFactor")
+  nb::class_<gtsam::NonlinearFactor, gtsam::Factor>(m_, "NonlinearFactor")
       .def("print", [](gtsam::NonlinearFactor *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::NonlinearFactor &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;
@@ -504,7 +504,7 @@ void nonlinear(nb::module_ &m_) {
       .def("getVerbosityDL", [](gtsam::DoglegParams *self) { return self->getVerbosityDL(); })
       .def("setDeltaInitial", [](gtsam::DoglegParams *self, double deltaInitial) { self->setDeltaInitial(deltaInitial); }, nb::arg("deltaInitial"))
       .def("setVerbosityDL", [](gtsam::DoglegParams *self, string verbosityDL) { self->setVerbosityDL(verbosityDL); }, nb::arg("verbosityDL"));
-  nb::enum_<gtsam::GncLossType>(m_, "GncLossType", nb::arithmetic())
+  nb::enum_<gtsam::GncLossType>(m_, "GncLossType", nb::is_arithmetic())
       .value("GM", gtsam::GncLossType::GM)
       .value("TLS", gtsam::GncLossType::TLS);
 
@@ -593,7 +593,7 @@ void nonlinear(nb::module_ &m_) {
       .def_rw("findUnusedFactorSlots", &gtsam::ISAM2Params::findUnusedFactorSlots)
       .def_rw("factorization", &gtsam::ISAM2Params::factorization);
 
-  nb::enum_<gtsam::ISAM2Params::Factorization>(isam2params, "Factorization", nb::arithmetic())
+  nb::enum_<gtsam::ISAM2Params::Factorization>(isam2params, "Factorization", nb::is_arithmetic())
       .value("CHOLESKY", gtsam::ISAM2Params::Factorization::CHOLESKY)
       .value("QR", gtsam::ISAM2Params::Factorization::QR);
 
@@ -692,362 +692,362 @@ void nonlinear(nb::module_ &m_) {
       .def("getLinearizationPoint", [](gtsam::NonlinearISAM *self) { return self->getLinearizationPoint(); })
       .def("getFactorsUnsafe", [](gtsam::NonlinearISAM *self) { return self->getFactorsUnsafe(); });
 
-  nb::class_<gtsam::PriorFactor<double>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<double>>>(m_, "PriorFactorDouble")
+  nb::class_<gtsam::PriorFactor<double>, gtsam::NoiseModelFactor>(m_, "PriorFactorDouble")
       .def(nb::init<size_t, const double &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<double> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<double> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<double> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<double> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<double> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<double> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<double> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<double> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<double> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<double> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Vector>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Vector>>>(m_, "PriorFactorVector")
+  nb::class_<gtsam::PriorFactor<gtsam::Vector>, gtsam::NoiseModelFactor>(m_, "PriorFactorVector")
       .def(nb::init<size_t, const gtsam::Vector &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Vector> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Vector> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Vector> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Vector> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Vector> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Vector> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Vector> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Vector> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Vector> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Vector> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Point2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Point2>>>(m_, "PriorFactorPoint2")
+  nb::class_<gtsam::PriorFactor<gtsam::Point2>, gtsam::NoiseModelFactor>(m_, "PriorFactorPoint2")
       .def(nb::init<size_t, const gtsam::Point2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Point2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Point2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Point2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Point2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::StereoPoint2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::StereoPoint2>>>(m_, "PriorFactorStereoPoint2")
+  nb::class_<gtsam::PriorFactor<gtsam::StereoPoint2>, gtsam::NoiseModelFactor>(m_, "PriorFactorStereoPoint2")
       .def(nb::init<size_t, const gtsam::StereoPoint2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Point3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Point3>>>(m_, "PriorFactorPoint3")
+  nb::class_<gtsam::PriorFactor<gtsam::Point3>, gtsam::NoiseModelFactor>(m_, "PriorFactorPoint3")
       .def(nb::init<size_t, const gtsam::Point3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Point3> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Point3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Point3> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Point3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Rot2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Rot2>>>(m_, "PriorFactorRot2")
+  nb::class_<gtsam::PriorFactor<gtsam::Rot2>, gtsam::NoiseModelFactor>(m_, "PriorFactorRot2")
       .def(nb::init<size_t, const gtsam::Rot2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Rot2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Rot2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::SO3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::SO3>>>(m_, "PriorFactorSO3")
+  nb::class_<gtsam::PriorFactor<gtsam::SO3>, gtsam::NoiseModelFactor>(m_, "PriorFactorSO3")
       .def(nb::init<size_t, const gtsam::SO3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::SO3> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::SO3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SO3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SO3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SO3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::SO3> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::SO3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SO3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SO3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SO3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::SO4>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::SO4>>>(m_, "PriorFactorSO4")
+  nb::class_<gtsam::PriorFactor<gtsam::SO4>, gtsam::NoiseModelFactor>(m_, "PriorFactorSO4")
       .def(nb::init<size_t, const gtsam::SO4 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::SO4> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::SO4> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SO4> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SO4> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SO4> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::SO4> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::SO4> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SO4> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SO4> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SO4> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::SOn>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::SOn>>>(m_, "PriorFactorSOn")
+  nb::class_<gtsam::PriorFactor<gtsam::SOn>, gtsam::NoiseModelFactor>(m_, "PriorFactorSOn")
       .def(nb::init<size_t, const gtsam::SOn &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::SOn> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::SOn> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SOn> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SOn> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SOn> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::SOn> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::SOn> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::SOn> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::SOn> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::SOn> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Rot3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Rot3>>>(m_, "PriorFactorRot3")
+  nb::class_<gtsam::PriorFactor<gtsam::Rot3>, gtsam::NoiseModelFactor>(m_, "PriorFactorRot3")
       .def(nb::init<size_t, const gtsam::Rot3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Rot3> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Rot3> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Pose2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Pose2>>>(m_, "PriorFactorPose2")
+  nb::class_<gtsam::PriorFactor<gtsam::Pose2>, gtsam::NoiseModelFactor>(m_, "PriorFactorPose2")
       .def(nb::init<size_t, const gtsam::Pose2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Pose2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Pose2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Pose3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Pose3>>>(m_, "PriorFactorPose3")
+  nb::class_<gtsam::PriorFactor<gtsam::Pose3>, gtsam::NoiseModelFactor>(m_, "PriorFactorPose3")
       .def(nb::init<size_t, const gtsam::Pose3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Pose3> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Pose3> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Unit3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Unit3>>>(m_, "PriorFactorUnit3")
+  nb::class_<gtsam::PriorFactor<gtsam::Unit3>, gtsam::NoiseModelFactor>(m_, "PriorFactorUnit3")
       .def(nb::init<size_t, const gtsam::Unit3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Unit3> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Unit3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Unit3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Unit3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Unit3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Unit3> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Unit3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Unit3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Unit3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Unit3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Cal3_S2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Cal3_S2>>>(m_, "PriorFactorCal3_S2")
+  nb::class_<gtsam::PriorFactor<gtsam::Cal3_S2>, gtsam::NoiseModelFactor>(m_, "PriorFactorCal3_S2")
       .def(nb::init<size_t, const gtsam::Cal3_S2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Cal3DS2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Cal3DS2>>>(m_, "PriorFactorCal3DS2")
+  nb::class_<gtsam::PriorFactor<gtsam::Cal3DS2>, gtsam::NoiseModelFactor>(m_, "PriorFactorCal3DS2")
       .def(nb::init<size_t, const gtsam::Cal3DS2 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3DS2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3DS2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3DS2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3DS2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3DS2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Cal3Bundler>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Cal3Bundler>>>(m_, "PriorFactorCal3Bundler")
+  nb::class_<gtsam::PriorFactor<gtsam::Cal3Bundler>, gtsam::NoiseModelFactor>(m_, "PriorFactorCal3Bundler")
       .def(nb::init<size_t, const gtsam::Cal3Bundler &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Bundler> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Bundler> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Bundler> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Bundler> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Bundler> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Cal3Fisheye>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Cal3Fisheye>>>(m_, "PriorFactorCal3Fisheye")
+  nb::class_<gtsam::PriorFactor<gtsam::Cal3Fisheye>, gtsam::NoiseModelFactor>(m_, "PriorFactorCal3Fisheye")
       .def(nb::init<size_t, const gtsam::Cal3Fisheye &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Fisheye> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Fisheye> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Fisheye> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Fisheye> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Fisheye> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::Cal3Unified>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::Cal3Unified>>>(m_, "PriorFactorCal3Unified")
+  nb::class_<gtsam::PriorFactor<gtsam::Cal3Unified>, gtsam::NoiseModelFactor>(m_, "PriorFactorCal3Unified")
       .def(nb::init<size_t, const gtsam::Cal3Unified &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Unified> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Unified> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::Cal3Unified> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::Cal3Unified> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::Cal3Unified> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::CalibratedCamera>>>(m_, "PriorFactorCalibratedCamera")
+  nb::class_<gtsam::PriorFactor<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor>(m_, "PriorFactorCalibratedCamera")
       .def(nb::init<size_t, const gtsam::CalibratedCamera &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>>>>(m_, "PriorFactorPinholeCameraCal3_S2")
+  nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor>(m_, "PriorFactorPinholeCameraCal3_S2")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3_S2> &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3_S2>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>>>>(m_, "PriorFactorPinholeCameraCal3Bundler")
+  nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor>(m_, "PriorFactorPinholeCameraCal3Bundler")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Bundler>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>>>(m_, "PriorFactorPinholeCameraCal3Fisheye")
+  nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor>(m_, "PriorFactorPinholeCameraCal3Fisheye")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>>>>(m_, "PriorFactorPinholeCameraCal3Unified")
+  nb::class_<gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor>(m_, "PriorFactorPinholeCameraCal3Unified")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Unified> &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::PinholeCamera<gtsam::Cal3Unified>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PriorFactor<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::PriorFactor<gtsam::imuBias::ConstantBias>>>(m_, "PriorFactorConstantBias")
+  nb::class_<gtsam::PriorFactor<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor>(m_, "PriorFactorConstantBias")
       .def(nb::init<size_t, const gtsam::imuBias::ConstantBias &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key"), nb::arg("prior"), nb::arg("noiseModel"))
-      .def("prior", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self) { return self->prior(); })
-      // // .def("serialize", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("prior", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self) { return self->prior(); });
+  // // .def("serialize", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::PriorFactor<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::PriorFactor<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PriorFactor<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Point2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Point2>>>(m_, "NonlinearEqualityPoint2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Point2>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPoint2")
       .def(nb::init<size_t, const gtsam::Point2 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Point2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Point2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Point2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Point2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::StereoPoint2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::StereoPoint2>>>(m_, "NonlinearEqualityStereoPoint2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::StereoPoint2>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityStereoPoint2")
       .def(nb::init<size_t, const gtsam::StereoPoint2 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::StereoPoint2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::StereoPoint2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Point3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Point3>>>(m_, "NonlinearEqualityPoint3")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Point3>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPoint3")
       .def(nb::init<size_t, const gtsam::Point3 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Point3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Point3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Point3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Point3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Rot2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Rot2>>>(m_, "NonlinearEqualityRot2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Rot2>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityRot2")
       .def(nb::init<size_t, const gtsam::Rot2 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Rot2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Rot2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::SO3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::SO3>>>(m_, "NonlinearEqualitySO3")
+  nb::class_<gtsam::NonlinearEquality<gtsam::SO3>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualitySO3")
       .def(nb::init<size_t, const gtsam::SO3 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::SO3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SO3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SO3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SO3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SO3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::SO3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SO3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SO3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SO3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SO3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::SO4>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::SO4>>>(m_, "NonlinearEqualitySO4")
+  nb::class_<gtsam::NonlinearEquality<gtsam::SO4>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualitySO4")
       .def(nb::init<size_t, const gtsam::SO4 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::SO4 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SO4> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SO4> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SO4> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SO4> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::SO4 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SO4> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SO4> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SO4> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SO4> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::SOn>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::SOn>>>(m_, "NonlinearEqualitySOn")
+  nb::class_<gtsam::NonlinearEquality<gtsam::SOn>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualitySOn")
       .def(nb::init<size_t, const gtsam::SOn &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::SOn &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SOn> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SOn> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SOn> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SOn> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::SOn &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::SOn> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::SOn> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::SOn> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::SOn> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Rot3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Rot3>>>(m_, "NonlinearEqualityRot3")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Rot3>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityRot3")
       .def(nb::init<size_t, const gtsam::Rot3 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Rot3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Rot3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Pose2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Pose2>>>(m_, "NonlinearEqualityPose2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Pose2>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPose2")
       .def(nb::init<size_t, const gtsam::Pose2 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Pose2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Pose2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Pose3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Pose3>>>(m_, "NonlinearEqualityPose3")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Pose3>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPose3")
       .def(nb::init<size_t, const gtsam::Pose3 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Pose3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Pose3 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::Cal3_S2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::Cal3_S2>>>(m_, "NonlinearEqualityCal3_S2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::Cal3_S2>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityCal3_S2")
       .def(nb::init<size_t, const gtsam::Cal3_S2 &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::Cal3_S2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::Cal3_S2 &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::CalibratedCamera>>>(m_, "NonlinearEqualityCalibratedCamera")
+  nb::class_<gtsam::NonlinearEquality<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityCalibratedCamera")
       .def(nb::init<size_t, const gtsam::CalibratedCamera &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::CalibratedCamera &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::CalibratedCamera &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>>>>(m_, "NonlinearEqualityPinholeCameraCal3_S2")
+  nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPinholeCameraCal3_S2")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3_S2> &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3_S2> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3_S2> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3_S2>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>>>>(m_, "NonlinearEqualityPinholeCameraCal3Bundler")
+  nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPinholeCameraCal3Bundler")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Bundler>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>>>(m_, "NonlinearEqualityPinholeCameraCal3Fisheye")
+  nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPinholeCameraCal3Fisheye")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>>>>(m_, "NonlinearEqualityPinholeCameraCal3Unified")
+  nb::class_<gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityPinholeCameraCal3Unified")
       .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Unified> &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Unified> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::PinholeCamera<gtsam::Cal3Unified> &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::PinholeCamera<gtsam::Cal3Unified>> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias>>>(m_, "NonlinearEqualityConstantBias")
+  nb::class_<gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor>(m_, "NonlinearEqualityConstantBias")
       .def(nb::init<size_t, const gtsam::imuBias::ConstantBias &>(), nb::arg("j"), nb::arg("feasible"))
-      .def(nb::init<size_t, const gtsam::imuBias::ConstantBias &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"))
-      // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def(nb::init<size_t, const gtsam::imuBias::ConstantBias &, double>(), nb::arg("j"), nb::arg("feasible"), nb::arg("error_gain"));
+  // // .def("serialize", [](gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NonlinearEquality<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::NonlinearEquality2<gtsam::Point2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Point2>>>(m_, "NonlinearEquality2Point2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Point2>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Point2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Point2> *self, const gtsam::Point2 &x1, const gtsam::Point2 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::StereoPoint2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::StereoPoint2>>>(m_, "NonlinearEquality2StereoPoint2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::StereoPoint2>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2StereoPoint2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::StereoPoint2> *self, const gtsam::StereoPoint2 &x1, const gtsam::StereoPoint2 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Point3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Point3>>>(m_, "NonlinearEquality2Point3")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Point3>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Point3")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Point3> *self, const gtsam::Point3 &x1, const gtsam::Point3 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Rot2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Rot2>>>(m_, "NonlinearEquality2Rot2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Rot2>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Rot2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Rot2> *self, const gtsam::Rot2 &x1, const gtsam::Rot2 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::SO3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::SO3>>>(m_, "NonlinearEquality2SO3")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::SO3>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2SO3")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::SO3> *self, const gtsam::SO3 &x1, const gtsam::SO3 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::SO4>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::SO4>>>(m_, "NonlinearEquality2SO4")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::SO4>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2SO4")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::SO4> *self, const gtsam::SO4 &x1, const gtsam::SO4 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::SOn>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::SOn>>>(m_, "NonlinearEquality2SOn")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::SOn>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2SOn")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::SOn> *self, const gtsam::SOn &x1, const gtsam::SOn &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Rot3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Rot3>>>(m_, "NonlinearEquality2Rot3")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Rot3>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Rot3")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Rot3> *self, const gtsam::Rot3 &x1, const gtsam::Rot3 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Pose2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Pose2>>>(m_, "NonlinearEquality2Pose2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Pose2>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Pose2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Pose2> *self, const gtsam::Pose2 &x1, const gtsam::Pose2 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Pose3>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Pose3>>>(m_, "NonlinearEquality2Pose3")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Pose3>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Pose3")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Pose3> *self, const gtsam::Pose3 &x1, const gtsam::Pose3 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::Cal3_S2>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::Cal3_S2>>>(m_, "NonlinearEquality2Cal3_S2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::Cal3_S2>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2Cal3_S2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::Cal3_S2> *self, const gtsam::Cal3_S2 &x1, const gtsam::Cal3_S2 &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::CalibratedCamera>>>(m_, "NonlinearEquality2CalibratedCamera")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::CalibratedCamera>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2CalibratedCamera")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::CalibratedCamera> *self, const gtsam::CalibratedCamera &x1, const gtsam::CalibratedCamera &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3_S2>>>>(m_, "NonlinearEquality2PinholeCameraCal3_S2")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3_S2>>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2PinholeCameraCal3_S2")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3_S2>> *self, const gtsam::PinholeCamera<gtsam::Cal3_S2> &x1, const gtsam::PinholeCamera<gtsam::Cal3_S2> &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Bundler>>>>(m_, "NonlinearEquality2PinholeCameraCal3Bundler")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Bundler>>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2PinholeCameraCal3Bundler")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Bundler>> *self, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &x1, const gtsam::PinholeCamera<gtsam::Cal3Bundler> &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>>>(m_, "NonlinearEquality2PinholeCameraCal3Fisheye")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Fisheye>>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2PinholeCameraCal3Fisheye")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Fisheye>> *self, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &x1, const gtsam::PinholeCamera<gtsam::Cal3Fisheye> &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Unified>>>>(m_, "NonlinearEquality2PinholeCameraCal3Unified")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Unified>>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2PinholeCameraCal3Unified")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::PinholeCamera<gtsam::Cal3Unified>> *self, const gtsam::PinholeCamera<gtsam::Cal3Unified> &x1, const gtsam::PinholeCamera<gtsam::Cal3Unified> &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::NonlinearEquality2<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor, boost::shared_ptr<gtsam::NonlinearEquality2<gtsam::imuBias::ConstantBias>>>(m_, "NonlinearEquality2ConstantBias")
+  nb::class_<gtsam::NonlinearEquality2<gtsam::imuBias::ConstantBias>, gtsam::NoiseModelFactor>(m_, "NonlinearEquality2ConstantBias")
       .def(nb::init<gtsam::Key, gtsam::Key, double>(), nb::arg("key1"), nb::arg("key2"), nb::arg("mu") = 1e4)
       .def("evaluateError", [](gtsam::NonlinearEquality2<gtsam::imuBias::ConstantBias> *self, const gtsam::imuBias::ConstantBias &x1, const gtsam::imuBias::ConstantBias &x2) { return self->evaluateError(x1, x2); }, nb::arg("x1"), nb::arg("x2"));
 
-  nb::class_<gtsam::GncParams<gtsam::GaussNewtonParams>, boost::shared_ptr<gtsam::GncParams<gtsam::GaussNewtonParams>>> gncgaussnewtonparams(m_, "GncGaussNewtonParams");
+  nb::class_<gtsam::GncParams<gtsam::GaussNewtonParams>> gncgaussnewtonparams(m_, "GncGaussNewtonParams");
   gncgaussnewtonparams
       .def(nb::init<const gtsam::GaussNewtonParams &>(), nb::arg("baseOptimizerParams"))
       .def(nb::init<>())
@@ -1074,12 +1074,12 @@ void nonlinear(nb::module_ &m_) {
       .def_rw("knownInliers", &gtsam::GncParams<gtsam::GaussNewtonParams>::knownInliers)
       .def_rw("knownOutliers", &gtsam::GncParams<gtsam::GaussNewtonParams>::knownOutliers);
 
-  nb::enum_<gtsam::GncParams<gtsam::GaussNewtonParams>::Verbosity>(gncgaussnewtonparams, "Verbosity", nb::arithmetic())
+  nb::enum_<gtsam::GncParams<gtsam::GaussNewtonParams>::Verbosity>(gncgaussnewtonparams, "Verbosity", nb::is_arithmetic())
       .value("SILENT", gtsam::GncParams<gtsam::GaussNewtonParams>::Verbosity::SILENT)
       .value("SUMMARY", gtsam::GncParams<gtsam::GaussNewtonParams>::Verbosity::SUMMARY)
       .value("VALUES", gtsam::GncParams<gtsam::GaussNewtonParams>::Verbosity::VALUES);
 
-  nb::class_<gtsam::GncParams<gtsam::LevenbergMarquardtParams>, boost::shared_ptr<gtsam::GncParams<gtsam::LevenbergMarquardtParams>>> gnclmparams(m_, "GncLMParams");
+  nb::class_<gtsam::GncParams<gtsam::LevenbergMarquardtParams>> gnclmparams(m_, "GncLMParams");
   gnclmparams
       .def(nb::init<const gtsam::LevenbergMarquardtParams &>(), nb::arg("baseOptimizerParams"))
       .def(nb::init<>())
@@ -1106,12 +1106,12 @@ void nonlinear(nb::module_ &m_) {
       .def_rw("knownInliers", &gtsam::GncParams<gtsam::LevenbergMarquardtParams>::knownInliers)
       .def_rw("knownOutliers", &gtsam::GncParams<gtsam::LevenbergMarquardtParams>::knownOutliers);
 
-  nb::enum_<gtsam::GncParams<gtsam::LevenbergMarquardtParams>::Verbosity>(gnclmparams, "Verbosity", nb::arithmetic())
+  nb::enum_<gtsam::GncParams<gtsam::LevenbergMarquardtParams>::Verbosity>(gnclmparams, "Verbosity", nb::is_arithmetic())
       .value("SILENT", gtsam::GncParams<gtsam::LevenbergMarquardtParams>::Verbosity::SILENT)
       .value("SUMMARY", gtsam::GncParams<gtsam::LevenbergMarquardtParams>::Verbosity::SUMMARY)
       .value("VALUES", gtsam::GncParams<gtsam::LevenbergMarquardtParams>::Verbosity::VALUES);
 
-  nb::class_<gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>>, boost::shared_ptr<gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>>>>(m_, "GncGaussNewtonOptimizer")
+  nb::class_<gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>>>(m_, "GncGaussNewtonOptimizer")
       .def(nb::init<const gtsam::NonlinearFactorGraph &, const gtsam::Values &, const gtsam::GncParams<gtsam::GaussNewtonParams> &>(), nb::arg("graph"), nb::arg("initialValues"), nb::arg("params"))
       .def("setInlierCostThresholds", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>> *self, const double inth) { self->setInlierCostThresholds(inth); }, nb::arg("inth"))
       .def("getInlierCostThresholds", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>> *self) { return self->getInlierCostThresholds(); })
@@ -1120,7 +1120,7 @@ void nonlinear(nb::module_ &m_) {
       .def("getWeights", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>> *self) { return self->getWeights(); })
       .def("optimize", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::GaussNewtonParams>> *self) { return self->optimize(); });
 
-  nb::class_<gtsam::GncOptimizer<gtsam::GncParams<gtsam::LevenbergMarquardtParams>>, boost::shared_ptr<gtsam::GncOptimizer<gtsam::GncParams<gtsam::LevenbergMarquardtParams>>>>(m_, "GncLMOptimizer")
+  nb::class_<gtsam::GncOptimizer<gtsam::GncParams<gtsam::LevenbergMarquardtParams>>>(m_, "GncLMOptimizer")
       .def(nb::init<const gtsam::NonlinearFactorGraph &, const gtsam::Values &, const gtsam::GncParams<gtsam::LevenbergMarquardtParams> &>(), nb::arg("graph"), nb::arg("initialValues"), nb::arg("params"))
       .def("setInlierCostThresholds", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::LevenbergMarquardtParams>> *self, const double inth) { self->setInlierCostThresholds(inth); }, nb::arg("inth"))
       .def("getInlierCostThresholds", [](gtsam::GncOptimizer<gtsam::GncParams<gtsam::LevenbergMarquardtParams>> *self) { return self->getInlierCostThresholds(); })

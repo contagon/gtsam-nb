@@ -40,7 +40,7 @@ namespace nb = nanobind;
 void navigation(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of navigation";
 
-  pybind11::module m_imuBias = m_.def_submodule("imuBias", "imuBias submodule");
+  auto m_imuBias = m_.def_submodule("imuBias", "imuBias submodule");
 
   nb::class_<gtsam::imuBias::ConstantBias>(m_imuBias, "ConstantBias")
       .def(nb::init<>())

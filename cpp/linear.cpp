@@ -48,7 +48,7 @@ namespace nb = nanobind;
 void linear(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of linear";
 
-  pybind11::module m_noiseModel = m_.def_submodule("noiseModel", "noiseModel submodule");
+  auto m_noiseModel = m_.def_submodule("noiseModel", "noiseModel submodule");
 
   nb::class_<gtsam::noiseModel::Base>(m_noiseModel, "Base")
       .def("print", [](gtsam::noiseModel::Base *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")
@@ -112,7 +112,7 @@ void linear(nb::module_ &m_) {
       // // .def("deserialize", [](gtsam::noiseModel::Unit *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
       // // .def(nb::pickle([](const gtsam::noiseModel::Unit &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Unit obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Create", [](size_t dim) { return gtsam::noiseModel::Unit::Create(dim); }, nb::arg("dim"));
-  pybind11::module m_noiseModel_mEstimator = m_noiseModel.def_submodule("mEstimator", "mEstimator submodule");
+  auto m_noiseModel_mEstimator = m_noiseModel.def_submodule("mEstimator", "mEstimator submodule");
 
   nb::class_<gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Base")
       .def("print", [](gtsam::noiseModel::mEstimator::Base *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")
@@ -298,12 +298,12 @@ void linear(nb::module_ &m_) {
       .def("whiten", [](gtsam::JacobianFactor *self) { return self->whiten(); })
       .def("eliminate", [](gtsam::JacobianFactor *self, const gtsam::Ordering &keys) { return self->eliminate(keys); }, nb::arg("keys"))
       .def("setModel", [](gtsam::JacobianFactor *self, bool anyConstrained, const gtsam::Vector &sigmas) { self->setModel(anyConstrained, sigmas); }, nb::arg("anyConstrained"), nb::arg("sigmas"))
-      .def("get_model", [](gtsam::JacobianFactor *self) { return self->get_model(); })
-      // // .def("serialize", [](gtsam::JacobianFactor *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::JacobianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::JacobianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::JacobianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("get_model", [](gtsam::JacobianFactor *self) { return self->get_model(); });
+  // // .def("serialize", [](gtsam::JacobianFactor *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::JacobianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::JacobianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::JacobianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::HessianFactor, gtsam::GaussianFactor>(m_, "HessianFactor")
+  nb::class_<gtsam::HessianFactor, gtsam::GaussianFactor>(m_, "HessianFactor")
       .def(nb::init<>())
       .def(nb::init<const gtsam::GaussianFactor &>(), nb::arg("factor"))
       .def(nb::init<size_t, const gtsam::Matrix &, const gtsam::Vector &, double>(), nb::arg("j"), nb::arg("G"), nb::arg("g"), nb::arg("f"))
@@ -321,12 +321,12 @@ void linear(nb::module_ &m_) {
       .def("rows", [](gtsam::HessianFactor *self) { return self->rows(); })
       .def("information", [](gtsam::HessianFactor *self) { return self->information(); })
       .def("constantTerm", [](gtsam::HessianFactor *self) { return self->constantTerm(); })
-      .def("linearTerm", [](gtsam::HessianFactor *self) { return self->linearTerm(); })
-      // // .def("serialize", [](gtsam::HessianFactor *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::HessianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::HessianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::HessianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("linearTerm", [](gtsam::HessianFactor *self) { return self->linearTerm(); });
+  // // .def("serialize", [](gtsam::HessianFactor *self) { return gtsam::serialize(*self); })
+  // // .def("deserialize", [](gtsam::HessianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // // .def(nb::pickle([](const gtsam::HessianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::HessianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::GaussianFactorGraph>(m_, "GaussianFactorGraph")
+  nb::class_<gtsam::GaussianFactorGraph>(m_, "GaussianFactorGraph")
       .def(nb::init<>())
       .def(nb::init<const gtsam::GaussianBayesNet &>(), nb::arg("bayesNet"))
       .def(nb::init<const gtsam::GaussianBayesTree &>(), nb::arg("bayesTree"))
@@ -387,12 +387,12 @@ void linear(nb::module_ &m_) {
       .def("hessian", [](gtsam::GaussianFactorGraph *self) { return self->hessian(); })
       .def("hessian", [](gtsam::GaussianFactorGraph *self, const gtsam::Ordering &ordering) { return self->hessian(ordering); }, nb::arg("ordering"))
       .def("dot", [](gtsam::GaussianFactorGraph *self, const gtsam::KeyFormatter &keyFormatter, const gtsam::DotWriter &writer) { return self->dot(keyFormatter, writer); }, nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::DotWriter())
-      .def("saveGraph", [](gtsam::GaussianFactorGraph *self, string s, const gtsam::KeyFormatter &keyFormatter, const gtsam::DotWriter &writer) { self->saveGraph(s, keyFormatter, writer); }, nb::arg("s"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::DotWriter())
-      // // .def("serialize", [](gtsam::GaussianFactorGraph *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::GaussianFactorGraph *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::GaussianFactorGraph &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GaussianFactorGraph obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("saveGraph", [](gtsam::GaussianFactorGraph *self, string s, const gtsam::KeyFormatter &keyFormatter, const gtsam::DotWriter &writer) { self->saveGraph(s, keyFormatter, writer); }, nb::arg("s"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::DotWriter());
+  // .def("serialize", [](gtsam::GaussianFactorGraph *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GaussianFactorGraph *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GaussianFactorGraph &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GaussianFactorGraph obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::GaussianConditional, gtsam::JacobianFactor>(m_, "GaussianConditional")
+  nb::class_<gtsam::GaussianConditional, gtsam::JacobianFactor>(m_, "GaussianConditional")
       .def(nb::init<size_t, const gtsam::Vector &, const gtsam::Matrix &, const boost::shared_ptr<gtsam::noiseModel::Diagonal>>(), nb::arg("key"), nb::arg("d"), nb::arg("R"), nb::arg("sigmas"))
       .def(nb::init<size_t, const gtsam::Vector &, const gtsam::Matrix &, size_t, const gtsam::Matrix &, const boost::shared_ptr<gtsam::noiseModel::Diagonal>>(), nb::arg("key"), nb::arg("d"), nb::arg("R"), nb::arg("name1"), nb::arg("S"), nb::arg("sigmas"))
       .def(nb::init<size_t, const gtsam::Vector &, const gtsam::Matrix &, size_t, const gtsam::Matrix &, size_t, const gtsam::Matrix &, const boost::shared_ptr<gtsam::noiseModel::Diagonal>>(), nb::arg("key"), nb::arg("d"), nb::arg("R"), nb::arg("name1"), nb::arg("S"), nb::arg("name2"), nb::arg("T"), nb::arg("sigmas"))
