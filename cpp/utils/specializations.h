@@ -30,8 +30,8 @@ namespace nb = nanobind;
 
 inline void bind_specializations(nb::module_ &m_) {
   // base.h
-  nb::bind_map<gtsam::IndexPairSetMap>(m_, "IndexPairSetMap");
   nb::bind_vector<gtsam::IndexPairVector>(m_, "IndexPairVector");
+  nb::bind_map<gtsam::IndexPairSetMap>(m_, "IndexPairSetMap");
   nb::bind_vector<std::vector<gtsam::Matrix>>(m_, "JacobianVector");
 
   // basis.h

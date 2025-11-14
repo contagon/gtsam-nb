@@ -3,6 +3,7 @@ These all come from the python/gtsam/preamble/ files.
 
 They are to help make certain STL containers opaque to nanobind so that we can pass things by reference.
 */
+#include <gtsam/discrete/DiscreteValues.h>
 #include <gtsam/geometry/Cal3Bundler.h>
 #include <gtsam/geometry/Cal3DS2.h>
 #include <gtsam/geometry/Cal3Fisheye.h>
@@ -30,6 +31,8 @@ They are to help make certain STL containers opaque to nanobind so that we can p
 
 // base.h
 NB_MAKE_OPAQUE(gtsam::IndexPairVector);
+NB_MAKE_OPAQUE(gtsam::IndexPairSetMap);
+// TODO: Not sure if this should be included...
 NB_MAKE_OPAQUE(gtsam::IndexPairSet);
 NB_MAKE_OPAQUE(std::vector<gtsam::Matrix>);
 
@@ -38,6 +41,7 @@ NB_MAKE_OPAQUE(std::vector<gtsam::Matrix>);
 // custom.h
 
 // discrete.h
+NB_MAKE_OPAQUE(gtsam::DiscreteValues);
 
 // geometry.h
 NB_MAKE_OPAQUE(std::vector<gtsam::Point2, Eigen::aligned_allocator<gtsam::Point2>>);
@@ -62,6 +66,7 @@ NB_MAKE_OPAQUE(std::vector<gtsam::Key>);
 // hybrid.h
 
 // inference.h
+NB_MAKE_OPAQUE(std::map<char, double>);
 
 // linear.h
 
