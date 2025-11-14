@@ -14,7 +14,7 @@ build-dir = "build/{wheel_tag}"
 [tool.uv]
 cache-keys = [
     { file = "pyproject.toml" },
-    { file = "src/**/*.{h,c,hpp,cpp}" },
+    { file = "cpp/**/*.{h,c,hpp,cpp}" },
     { file = "CMakeLists.txt" },
 ]
 
@@ -23,6 +23,4 @@ requires = ["scikit-build-core>=0.10", "nanobind>=2.9.2", "numpy"]
 build-backend = "scikit_build_core.build"
 
 [dependency-groups]
-dev = [
-    "compdb>=0.2.0",
-]
+dev = ["compdb>=0.2.0"]

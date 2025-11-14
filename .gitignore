@@ -12,6 +12,7 @@ wheels/
 # Cpp files
 compile_commands.json
 .clangd/
+.cache/
 
 # IDE files
 .vscode/
