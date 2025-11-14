@@ -1,0 +1,4 @@
+These bindings are released under the simplified BSD license, reproduced in the file 
+LICENSE.BSD in this directory.
+
+Included in this repo is code from both gtsam (original source of bindings) and nanobind (shared_ptr.h bindings) both of which are also released under the simplified BSD license.
