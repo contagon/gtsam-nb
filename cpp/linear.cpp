@@ -20,6 +20,8 @@
 #include <nanobind/operators.h>
 #include <nanobind/stl/string.h>
 
+#include "utils/boost_shared_ptr.h"
+
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/hybrid/HybridValues.h"
 #include "gtsam/linear/ConjugateGradientSolver.h"

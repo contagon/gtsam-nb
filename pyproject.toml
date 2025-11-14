@@ -5,7 +5,9 @@ description = "Add your description here"
 readme = "README.md"
 authors = [{ name = "Easton Potokar", email = "contagon6@gmail.com" }]
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "numpy>2",
+]
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"

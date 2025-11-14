@@ -14,6 +14,7 @@
 
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/map.h>

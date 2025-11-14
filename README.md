@@ -24,8 +24,9 @@ import gtsam
 There's a handful of reasons why I decided to make this (most of which should *hopefully* be resolved when gtsam 4.3 is released):
 
 - As of the writing of this README, `gtsam`'s most recent python release only supports up to python 3.11. This has restricted the python version for a number of my projects.
+- In addition, the current stable `gtsam` on pypi are incompatible with numpy>=2.0.  
 - The `gtsam` python bindings don't include type stubs, making development in an IDE and type checking more difficult.
-- I prefer nanobind over pybind11 for a number of reasons, including 
+- A switch to nanobind over pybind11 for a number of reasons, including 
   - nanobind results in faster compilation, smaller binaries, and a smaller overhead. See [benchmarks](https://nanobind.readthedocs.io/en/latest/benchmark.html#benchmarks) for more details.
   - nanobind has built-in stub generation, make setting up type stubs a cakewalk.
   - Based on my knowledge, nanobind has a more permissive ABI compatibility story than pybind11, which makes it easier to extend `gtsam` with custom C++ code that will just work together. See [here](https://github.com/pybind/pybind11/issues/3793) and [here](https://nanobind.readthedocs.io/en/latest/faq.html#how-can-i-avoid-conflicts-with-other-projects-using-nanobind).

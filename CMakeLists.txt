@@ -74,3 +74,16 @@ target_link_libraries(_core PRIVATE Eigen3::Eigen gtsam)
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
 
 # TODO: Stubs
+nanobind_add_stub(
+  gtsam_stubs
+  INSTALL_TIME
+  MODULE gtsam._core
+  RECURSIVE
+
+  OUTPUT_PATH gtsam
+  OUTPUT
+      gtsam/__init__.pyi
+      gtsam/submodule_1.pyi
+      gtsam/submodule_2/__init__.pyi
+      gtsam/submodule_2/nested.pyi
+)
