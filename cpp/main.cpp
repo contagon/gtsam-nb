@@ -40,13 +40,13 @@ void geometry(nb::module_ &);
 void linear(nb::module_ &);
 void nonlinear(nb::module_ &);
 void custom(nb::module_ &);
-// void symbolic(nb::module_ &);
-// void sam(nb::module_ &);
-// void slam(nb::module_ &);
+void symbolic(nb::module_ &);
+void sam(nb::module_ &);
+void slam(nb::module_ &);
 // void sfm(nb::module_ &);
-// void navigation(nb::module_ &);
-// void basis(nb::module_ &);
-// void hybrid(nb::module_ &);
+void navigation(nb::module_ &);
+void basis(nb::module_ &);
+void hybrid(nb::module_ &);
 
 NB_MODULE(_core, m_) {
   m_.doc() = "nanobind wrapper of gtsam";
@@ -64,13 +64,13 @@ NB_MODULE(_core, m_) {
   linear(m_);
   nonlinear(m_);
   custom(m_);
-  //   symbolic(m_);
-  //   sam(m_);
-  //   slam(m_);
-  //   sfm(m_);
-  //   navigation(m_);
-  //   basis(m_);
-  //   hybrid(m_);
+  symbolic(m_);
+  sam(m_);
+  slam(m_);
+  //   sfm(m_); // TODO: nanobind memory leak in here!
+  navigation(m_);
+  basis(m_);
+  hybrid(m_);
 
   m_.attr("DefaultKeyFormatter") = gtsam::DefaultKeyFormatter;
   nb::class_<gtsam::KeyList>(m_, "KeyList")

@@ -79,89 +79,89 @@ void base(nb::module_ &m_) {
       .def("dim", [](gtsam::Value *self) { return self->dim(); });
 
   nb::class_<gtsam::GenericValue<gtsam::Vector>, gtsam::Value>(m_, "GenericValueVector");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Vector> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Vector> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Vector> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Vector> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Vector> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Vector> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Vector> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Vector> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Matrix>, gtsam::Value>(m_, "GenericValueMatrix");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Matrix> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Matrix> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Matrix> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Matrix> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Matrix> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Matrix> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Matrix> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Matrix> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Point2>, gtsam::Value>(m_, "GenericValuePoint2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Point2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Point2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Point2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Point2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Point2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Point3>, gtsam::Value>(m_, "GenericValuePoint3");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Point3> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Point3> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Point3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Point3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Point3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Rot2>, gtsam::Value>(m_, "GenericValueRot2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Rot2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Rot2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Rot2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Rot2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Rot3>, gtsam::Value>(m_, "GenericValueRot3");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Rot3> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Rot3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Rot3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Rot3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Pose2>, gtsam::Value>(m_, "GenericValuePose2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Pose2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Pose2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Pose2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Pose3>, gtsam::Value>(m_, "GenericValuePose3");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Pose3> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::StereoPoint2>, gtsam::Value>(m_, "GenericValueStereoPoint2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::StereoPoint2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::StereoPoint2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::StereoPoint2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Cal3_S2>, gtsam::Value>(m_, "GenericValueCal3_S2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3_S2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3_S2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3_S2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3_S2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Cal3DS2>, gtsam::Value>(m_, "GenericValueCal3DS2");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3DS2> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3DS2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3DS2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3DS2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3DS2> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3DS2> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3DS2> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3DS2> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Cal3Bundler>, gtsam::Value>(m_, "GenericValueCal3Bundler");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Bundler> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Bundler> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Bundler> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Bundler> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Bundler> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Bundler> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Bundler> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Bundler> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Cal3Fisheye>, gtsam::Value>(m_, "GenericValueCal3Fisheye");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Fisheye> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Fisheye> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Fisheye> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Fisheye> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Fisheye> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Fisheye> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Fisheye> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Fisheye> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::Cal3Unified>, gtsam::Value>(m_, "GenericValueCal3Unified");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Unified> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Unified> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Unified> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Unified> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Cal3Unified> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Cal3Unified> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Cal3Unified> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Cal3Unified> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::EssentialMatrix>, gtsam::Value>(m_, "GenericValueEssentialMatrix");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::EssentialMatrix> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::EssentialMatrix> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::EssentialMatrix> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::EssentialMatrix> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::EssentialMatrix> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::EssentialMatrix> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::EssentialMatrix> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::EssentialMatrix> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::CalibratedCamera>, gtsam::Value>(m_, "GenericValueCalibratedCamera");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::CalibratedCamera> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::CalibratedCamera> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::CalibratedCamera> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::CalibratedCamera> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GenericValue<gtsam::imuBias::ConstantBias>, gtsam::Value>(m_, "GenericValueConstantBias");
-  // // .def("serialize", [](gtsam::GenericValue<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::GenericValue<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::GenericValue<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::GenericValue<gtsam::imuBias::ConstantBias> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   m_.def("isDebugVersion", []() { return gtsam::isDebugVersion(); });
   m_.def("IndexPairSetAsArray", [](gtsam::IndexPairSet &set) { return gtsam::IndexPairSetAsArray(set); }, nb::arg("set"));

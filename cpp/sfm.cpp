@@ -56,9 +56,9 @@ void sfm(nb::module_ &m_) {
       .def(nb::init<>())
       .def(nb::init<const gtsam::Point3 &>(), nb::arg("pt"))
       .def("point3", [](gtsam::SfmTrack *self) { return self->point3(); })
-      // // .def("serialize", [](gtsam::SfmTrack *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::SfmTrack *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::SfmTrack &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::SfmTrack obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::SfmTrack *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::SfmTrack *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::SfmTrack &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::SfmTrack obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("equals", [](gtsam::SfmTrack *self, const gtsam::SfmTrack &expected, double tol) { return self->equals(expected, tol); }, nb::arg("expected"), nb::arg("tol"))
       .def_rw("p", &gtsam::SfmTrack::p)
       .def_rw("r", &gtsam::SfmTrack::r)
@@ -77,9 +77,9 @@ void sfm(nb::module_ &m_) {
       .def("camera", [](gtsam::SfmData *self, size_t idx) { return self->camera(idx); }, nb::arg("idx"))
       .def("generalSfmFactors", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model) { return self->generalSfmFactors(model); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0))
       .def("sfmFactorGraph", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model, size_t fixedCamera, size_t fixedPoint) { return self->sfmFactorGraph(model, fixedCamera, fixedPoint); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0), nb::arg("fixedCamera") = 0, nb::arg("fixedPoint") = 0)
-      // // .def("serialize", [](gtsam::SfmData *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::SfmData *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::SfmData &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::SfmData obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::SfmData *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::SfmData *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::SfmData &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::SfmData obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("equals", [](gtsam::SfmData *self, const gtsam::SfmData &expected, double tol) { return self->equals(expected, tol); }, nb::arg("expected"), nb::arg("tol"))
       .def_static("FromBundlerFile", [](string filename) { return gtsam::SfmData::FromBundlerFile(filename); }, nb::arg("filename"))
       .def_static("FromBalFile", [](string filename) { return gtsam::SfmData::FromBalFile(filename); }, nb::arg("filename"));
@@ -207,21 +207,21 @@ void sfm(nb::module_ &m_) {
       .def_rw("coordinates", &gtsam::gtsfm::Keypoints::coordinates);
 
   m_gtsfm.def("tracksFromPairwiseMatches", [](const gtsam::gtsfm::MatchIndicesMap &matches_dict, const gtsam::gtsfm::KeypointsVector &keypoints_list, bool verbose) { return gtsam::gtsfm::tracksFromPairwiseMatches(matches_dict, keypoints_list, verbose); }, nb::arg("matches_dict"), nb::arg("keypoints_list"), nb::arg("verbose") = false);
-  nb::class_<gtsam::BinaryMeasurement<gtsam::Unit3>, boost::shared_ptr<gtsam::BinaryMeasurement<gtsam::Unit3>>>(m_, "BinaryMeasurementUnit3")
+  nb::class_<gtsam::BinaryMeasurement<gtsam::Unit3>>(m_, "BinaryMeasurementUnit3")
       .def(nb::init<size_t, size_t, const gtsam::Unit3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key1"), nb::arg("key2"), nb::arg("measured"), nb::arg("model"))
       .def("key1", [](gtsam::BinaryMeasurement<gtsam::Unit3> *self) { return self->key1(); })
       .def("key2", [](gtsam::BinaryMeasurement<gtsam::Unit3> *self) { return self->key2(); })
       .def("measured", [](gtsam::BinaryMeasurement<gtsam::Unit3> *self) { return self->measured(); })
       .def("noiseModel", [](gtsam::BinaryMeasurement<gtsam::Unit3> *self) { return self->noiseModel(); });
 
-  nb::class_<gtsam::BinaryMeasurement<gtsam::Rot3>, boost::shared_ptr<gtsam::BinaryMeasurement<gtsam::Rot3>>>(m_, "BinaryMeasurementRot3")
+  nb::class_<gtsam::BinaryMeasurement<gtsam::Rot3>>(m_, "BinaryMeasurementRot3")
       .def(nb::init<size_t, size_t, const gtsam::Rot3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key1"), nb::arg("key2"), nb::arg("measured"), nb::arg("model"))
       .def("key1", [](gtsam::BinaryMeasurement<gtsam::Rot3> *self) { return self->key1(); })
       .def("key2", [](gtsam::BinaryMeasurement<gtsam::Rot3> *self) { return self->key2(); })
       .def("measured", [](gtsam::BinaryMeasurement<gtsam::Rot3> *self) { return self->measured(); })
       .def("noiseModel", [](gtsam::BinaryMeasurement<gtsam::Rot3> *self) { return self->noiseModel(); });
 
-  nb::class_<gtsam::BinaryMeasurement<gtsam::Point3>, boost::shared_ptr<gtsam::BinaryMeasurement<gtsam::Point3>>>(m_, "BinaryMeasurementPoint3")
+  nb::class_<gtsam::BinaryMeasurement<gtsam::Point3>>(m_, "BinaryMeasurementPoint3")
       .def(nb::init<size_t, size_t, const gtsam::Point3 &, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("key1"), nb::arg("key2"), nb::arg("measured"), nb::arg("model"))
       .def("key1", [](gtsam::BinaryMeasurement<gtsam::Point3> *self) { return self->key1(); })
       .def("key2", [](gtsam::BinaryMeasurement<gtsam::Point3> *self) { return self->key2(); })

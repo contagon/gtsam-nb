@@ -62,13 +62,13 @@ nanobind_add_module(_core
         cpp/linear.cpp
         cpp/nonlinear.cpp
         cpp/custom.cpp
-        # cpp/symbolic.cpp
-        # cpp/sam.cpp
-        # cpp/slam.cpp
-        # cpp/sfm.cpp
-        # cpp/navigation.cpp
-        # cpp/basis.cpp
-        # cpp/hybrid.cpp
+        cpp/symbolic.cpp
+        cpp/sam.cpp
+        cpp/slam.cpp
+        cpp/sfm.cpp
+        cpp/navigation.cpp
+        cpp/basis.cpp
+        cpp/hybrid.cpp
 )
 target_link_libraries(_core PRIVATE Eigen3::Eigen gtsam)
 install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})

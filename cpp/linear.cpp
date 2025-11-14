@@ -65,9 +65,9 @@ void linear(nb::module_ &m_) {
       .def("whiten", [](gtsam::noiseModel::Gaussian *self, const gtsam::Vector &v) { return self->whiten(v); }, nb::arg("v"))
       .def("unwhiten", [](gtsam::noiseModel::Gaussian *self, const gtsam::Vector &v) { return self->unwhiten(v); }, nb::arg("v"))
       .def("Whiten", [](gtsam::noiseModel::Gaussian *self, const gtsam::Matrix &H) { return self->Whiten(H); }, nb::arg("H"))
-      // // .def("serialize", [](gtsam::noiseModel::Gaussian *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Gaussian *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Gaussian &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Gaussian obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Gaussian *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Gaussian *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Gaussian &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Gaussian obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Information", [](const gtsam::Matrix &R, bool smart) { return gtsam::noiseModel::Gaussian::Information(R, smart); }, nb::arg("R"), nb::arg("smart") = true)
       .def_static("SqrtInformation", [](const gtsam::Matrix &R, bool smart) { return gtsam::noiseModel::Gaussian::SqrtInformation(R, smart); }, nb::arg("R"), nb::arg("smart") = true)
       .def_static("Covariance", [](const gtsam::Matrix &R, bool smart) { return gtsam::noiseModel::Gaussian::Covariance(R, smart); }, nb::arg("R"), nb::arg("smart") = true);
@@ -77,18 +77,18 @@ void linear(nb::module_ &m_) {
       .def("sigmas", [](gtsam::noiseModel::Diagonal *self) { return self->sigmas(); })
       .def("invsigmas", [](gtsam::noiseModel::Diagonal *self) { return self->invsigmas(); })
       .def("precisions", [](gtsam::noiseModel::Diagonal *self) { return self->precisions(); })
-      // // .def("serialize", [](gtsam::noiseModel::Diagonal *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Diagonal *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Diagonal &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Diagonal obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Diagonal *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Diagonal *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Diagonal &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Diagonal obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Sigmas", [](const gtsam::Vector &sigmas, bool smart) { return gtsam::noiseModel::Diagonal::Sigmas(sigmas, smart); }, nb::arg("sigmas"), nb::arg("smart") = true)
       .def_static("Variances", [](const gtsam::Vector &variances, bool smart) { return gtsam::noiseModel::Diagonal::Variances(variances, smart); }, nb::arg("variances"), nb::arg("smart") = true)
       .def_static("Precisions", [](const gtsam::Vector &precisions, bool smart) { return gtsam::noiseModel::Diagonal::Precisions(precisions, smart); }, nb::arg("precisions"), nb::arg("smart") = true);
 
   nb::class_<gtsam::noiseModel::Constrained, gtsam::noiseModel::Diagonal>(m_noiseModel, "Constrained")
       .def("unit", [](gtsam::noiseModel::Constrained *self) { return self->unit(); })
-      // // .def("serialize", [](gtsam::noiseModel::Constrained *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Constrained *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Constrained &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Constrained obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Constrained *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Constrained *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Constrained &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Constrained obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("MixedSigmas", [](const gtsam::Vector &mu, const gtsam::Vector &sigmas) { return gtsam::noiseModel::Constrained::MixedSigmas(mu, sigmas); }, nb::arg("mu"), nb::arg("sigmas"))
       .def_static("MixedSigmas", [](double m, const gtsam::Vector &sigmas) { return gtsam::noiseModel::Constrained::MixedSigmas(m, sigmas); }, nb::arg("m"), nb::arg("sigmas"))
       .def_static("MixedVariances", [](const gtsam::Vector &mu, const gtsam::Vector &variances) { return gtsam::noiseModel::Constrained::MixedVariances(mu, variances); }, nb::arg("mu"), nb::arg("variances"))
@@ -100,17 +100,17 @@ void linear(nb::module_ &m_) {
 
   nb::class_<gtsam::noiseModel::Isotropic, gtsam::noiseModel::Diagonal>(m_noiseModel, "Isotropic")
       .def("sigma", [](gtsam::noiseModel::Isotropic *self) { return self->sigma(); })
-      // // .def("serialize", [](gtsam::noiseModel::Isotropic *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Isotropic *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Isotropic &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Isotropic obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Isotropic *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Isotropic *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Isotropic &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Isotropic obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Sigma", [](size_t dim, double sigma, bool smart) { return gtsam::noiseModel::Isotropic::Sigma(dim, sigma, smart); }, nb::arg("dim"), nb::arg("sigma"), nb::arg("smart") = true)
       .def_static("Variance", [](size_t dim, double varianace, bool smart) { return gtsam::noiseModel::Isotropic::Variance(dim, varianace, smart); }, nb::arg("dim"), nb::arg("varianace"), nb::arg("smart") = true)
       .def_static("Precision", [](size_t dim, double precision, bool smart) { return gtsam::noiseModel::Isotropic::Precision(dim, precision, smart); }, nb::arg("dim"), nb::arg("precision"), nb::arg("smart") = true);
 
   nb::class_<gtsam::noiseModel::Unit, gtsam::noiseModel::Isotropic>(m_noiseModel, "Unit")
-      // // .def("serialize", [](gtsam::noiseModel::Unit *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Unit *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Unit &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Unit obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Unit *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Unit *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Unit &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Unit obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Create", [](size_t dim) { return gtsam::noiseModel::Unit::Create(dim); }, nb::arg("dim"));
   auto m_noiseModel_mEstimator = m_noiseModel.def_submodule("mEstimator", "mEstimator submodule");
 
@@ -123,90 +123,90 @@ void linear(nb::module_ &m_) {
 
   nb::class_<gtsam::noiseModel::mEstimator::Null, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Null")
       .def(nb::init<>())
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Null *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Null *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Null &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Null obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Null *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Null *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Null &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Null obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Null *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Null *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", []() { return gtsam::noiseModel::mEstimator::Null::Create(); });
 
   nb::class_<gtsam::noiseModel::mEstimator::Fair, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Fair")
       .def(nb::init<double>(), nb::arg("c"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Fair *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Fair *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Fair &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Fair obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Fair *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Fair *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Fair &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Fair obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Fair *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Fair *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double c) { return gtsam::noiseModel::mEstimator::Fair::Create(c); }, nb::arg("c"));
 
   nb::class_<gtsam::noiseModel::mEstimator::Huber, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Huber")
       .def(nb::init<double>(), nb::arg("k"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Huber *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Huber *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Huber &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Huber obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Huber *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Huber *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Huber &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Huber obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Huber *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Huber *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double k) { return gtsam::noiseModel::mEstimator::Huber::Create(k); }, nb::arg("k"));
 
   nb::class_<gtsam::noiseModel::mEstimator::Cauchy, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Cauchy")
       .def(nb::init<double>(), nb::arg("k"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Cauchy *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Cauchy *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Cauchy &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Cauchy obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Cauchy *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Cauchy *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Cauchy &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Cauchy obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Cauchy *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Cauchy *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double k) { return gtsam::noiseModel::mEstimator::Cauchy::Create(k); }, nb::arg("k"));
 
   nb::class_<gtsam::noiseModel::mEstimator::Tukey, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Tukey")
       .def(nb::init<double>(), nb::arg("k"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Tukey *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Tukey *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Tukey &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Tukey obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Tukey *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Tukey *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Tukey &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Tukey obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Tukey *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Tukey *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double k) { return gtsam::noiseModel::mEstimator::Tukey::Create(k); }, nb::arg("k"));
 
   nb::class_<gtsam::noiseModel::mEstimator::Welsch, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "Welsch")
       .def(nb::init<double>(), nb::arg("k"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::Welsch *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::Welsch *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Welsch &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Welsch obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::Welsch *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::Welsch *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::Welsch &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::Welsch obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::Welsch *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::Welsch *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double k) { return gtsam::noiseModel::mEstimator::Welsch::Create(k); }, nb::arg("k"));
 
   nb::class_<gtsam::noiseModel::mEstimator::GemanMcClure, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "GemanMcClure")
       .def(nb::init<double>(), nb::arg("c"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::GemanMcClure *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::GemanMcClure *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::GemanMcClure &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::GemanMcClure obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::GemanMcClure *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::GemanMcClure *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::GemanMcClure &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::GemanMcClure obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::GemanMcClure *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::GemanMcClure *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double c) { return gtsam::noiseModel::mEstimator::GemanMcClure::Create(c); }, nb::arg("c"));
 
   nb::class_<gtsam::noiseModel::mEstimator::DCS, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "DCS")
       .def(nb::init<double>(), nb::arg("c"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::DCS *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::DCS *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::DCS &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::DCS obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::DCS *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::DCS *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::DCS &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::DCS obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::DCS *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::DCS *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double c) { return gtsam::noiseModel::mEstimator::DCS::Create(c); }, nb::arg("c"));
 
   nb::class_<gtsam::noiseModel::mEstimator::L2WithDeadZone, gtsam::noiseModel::mEstimator::Base>(m_noiseModel_mEstimator, "L2WithDeadZone")
       .def(nb::init<double>(), nb::arg("k"))
-      // // .def("serialize", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::L2WithDeadZone &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::L2WithDeadZone obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::mEstimator::L2WithDeadZone &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::mEstimator::L2WithDeadZone obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("weight", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self, double error) { return self->weight(error); }, nb::arg("error"))
       .def("loss", [](gtsam::noiseModel::mEstimator::L2WithDeadZone *self, double error) { return self->loss(error); }, nb::arg("error"))
       .def_static("Create", [](double k) { return gtsam::noiseModel::mEstimator::L2WithDeadZone::Create(k); }, nb::arg("k"));
 
   nb::class_<gtsam::noiseModel::Robust, gtsam::noiseModel::Base>(m_noiseModel, "Robust")
       .def(nb::init<const boost::shared_ptr<gtsam::noiseModel::mEstimator::Base>, const boost::shared_ptr<gtsam::noiseModel::Base>>(), nb::arg("robust"), nb::arg("noise"))
-      // // .def("serialize", [](gtsam::noiseModel::Robust *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::noiseModel::Robust *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::noiseModel::Robust &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Robust obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::noiseModel::Robust *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::noiseModel::Robust *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::noiseModel::Robust &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::noiseModel::Robust obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Create", [](const boost::shared_ptr<gtsam::noiseModel::mEstimator::Base> robust, const boost::shared_ptr<gtsam::noiseModel::Base> noise) { return gtsam::noiseModel::Robust::Create(robust, noise); }, nb::arg("robust"), nb::arg("noise"));
 
   nb::class_<gtsam::Sampler>(m_, "Sampler")
@@ -246,9 +246,9 @@ void linear(nb::module_ &m_) {
       .def("dot", [](gtsam::VectorValues *self, const gtsam::VectorValues &V) { return self->dot(V); }, nb::arg("V"))
       .def("norm", [](gtsam::VectorValues *self) { return self->norm(); })
       .def("squaredNorm", [](gtsam::VectorValues *self) { return self->squaredNorm(); })
-      // // .def("serialize", [](gtsam::VectorValues *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::VectorValues *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::VectorValues &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::VectorValues obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::VectorValues *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::VectorValues *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::VectorValues &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::VectorValues obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("_repr_html_", [](gtsam::VectorValues *self) { return self->html(); })
       .def_static("Zero", [](const gtsam::VectorValues &model) { return gtsam::VectorValues::Zero(model); }, nb::arg("model"));
 
@@ -299,9 +299,9 @@ void linear(nb::module_ &m_) {
       .def("eliminate", [](gtsam::JacobianFactor *self, const gtsam::Ordering &keys) { return self->eliminate(keys); }, nb::arg("keys"))
       .def("setModel", [](gtsam::JacobianFactor *self, bool anyConstrained, const gtsam::Vector &sigmas) { self->setModel(anyConstrained, sigmas); }, nb::arg("anyConstrained"), nb::arg("sigmas"))
       .def("get_model", [](gtsam::JacobianFactor *self) { return self->get_model(); });
-  // // .def("serialize", [](gtsam::JacobianFactor *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::JacobianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::JacobianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::JacobianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::JacobianFactor *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::JacobianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::JacobianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::JacobianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::HessianFactor, gtsam::GaussianFactor>(m_, "HessianFactor")
       .def(nb::init<>())
@@ -322,9 +322,9 @@ void linear(nb::module_ &m_) {
       .def("information", [](gtsam::HessianFactor *self) { return self->information(); })
       .def("constantTerm", [](gtsam::HessianFactor *self) { return self->constantTerm(); })
       .def("linearTerm", [](gtsam::HessianFactor *self) { return self->linearTerm(); });
-  // // .def("serialize", [](gtsam::HessianFactor *self) { return gtsam::serialize(*self); })
-  // // .def("deserialize", [](gtsam::HessianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-  // // .def(nb::pickle([](const gtsam::HessianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::HessianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+  // .def("serialize", [](gtsam::HessianFactor *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::HessianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::HessianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::HessianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
   nb::class_<gtsam::GaussianFactorGraph>(m_, "GaussianFactorGraph")
       .def(nb::init<>())
@@ -420,9 +420,9 @@ void linear(nb::module_ &m_) {
       .def("R", [](gtsam::GaussianConditional *self) { return self->R(); })
       .def("S", [](gtsam::GaussianConditional *self) { return self->S(); })
       .def("d", [](gtsam::GaussianConditional *self) { return self->d(); })
-      // // .def("serialize", [](gtsam::GaussianConditional *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::GaussianConditional *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::GaussianConditional &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GaussianConditional obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::GaussianConditional *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::GaussianConditional *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::GaussianConditional &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GaussianConditional obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def("logProbability", [](gtsam::GaussianConditional *self, const gtsam::HybridValues &x) { return self->logProbability(x); }, nb::arg("x"))
       .def("evaluate", [](gtsam::GaussianConditional *self, const gtsam::HybridValues &x) { return self->evaluate(x); }, nb::arg("x"))
       .def("error", [](gtsam::GaussianConditional *self, const gtsam::HybridValues &x) { return self->error(x); }, nb::arg("x"))

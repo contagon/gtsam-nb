@@ -56,9 +56,9 @@ void navigation(nb::module_ &m_) {
       .def("gyroscope", [](gtsam::imuBias::ConstantBias *self) { return self->gyroscope(); })
       .def("correctAccelerometer", [](gtsam::imuBias::ConstantBias *self, const gtsam::Vector &measurement) { return self->correctAccelerometer(measurement); }, nb::arg("measurement"))
       .def("correctGyroscope", [](gtsam::imuBias::ConstantBias *self, const gtsam::Vector &measurement) { return self->correctGyroscope(measurement); }, nb::arg("measurement"))
-      // // .def("serialize", [](gtsam::imuBias::ConstantBias *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::imuBias::ConstantBias *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::imuBias::ConstantBias &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::imuBias::ConstantBias obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::imuBias::ConstantBias *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::imuBias::ConstantBias *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::imuBias::ConstantBias &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::imuBias::ConstantBias obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("Identity", []() { return gtsam::imuBias::ConstantBias::Identity(); })
       .def(-nb::self)
       .def(nb::self + nb::self)
@@ -79,12 +79,12 @@ void navigation(nb::module_ &m_) {
       .def("velocity", [](gtsam::NavState *self) { return self->velocity(); })
       .def("pose", [](gtsam::NavState *self) { return self->pose(); })
       .def("retract", [](gtsam::NavState *self, const gtsam::Vector &x) { return self->retract(x); }, nb::arg("x"))
-      .def("localCoordinates", [](gtsam::NavState *self, const gtsam::NavState &g) { return self->localCoordinates(g); }, nb::arg("g"))
-      // // .def("serialize", [](gtsam::NavState *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::NavState *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::NavState &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NavState obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("localCoordinates", [](gtsam::NavState *self, const gtsam::NavState &g) { return self->localCoordinates(g); }, nb::arg("g"));
+  // .def("serialize", [](gtsam::NavState *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::NavState *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::NavState &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::NavState obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::PreintegratedRotationParams>(m_, "PreintegratedRotationParams")
+  nb::class_<gtsam::PreintegratedRotationParams>(m_, "PreintegratedRotationParams")
       .def(nb::init<>())
       .def("print", [](gtsam::PreintegratedRotationParams *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")
       .def("__repr__", [](const gtsam::PreintegratedRotationParams &self, string s) {
@@ -113,9 +113,9 @@ void navigation(nb::module_ &m_) {
       .def("getAccelerometerCovariance", [](gtsam::PreintegrationParams *self) { return self->getAccelerometerCovariance(); })
       .def("getIntegrationCovariance", [](gtsam::PreintegrationParams *self) { return self->getIntegrationCovariance(); })
       .def("getUse2ndOrderCoriolis", [](gtsam::PreintegrationParams *self) { return self->getUse2ndOrderCoriolis(); })
-      // // .def("serialize", [](gtsam::PreintegrationParams *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PreintegrationParams *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PreintegrationParams &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PreintegrationParams obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
+      // .def("serialize", [](gtsam::PreintegrationParams *self) { return gtsam::serialize(*self); })
+      // .def("deserialize", [](gtsam::PreintegrationParams *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+      // .def(nb::pickle([](const gtsam::PreintegrationParams &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PreintegrationParams obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
       .def_static("MakeSharedD", [](double g) { return gtsam::PreintegrationParams::MakeSharedD(g); }, nb::arg("g"))
       .def_static("MakeSharedU", [](double g) { return gtsam::PreintegrationParams::MakeSharedU(g); }, nb::arg("g"))
       .def_static("MakeSharedD", []() { return gtsam::PreintegrationParams::MakeSharedD(); })
@@ -142,12 +142,12 @@ void navigation(nb::module_ &m_) {
       .def("deltaVij", [](gtsam::PreintegratedImuMeasurements *self) { return self->deltaVij(); })
       .def("biasHat", [](gtsam::PreintegratedImuMeasurements *self) { return self->biasHat(); })
       .def("biasHatVector", [](gtsam::PreintegratedImuMeasurements *self) { return self->biasHatVector(); })
-      .def("predict", [](gtsam::PreintegratedImuMeasurements *self, const gtsam::NavState &state_i, const gtsam::imuBias::ConstantBias &bias) { return self->predict(state_i, bias); }, nb::arg("state_i"), nb::arg("bias"))
-      // // .def("serialize", [](gtsam::PreintegratedImuMeasurements *self) { return gtsam::serialize(*self); })
-      // // .def("deserialize", [](gtsam::PreintegratedImuMeasurements *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
-      // // .def(nb::pickle([](const gtsam::PreintegratedImuMeasurements &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PreintegratedImuMeasurements obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+      .def("predict", [](gtsam::PreintegratedImuMeasurements *self, const gtsam::NavState &state_i, const gtsam::imuBias::ConstantBias &bias) { return self->predict(state_i, bias); }, nb::arg("state_i"), nb::arg("bias"));
+  // .def("serialize", [](gtsam::PreintegratedImuMeasurements *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::PreintegratedImuMeasurements *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::PreintegratedImuMeasurements &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::PreintegratedImuMeasurements obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
-      nb::class_<gtsam::ImuFactor, gtsam::NonlinearFactor>(m_, "ImuFactor")
+  nb::class_<gtsam::ImuFactor, gtsam::NonlinearFactor>(m_, "ImuFactor")
       .def(nb::init<size_t, size_t, size_t, size_t, size_t, const gtsam::PreintegratedImuMeasurements &>(), nb::arg("pose_i"), nb::arg("vel_i"), nb::arg("pose_j"), nb::arg("vel_j"), nb::arg("bias"), nb::arg("preintegratedMeasurements"))
       .def("preintegratedMeasurements", [](gtsam::ImuFactor *self) { return self->preintegratedMeasurements(); })
       .def("evaluateError", [](gtsam::ImuFactor *self, const gtsam::Pose3 &pose_i, const gtsam::Vector &vel_i, const gtsam::Pose3 &pose_j, const gtsam::Vector &vel_j, const gtsam::imuBias::ConstantBias &bias) { return self->evaluateError(pose_i, vel_i, pose_j, vel_j, bias); }, nb::arg("pose_i"), nb::arg("vel_i"), nb::arg("pose_j"), nb::arg("vel_j"), nb::arg("bias"));
