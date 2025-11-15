@@ -19,13 +19,13 @@
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/map.h>
 #include <nanobind/stl/set.h>
+#include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
 
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/inference/Key.h"
 #include "gtsam/nonlinear/utilities.h"
 
-// TODO: Need to add in boost optional support
 #include "utils/boost_shared_ptr.h"
 #include "utils/preamble.h"
 #include "utils/specializations.h"
@@ -55,8 +55,6 @@ NB_MODULE(_core, m_) {
       "abi_tag",
       []() { return nb::detail::abi_tag(); },
       "Get the ABI tag of the current module. Useful for debugging when extending gtsam.");
-
-  bind_specializations(m_);
 
   base(m_);
   inference(m_);
@@ -149,4 +147,6 @@ NB_MODULE(_core, m_) {
   // nb::class_<gtsam::RedirectCout>(m_, "RedirectCout")
   //     .def(nb::init<>())
   //     .def("str", [](gtsam::RedirectCout *self) { return self->str(); });
+
+  bind_specializations(m_);
 }

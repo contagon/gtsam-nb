@@ -13,12 +13,15 @@
 #include "gtsam/base/serialization.h"
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
-#include <nanobind/eigen/dense.h>
-#include <nanobind/stl/function.h>
 
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
+
+#include "utils/boost_shared_ptr.h"
 
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/basis/ParameterMatrix.h"
@@ -630,7 +633,6 @@ void nonlinear(nb::module_ &m_) {
                         gtsam::RedirectCout redirect;
                         self.print(s, keyFormatter);
                         return redirect.str(); }, nb::arg("s") = "", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
-      .def("printStats", [](gtsam::ISAM2 *self) { self->printStats(); })
       .def("saveGraph", [](gtsam::ISAM2 *self, string s) { self->saveGraph(s); }, nb::arg("s"))
       .def("update", [](gtsam::ISAM2 *self) { return self->update(); })
       .def("update", [](gtsam::ISAM2 *self, const gtsam::NonlinearFactorGraph &newFactors, const gtsam::Values &newTheta) { return self->update(newFactors, newTheta); }, nb::arg("newFactors"), nb::arg("newTheta"))

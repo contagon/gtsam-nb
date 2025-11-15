@@ -13,11 +13,13 @@
 #include "gtsam/base/serialization.h"
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
-#include <nanobind/eigen/dense.h>
-#include <nanobind/stl/function.h>
 
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/bind_map.h>
+#include <nanobind/stl/bind_vector.h>
+#include <nanobind/stl/function.h>
 #include <nanobind/stl/string.h>
 
 // These are the included headers listed in `gtsam.i`
@@ -185,11 +187,6 @@ void sfm(nb::module_ &m_) {
       .def("initializeRandomly", [](gtsam::ShonanAveraging3 *self) { return self->initializeRandomly(); })
       .def("run", [](gtsam::ShonanAveraging3 *self, const gtsam::Values &initial, size_t min_p, size_t max_p) { return self->run(initial, min_p, max_p); }, nb::arg("initial"), nb::arg("min_p"), nb::arg("max_p"));
 
-  nb::class_<gtsam::MFAS>(m_, "MFAS")
-      .def(nb::init<const gtsam::BinaryMeasurementsUnit3 &, const gtsam::Unit3 &>(), nb::arg("relativeTranslations"), nb::arg("projectionDirection"))
-      .def("computeOutlierWeights", [](gtsam::MFAS *self) { return self->computeOutlierWeights(); })
-      .def("computeOrdering", [](gtsam::MFAS *self) { return self->computeOrdering(); });
-
   nb::class_<gtsam::TranslationRecovery>(m_, "TranslationRecovery")
       .def(nb::init<const gtsam::LevenbergMarquardtParams &>(), nb::arg("lmParams"))
       .def(nb::init<>())
@@ -227,6 +224,11 @@ void sfm(nb::module_ &m_) {
       .def("key2", [](gtsam::BinaryMeasurement<gtsam::Point3> *self) { return self->key2(); })
       .def("measured", [](gtsam::BinaryMeasurement<gtsam::Point3> *self) { return self->measured(); })
       .def("noiseModel", [](gtsam::BinaryMeasurement<gtsam::Point3> *self) { return self->noiseModel(); });
+
+  nb::class_<gtsam::MFAS>(m_, "MFAS")
+      .def(nb::init<const gtsam::BinaryMeasurementsUnit3 &, const gtsam::Unit3 &>(), nb::arg("relativeTranslations"), nb::arg("projectionDirection"))
+      .def("computeOutlierWeights", [](gtsam::MFAS *self) { return self->computeOutlierWeights(); })
+      .def("computeOrdering", [](gtsam::MFAS *self) { return self->computeOrdering(); });
 
   m_.def("readBal", [](string filename) { return gtsam::readBal(filename); }, nb::arg("filename"));
   m_.def("writeBAL", [](string filename, gtsam::SfmData &data) { return gtsam::writeBAL(filename, data); }, nb::arg("filename"), nb::arg("data"));

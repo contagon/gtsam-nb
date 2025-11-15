@@ -17,9 +17,13 @@ set(GTSAM_BUILD_UNSTABLE OFF CACHE BOOL "")
 set(GTSAM_BUILD_EXAMPLES OFF CACHE BOOL "")
 set(GTSAM_BUILD_EXAMPLES_ALWAYS OFF CACHE BOOL "")
 
+# use system eigen if found
 if(Eigen3_FOUND)
     set(GTSAM_USE_SYSTEM_EIGEN ON CACHE BOOL "")
 endif()
+
+# turn off deprecation warnings
+add_compile_options(-Wno-deprecated-declarations)
 
 FetchContent_Declare(
     GTSAM

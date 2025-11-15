@@ -13,11 +13,12 @@
 #include "gtsam/base/serialization.h"
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
-#include <nanobind/eigen/dense.h>
-#include <nanobind/stl/function.h>
 
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
 
 #include "utils/boost_shared_ptr.h"
@@ -460,7 +461,6 @@ void linear(nb::module_ &m_) {
       .def("back", [](gtsam::GaussianBayesNet *self) { return self->back(); })
       .def("logProbability", [](gtsam::GaussianBayesNet *self, const gtsam::VectorValues &x) { return self->logProbability(x); }, nb::arg("x"))
       .def("evaluate", [](gtsam::GaussianBayesNet *self, const gtsam::VectorValues &x) { return self->evaluate(x); }, nb::arg("x"))
-      .def("error", [](gtsam::GaussianBayesNet *self, const gtsam::VectorValues &x) { return self->error(x); }, nb::arg("x"))
       .def("optimize", [](gtsam::GaussianBayesNet *self) { return self->optimize(); })
       .def("optimize", [](gtsam::GaussianBayesNet *self, const gtsam::VectorValues &given) { return self->optimize(given); }, nb::arg("given"))
       .def("optimizeGradientSearch", [](gtsam::GaussianBayesNet *self) { return self->optimizeGradientSearch(); })

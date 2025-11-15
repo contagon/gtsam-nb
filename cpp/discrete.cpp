@@ -18,6 +18,7 @@
 
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/map.h>
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
 #include <nanobind/stl/vector.h>
@@ -76,7 +77,6 @@ void discrete(nb::module_ &m_) {
                         self.print(s, keyFormatter);
                         return redirect.str(); }, nb::arg("s") = "DecisionTreeFactor\n", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("equals", [](gtsam::DecisionTreeFactor *self, const gtsam::DecisionTreeFactor &other, double tol) { return self->equals(other, tol); }, nb::arg("other"), nb::arg("tol") = 1e-9)
-      .def("cardinality", [](gtsam::DecisionTreeFactor *self, gtsam::Key j) { return self->cardinality(j); }, nb::arg("j"))
       .def("cardinality", [](gtsam::DecisionTreeFactor *self, gtsam::Key j) { return self->cardinality(j); }, nb::arg("j"))
       .def("sum", [](gtsam::DecisionTreeFactor *self, size_t nrFrontals) { return self->sum(nrFrontals); }, nb::arg("nrFrontals"))
       .def("sum", [](gtsam::DecisionTreeFactor *self, const gtsam::Ordering &keys) { return self->sum(keys); }, nb::arg("keys"))
@@ -207,7 +207,6 @@ void discrete(nb::module_ &m_) {
       .def("_repr_html_", [](gtsam::DiscreteBayesTree *self, const gtsam::KeyFormatter &keyFormatter) { return self->html(keyFormatter); }, nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("_repr_html_", [](gtsam::DiscreteBayesTree *self, const gtsam::KeyFormatter &keyFormatter, std::map<gtsam::Key, std::vector<std::string>> names) { return self->html(keyFormatter, names); }, nb::arg("keyFormatter"), nb::arg("names"))
       .def("__getitem__", &gtsam::DiscreteBayesTree::operator[])
-      .def("__call__", &gtsam::DiscreteBayesTree::operator())
       .def("__call__", &gtsam::DiscreteBayesTree::operator());
 
   nb::class_<gtsam::DiscreteLookupTable, gtsam::DiscreteConditional>(m_, "DiscreteLookupTable")

@@ -13,12 +13,15 @@
 #include "gtsam/base/serialization.h"
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
-#include <nanobind/eigen/dense.h>
-#include <nanobind/stl/function.h>
 
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/map.h>
+#include <nanobind/stl/set.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/discrete/DiscreteFactorGraph.h"
@@ -43,7 +46,7 @@ void inference(nb::module_ &m_) {
 
   nb::class_<gtsam::Symbol>(m_, "Symbol")
       .def(nb::init<>())
-      .def(nb::init<char, uint64_t>(), nb::arg("c"), nb::arg("j"))
+      .def(nb::init<unsigned char, uint64_t>(), nb::arg("c"), nb::arg("j"))
       .def(nb::init<size_t>(), nb::arg("key"))
       .def("key", [](gtsam::Symbol *self) { return self->key(); })
       .def("print", [](gtsam::Symbol *self, const string &s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")

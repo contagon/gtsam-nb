@@ -13,12 +13,15 @@
 #include "gtsam/base/serialization.h"
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
-#include <nanobind/eigen/dense.h>
-#include <nanobind/stl/function.h>
 
+#include <nanobind/eigen/dense.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
+#include <nanobind/stl/function.h>
+#include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
+
+#include "utils/boost_shared_ptr.h"
 
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/nonlinear/CustomFactor.h"
