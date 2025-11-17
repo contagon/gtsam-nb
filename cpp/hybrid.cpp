@@ -119,14 +119,14 @@ void hybrid(nb::module_ &m_) {
                         return redirect.str(); }, nb::arg("s") = "GaussianMixture\n", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter);
 
   nb::class_<gtsam::HybridBayesTreeClique>(m_, "HybridBayesTreeClique")
-      // TODO: macOS builds error on this stating constructor is protected
-      // .def(nb::init<>())
+      .def(nb::init<>())
       .def(nb::init<const boost::shared_ptr<gtsam::HybridConditional>>(), nb::arg("conditional"))
       .def("conditional", [](gtsam::HybridBayesTreeClique *self) { return self->conditional(); })
       .def("isRoot", [](gtsam::HybridBayesTreeClique *self) { return self->isRoot(); });
 
   nb::class_<gtsam::HybridBayesTree>(m_, "HybridBayesTree")
-      .def(nb::init<>())
+      // TODO: macOS builds error on this stating constructor is protected
+      // .def(nb::init<>())
       .def("print", [](gtsam::HybridBayesTree *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "HybridBayesTree\n", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::HybridBayesTree &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;
