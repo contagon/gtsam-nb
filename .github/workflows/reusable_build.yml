@@ -26,7 +26,7 @@ jobs:
           CIBW_BEFORE_ALL_MACOS: >
               curl -O https://mac.r-project.org/openmp/openmp-19.1.0-darwin20-Release.tar.gz &&
               sudo tar fvxz openmp-19.1.0-darwin20-Release.tar.gz -C / && 
-              brew install boost
+              brew install boost && rm -rf /usr/local/lib/cmake/Boost-* && ls -1 /usr/local/lib/libboost_*
 
           # install boost for linux
           CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel"
