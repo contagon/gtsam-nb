@@ -22,10 +22,14 @@ jobs:
       - uses: pypa/cibuildwheel@v3.1
         name: Build wheel
         env:
-          # install openmp stuff for mac
+          # install openmp & boost for mac
           CIBW_BEFORE_ALL_MACOS: >
               curl -O https://mac.r-project.org/openmp/openmp-19.1.0-darwin20-Release.tar.gz &&
-              sudo tar fvxz openmp-19.1.0-darwin20-Release.tar.gz -C /
+              sudo tar fvxz openmp-19.1.0-darwin20-Release.tar.gz -C && 
+              brew install boost /
+
+          # install boost for linux
+          CIBW_BEFORE_BUILD_LINUX: "yum install -y boost-devel"
 
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
           
