@@ -1,0 +1,36 @@
+name: "Build python wheels"
+
+on:
+  workflow_call:
+    inputs:
+      CIBW_BUILD:
+        required: false
+        type: string
+        default: ""
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+
+      - uses: pypa/cibuildwheel@v3.1
+        name: Build wheel
+        env:
+          # install openmp stuff for mac
+          CIBW_BEFORE_ALL_MACOS: >
+              curl -O https://mac.r-project.org/openmp/openmp-19.1.0-darwin20-Release.tar.gz &&
+              sudo tar fvxz openmp-19.1.0-darwin20-Release.tar.gz -C /
+
+          CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
+          
+      # save artifacts for testing
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl

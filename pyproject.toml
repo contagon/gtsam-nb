@@ -1,11 +1,16 @@
 [project]
 name = "gtsam"
-version = "0.1.0"
-description = "Add your description here"
+version = "0.0.1"
+description = "nanobind bindings for GTSAM"
+authors = [
+    { name = "Easton Potokar", email = "contagon6@gmail.com" },
+    { name = "GTSAM Authors" },
+]
 readme = "README.md"
-authors = [{ name = "Easton Potokar", email = "contagon6@gmail.com" }]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 dependencies = ["numpy>2"]
+keywords = ["gtsam", "bindings", "nanobind", "robotics", "slam", "optimization"]
+license = { file = "LICENSE.BSD" }
 
 [tool.scikit-build]
 minimum-version = "build-system.requires"
@@ -30,3 +35,15 @@ include = ["python"]
 typeCheckingMode = "strict"
 reportIncompatibleMethodOverride = "none"
 reportWildcardImportFromLibrary = "none"
+
+[tool.cibuildwheel]
+skip = [
+    "cp3??t-*",           # skip free-threaded builds 
+    "*musllinux*",        # skip musl builds 
+    "*win32",             # skip 32-bit windows
+    "*macosx_x86_64",     # skip intel mac builds
+    "*macosx_universal2", # skip universal2 mac builds
+]
+# test-requires = "pytest>=8.3.5 scipy>=1.15.2"
+# test-command = "evalio ls pipelines && pytest {project}/tests"
+build-verbosity = 1

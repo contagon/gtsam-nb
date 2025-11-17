@@ -1,0 +1,20 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  # Always run checks
+  checks:
+    name: Checks
+    uses: ./.github/workflows/reusable_checks.yml
+    secrets: inherit
+
+  # Build subset of wheels for all platforms
+  build:
+    name: Build
+    uses: ./.github/workflows/reusable_build.yml
+    secrets: inherit
+    with:
+      CIBW_BUILD: "cp311-*"
