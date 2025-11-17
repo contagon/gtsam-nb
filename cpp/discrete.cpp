@@ -210,7 +210,8 @@ void discrete(nb::module_ &m_) {
       .def("__call__", &gtsam::DiscreteBayesTree::operator());
 
   nb::class_<gtsam::DiscreteLookupTable, gtsam::DiscreteConditional>(m_, "DiscreteLookupTable")
-      .def(nb::init<size_t, const gtsam::DiscreteKeys &, const gtsam::DecisionTreeFactor::ADT &>(), nb::arg("nFrontals"), nb::arg("keys"), nb::arg("potentials"))
+      // TODO: gtsam::DecisionTreeFactor::ADT is not yet bound, need to add bindings
+      // .def(nb::init<size_t, const gtsam::DiscreteKeys &, const gtsam::DecisionTreeFactor::ADT &>(), nb::arg("nFrontals"), nb::arg("keys"), nb::arg("potentials"))
       .def("print", [](gtsam::DiscreteLookupTable *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "Discrete Lookup Table: ", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::DiscreteLookupTable &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;

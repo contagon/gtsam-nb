@@ -48,6 +48,11 @@ using namespace std;
 
 namespace nb = nanobind;
 
+// Eigen::Block isn't wrapped in nanobind, so we have to explicitly convert to MatrixXd in a few spots
+// This has a cost, but works for now
+// Someone started a PR a while back, but never got merged:
+// https://github.com/wjakob/nanobind/pull/219
+
 void linear(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of linear";
 
@@ -213,8 +218,8 @@ void linear(nb::module_ &m_) {
       .def_static("Create", [](const boost::shared_ptr<gtsam::noiseModel::mEstimator::Base> robust, const boost::shared_ptr<gtsam::noiseModel::Base> noise) { return gtsam::noiseModel::Robust::Create(robust, noise); }, nb::arg("robust"), nb::arg("noise"));
 
   nb::class_<gtsam::Sampler>(m_, "Sampler")
-      .def(nb::init<boost::shared_ptr<gtsam::noiseModel::Diagonal>, int>(), nb::arg("model"), nb::arg("seed"))
-      .def(nb::init<const gtsam::Vector &, int>(), nb::arg("sigmas"), nb::arg("seed"))
+      .def(nb::init<boost::shared_ptr<gtsam::noiseModel::Diagonal>, unsigned int>(), nb::arg("model"), nb::arg("seed"))
+      .def(nb::init<const gtsam::Vector &, unsigned int>(), nb::arg("sigmas"), nb::arg("seed"))
       .def("dim", [](gtsam::Sampler *self) { return self->dim(); })
       .def("sigmas", [](gtsam::Sampler *self) { return self->sigmas(); })
       .def("model", [](gtsam::Sampler *self) { return self->model(); })
@@ -277,9 +282,10 @@ void linear(nb::module_ &m_) {
       .def(nb::init<size_t, const gtsam::Matrix &, size_t, const gtsam::Matrix &, const gtsam::Vector &, const boost::shared_ptr<gtsam::noiseModel::Diagonal>>(), nb::arg("i1"), nb::arg("A1"), nb::arg("i2"), nb::arg("A2"), nb::arg("b"), nb::arg("model"))
       .def(nb::init<size_t, const gtsam::Matrix &, size_t, const gtsam::Matrix &, size_t, const gtsam::Matrix &, const gtsam::Vector &, const boost::shared_ptr<gtsam::noiseModel::Diagonal>>(), nb::arg("i1"), nb::arg("A1"), nb::arg("i2"), nb::arg("A2"), nb::arg("i3"), nb::arg("A3"), nb::arg("b"), nb::arg("model"))
       .def(nb::init<const gtsam::GaussianFactorGraph &>(), nb::arg("graph"))
-      .def(nb::init<const gtsam::GaussianFactorGraph &, const gtsam::VariableSlots &>(), nb::arg("graph"), nb::arg("p_variableSlots"))
+      // TODO: VariableSlots aren't bound, need to add them in
+      // .def(nb::init<const gtsam::GaussianFactorGraph &, const gtsam::VariableSlots &>(), nb::arg("graph"), nb::arg("p_variableSlots"))
+      // .def(nb::init<const gtsam::GaussianFactorGraph &, const gtsam::Ordering &, const gtsam::VariableSlots &>(), nb::arg("graph"), nb::arg("ordering"), nb::arg("p_variableSlots"))
       .def(nb::init<const gtsam::GaussianFactorGraph &, const gtsam::Ordering &>(), nb::arg("graph"), nb::arg("ordering"))
-      .def(nb::init<const gtsam::GaussianFactorGraph &, const gtsam::Ordering &, const gtsam::VariableSlots &>(), nb::arg("graph"), nb::arg("ordering"), nb::arg("p_variableSlots"))
       .def(nb::init<const gtsam::GaussianFactor &>(), nb::arg("factor"))
       .def("print", [](gtsam::JacobianFactor *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::JacobianFactor &self, string s, const gtsam::KeyFormatter &keyFormatter) {
@@ -290,8 +296,8 @@ void linear(nb::module_ &m_) {
       .def("unweighted_error", [](gtsam::JacobianFactor *self, const gtsam::VectorValues &c) { return self->unweighted_error(c); }, nb::arg("c"))
       .def("error_vector", [](gtsam::JacobianFactor *self, const gtsam::VectorValues &c) { return self->error_vector(c); }, nb::arg("c"))
       .def("error", [](gtsam::JacobianFactor *self, const gtsam::VectorValues &c) { return self->error(c); }, nb::arg("c"))
-      .def("getA", [](gtsam::JacobianFactor *self) { return self->getA(); })
-      .def("getb", [](gtsam::JacobianFactor *self) { return self->getb(); })
+      .def("getA", [](gtsam::JacobianFactor *self) { return Eigen::MatrixXd(self->getA()); })
+      .def("getb", [](gtsam::JacobianFactor *self) { return Eigen::MatrixXd(self->getb()); })
       .def("rows", [](gtsam::JacobianFactor *self) { return self->rows(); })
       .def("cols", [](gtsam::JacobianFactor *self) { return self->cols(); })
       .def("isConstrained", [](gtsam::JacobianFactor *self) { return self->isConstrained(); })
@@ -324,7 +330,7 @@ void linear(nb::module_ &m_) {
       .def("rows", [](gtsam::HessianFactor *self) { return self->rows(); })
       .def("information", [](gtsam::HessianFactor *self) { return self->information(); })
       .def("constantTerm", [](gtsam::HessianFactor *self) { return self->constantTerm(); })
-      .def("linearTerm", [](gtsam::HessianFactor *self) { return self->linearTerm(); });
+      .def("linearTerm", [](gtsam::HessianFactor *self) { return Eigen::MatrixXd(self->linearTerm()); });
   // .def("serialize", [](gtsam::HessianFactor *self) { return gtsam::serialize(*self); })
   // .def("deserialize", [](gtsam::HessianFactor *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
   // .def(nb::pickle([](const gtsam::HessianFactor &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::HessianFactor obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
@@ -420,9 +426,9 @@ void linear(nb::module_ &m_) {
       .def("sample", [](gtsam::GaussianConditional *self) { return self->sample(); })
       .def("solveOtherRHS", [](gtsam::GaussianConditional *self, const gtsam::VectorValues &parents, const gtsam::VectorValues &rhs) { return self->solveOtherRHS(parents, rhs); }, nb::arg("parents"), nb::arg("rhs"))
       .def("solveTransposeInPlace", [](gtsam::GaussianConditional *self, gtsam::VectorValues &gy) { self->solveTransposeInPlace(gy); }, nb::arg("gy"))
-      .def("R", [](gtsam::GaussianConditional *self) { return self->R(); })
-      .def("S", [](gtsam::GaussianConditional *self) { return self->S(); })
-      .def("d", [](gtsam::GaussianConditional *self) { return self->d(); })
+      .def("R", [](gtsam::GaussianConditional *self) { return Eigen::MatrixXd(self->R()); })
+      .def("S", [](gtsam::GaussianConditional *self) { return Eigen::MatrixXd(self->S()); })
+      .def("d", [](gtsam::GaussianConditional *self) { return Eigen::MatrixXd(self->d()); })
       // .def("serialize", [](gtsam::GaussianConditional *self) { return gtsam::serialize(*self); })
       // .def("deserialize", [](gtsam::GaussianConditional *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
       // .def(nb::pickle([](const gtsam::GaussianConditional &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GaussianConditional obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))

@@ -152,7 +152,9 @@ void inference(nb::module_ &m_) {
       .def_static("CreateGaussianFactorGraph", [](gtsam::Ordering::OrderingType orderingType, const gtsam::GaussianFactorGraph &graph) { return gtsam::Ordering::Create<gtsam::GaussianFactorGraph>(orderingType, graph); }, nb::arg("orderingType"), nb::arg("graph"))
       .def_static("CreateHybridGaussianFactorGraph", [](gtsam::Ordering::OrderingType orderingType, const gtsam::HybridGaussianFactorGraph &graph) { return gtsam::Ordering::Create<gtsam::HybridGaussianFactorGraph>(orderingType, graph); }, nb::arg("orderingType"), nb::arg("graph"));
 
-  nb::enum_<gtsam::Ordering::OrderingType>(ordering, "OrderingType", nb::is_arithmetic())
+  // Changed this scope so typing works out better in discrete module with default arguments
+  // Previously used ordering as scope instead of m_
+  nb::enum_<gtsam::Ordering::OrderingType>(m_, "OrderingType", nb::is_arithmetic())
       .value("COLAMD", gtsam::Ordering::OrderingType::COLAMD)
       .value("METIS", gtsam::Ordering::OrderingType::METIS)
       .value("NATURAL", gtsam::Ordering::OrderingType::NATURAL)

@@ -44,7 +44,7 @@ void custom(nb::module_ &);
 void symbolic(nb::module_ &);
 void sam(nb::module_ &);
 void slam(nb::module_ &);
-// void sfm(nb::module_ &);
+void sfm(nb::module_ &);
 void navigation(nb::module_ &);
 void basis(nb::module_ &);
 void hybrid(nb::module_ &);
@@ -66,7 +66,7 @@ NB_MODULE(_core, m_) {
   symbolic(m_);
   sam(m_);
   slam(m_);
-  //   sfm(m_); // TODO: nanobind memory leak in here!
+  sfm(m_);
   navigation(m_);
   basis(m_);
   hybrid(m_);
@@ -121,32 +121,31 @@ NB_MODULE(_core, m_) {
       .def("erase", [](gtsam::KeyGroupMap *self, size_t key) { return self->erase(key); }, nb::arg("key"))
       .def("insert2", [](gtsam::KeyGroupMap *self, size_t key, int val) { return self->insert2(key, val); }, nb::arg("key"), nb::arg("val"));
 
-  // TODO: These need more modules to work first
-  // auto m_utilities = m_.def_submodule("utilities", "utilities submodule");
-  // m_utilities.def("createKeyList", [](const gtsam::Vector &I) { return gtsam::utilities::createKeyList(I); }, nb::arg("I"));
-  // m_utilities.def("createKeyList", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeyList(s, I); }, nb::arg("s"), nb::arg("I"));
-  // m_utilities.def("createKeyVector", [](const gtsam::Vector &I) { return gtsam::utilities::createKeyVector(I); }, nb::arg("I"));
-  // m_utilities.def("createKeyVector", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeyVector(s, I); }, nb::arg("s"), nb::arg("I"));
-  // m_utilities.def("createKeySet", [](const gtsam::Vector &I) { return gtsam::utilities::createKeySet(I); }, nb::arg("I"));
-  // m_utilities.def("createKeySet", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeySet(s, I); }, nb::arg("s"), nb::arg("I"));
-  // m_utilities.def("extractPoint2", [](const gtsam::Values &values) { return gtsam::utilities::extractPoint2(values); }, nb::arg("values"));
-  // m_utilities.def("extractPoint3", [](const gtsam::Values &values) { return gtsam::utilities::extractPoint3(values); }, nb::arg("values"));
-  // m_utilities.def("allPose2s", [](gtsam::Values &values) { return gtsam::utilities::allPose2s(values); }, nb::arg("values"));
-  // m_utilities.def("extractPose2", [](const gtsam::Values &values) { return gtsam::utilities::extractPose2(values); }, nb::arg("values"));
-  // m_utilities.def("allPose3s", [](gtsam::Values &values) { return gtsam::utilities::allPose3s(values); }, nb::arg("values"));
-  // m_utilities.def("extractPose3", [](const gtsam::Values &values) { return gtsam::utilities::extractPose3(values); }, nb::arg("values"));
-  // m_utilities.def("extractVectors", [](const gtsam::Values &values, char c) { return gtsam::utilities::extractVectors(values, c); }, nb::arg("values"), nb::arg("c"));
-  // m_utilities.def("perturbPoint2", [](gtsam::Values &values, double sigma, int seed) { gtsam::utilities::perturbPoint2(values, sigma, seed); }, nb::arg("values"), nb::arg("sigma"), nb::arg("seed") = 42u);
-  // m_utilities.def("perturbPose2", [](gtsam::Values &values, double sigmaT, double sigmaR, int seed) { gtsam::utilities::perturbPose2(values, sigmaT, sigmaR, seed); }, nb::arg("values"), nb::arg("sigmaT"), nb::arg("sigmaR"), nb::arg("seed") = 42u);
-  // m_utilities.def("perturbPoint3", [](gtsam::Values &values, double sigma, int seed) { gtsam::utilities::perturbPoint3(values, sigma, seed); }, nb::arg("values"), nb::arg("sigma"), nb::arg("seed") = 42u);
-  // m_utilities.def("insertBackprojections", [](gtsam::Values &values, const gtsam::PinholeCamera<gtsam::Cal3_S2> &c, const gtsam::Vector &J, const gtsam::Matrix &Z, double depth) { gtsam::utilities::insertBackprojections(values, c, J, Z, depth); }, nb::arg("values"), nb::arg("c"), nb::arg("J"), nb::arg("Z"), nb::arg("depth"));
-  // m_utilities.def("insertProjectionFactors", [](gtsam::NonlinearFactorGraph &graph, size_t i, const gtsam::Vector &J, const gtsam::Matrix &Z, const boost::shared_ptr<gtsam::noiseModel::Base> model, const boost::shared_ptr<gtsam::Cal3_S2> K, const gtsam::Pose3 &body_P_sensor) { gtsam::utilities::insertProjectionFactors(graph, i, J, Z, model, K, body_P_sensor); }, nb::arg("graph"), nb::arg("i"), nb::arg("J"), nb::arg("Z"), nb::arg("model"), nb::arg("K"), nb::arg("body_P_sensor") = gtsam::Pose3());
-  // m_utilities.def("reprojectionErrors", [](const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values) { return gtsam::utilities::reprojectionErrors(graph, values); }, nb::arg("graph"), nb::arg("values"));
-  // m_utilities.def("localToWorld", [](const gtsam::Values &local, const gtsam::Pose2 &base) { return gtsam::utilities::localToWorld(local, base); }, nb::arg("local"), nb::arg("base"));
-  // m_utilities.def("localToWorld", [](const gtsam::Values &local, const gtsam::Pose2 &base, const gtsam::KeyVector &keys) { return gtsam::utilities::localToWorld(local, base, keys); }, nb::arg("local"), nb::arg("base"), nb::arg("keys"));
-  // nb::class_<gtsam::RedirectCout>(m_, "RedirectCout")
-  //     .def(nb::init<>())
-  //     .def("str", [](gtsam::RedirectCout *self) { return self->str(); });
+  auto m_utilities = m_.def_submodule("utilities", "utilities submodule");
+  m_utilities.def("createKeyList", [](const gtsam::Vector &I) { return gtsam::utilities::createKeyList(I); }, nb::arg("I"));
+  m_utilities.def("createKeyList", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeyList(s, I); }, nb::arg("s"), nb::arg("I"));
+  m_utilities.def("createKeyVector", [](const gtsam::Vector &I) { return gtsam::utilities::createKeyVector(I); }, nb::arg("I"));
+  m_utilities.def("createKeyVector", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeyVector(s, I); }, nb::arg("s"), nb::arg("I"));
+  m_utilities.def("createKeySet", [](const gtsam::Vector &I) { return gtsam::utilities::createKeySet(I); }, nb::arg("I"));
+  m_utilities.def("createKeySet", [](string s, const gtsam::Vector &I) { return gtsam::utilities::createKeySet(s, I); }, nb::arg("s"), nb::arg("I"));
+  m_utilities.def("extractPoint2", [](const gtsam::Values &values) { return gtsam::utilities::extractPoint2(values); }, nb::arg("values"));
+  m_utilities.def("extractPoint3", [](const gtsam::Values &values) { return gtsam::utilities::extractPoint3(values); }, nb::arg("values"));
+  m_utilities.def("allPose2s", [](gtsam::Values &values) { return gtsam::utilities::allPose2s(values); }, nb::arg("values"));
+  m_utilities.def("extractPose2", [](const gtsam::Values &values) { return gtsam::utilities::extractPose2(values); }, nb::arg("values"));
+  m_utilities.def("allPose3s", [](gtsam::Values &values) { return gtsam::utilities::allPose3s(values); }, nb::arg("values"));
+  m_utilities.def("extractPose3", [](const gtsam::Values &values) { return gtsam::utilities::extractPose3(values); }, nb::arg("values"));
+  m_utilities.def("extractVectors", [](const gtsam::Values &values, char c) { return gtsam::utilities::extractVectors(values, c); }, nb::arg("values"), nb::arg("c"));
+  m_utilities.def("perturbPoint2", [](gtsam::Values &values, double sigma, int seed) { gtsam::utilities::perturbPoint2(values, sigma, seed); }, nb::arg("values"), nb::arg("sigma"), nb::arg("seed") = 42u);
+  m_utilities.def("perturbPose2", [](gtsam::Values &values, double sigmaT, double sigmaR, int seed) { gtsam::utilities::perturbPose2(values, sigmaT, sigmaR, seed); }, nb::arg("values"), nb::arg("sigmaT"), nb::arg("sigmaR"), nb::arg("seed") = 42u);
+  m_utilities.def("perturbPoint3", [](gtsam::Values &values, double sigma, int seed) { gtsam::utilities::perturbPoint3(values, sigma, seed); }, nb::arg("values"), nb::arg("sigma"), nb::arg("seed") = 42u);
+  m_utilities.def("insertBackprojections", [](gtsam::Values &values, const gtsam::PinholeCamera<gtsam::Cal3_S2> &c, const gtsam::Vector &J, const gtsam::Matrix &Z, double depth) { gtsam::utilities::insertBackprojections(values, c, J, Z, depth); }, nb::arg("values"), nb::arg("c"), nb::arg("J"), nb::arg("Z"), nb::arg("depth"));
+  m_utilities.def("insertProjectionFactors", [](gtsam::NonlinearFactorGraph &graph, size_t i, const gtsam::Vector &J, const gtsam::Matrix &Z, const boost::shared_ptr<gtsam::noiseModel::Base> model, const boost::shared_ptr<gtsam::Cal3_S2> K, const gtsam::Pose3 &body_P_sensor) { gtsam::utilities::insertProjectionFactors(graph, i, J, Z, model, K, body_P_sensor); }, nb::arg("graph"), nb::arg("i"), nb::arg("J"), nb::arg("Z"), nb::arg("model"), nb::arg("K"), nb::arg("body_P_sensor") = gtsam::Pose3());
+  m_utilities.def("reprojectionErrors", [](const gtsam::NonlinearFactorGraph &graph, const gtsam::Values &values) { return gtsam::utilities::reprojectionErrors(graph, values); }, nb::arg("graph"), nb::arg("values"));
+  m_utilities.def("localToWorld", [](const gtsam::Values &local, const gtsam::Pose2 &base) { return gtsam::utilities::localToWorld(local, base); }, nb::arg("local"), nb::arg("base"));
+  m_utilities.def("localToWorld", [](const gtsam::Values &local, const gtsam::Pose2 &base, const gtsam::KeyVector &keys) { return gtsam::utilities::localToWorld(local, base, keys); }, nb::arg("local"), nb::arg("base"), nb::arg("keys"));
+  nb::class_<gtsam::RedirectCout>(m_, "RedirectCout")
+      .def(nb::init<>())
+      .def("str", [](gtsam::RedirectCout *self) { return self->str(); });
 
   bind_specializations(m_);
 }

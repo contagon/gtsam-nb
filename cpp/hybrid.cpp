@@ -216,7 +216,8 @@ void hybrid(nb::module_ &m_) {
                         return redirect.str(); }, nb::arg("s") = "HybridNonlinearFactorGraph\n", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter);
 
   nb::class_<gtsam::MixtureFactor, gtsam::HybridFactor>(m_, "MixtureFactor")
-      .def(nb::init<const gtsam::KeyVector &, const gtsam::DiscreteKeys &, const gtsam::DecisionTree<gtsam::Key, boost::shared_ptr<gtsam::NonlinearFactor>> &, bool>(), nb::arg("keys"), nb::arg("discreteKeys"), nb::arg("factors"), nb::arg("normalized") = false)
+      // TODO: gtsam::DecisionTree still needs bindings
+      // .def(nb::init<const gtsam::KeyVector &, const gtsam::DiscreteKeys &, const gtsam::DecisionTree<gtsam::Key, boost::shared_ptr<gtsam::NonlinearFactor>> &, bool>(), nb::arg("keys"), nb::arg("discreteKeys"), nb::arg("factors"), nb::arg("normalized") = false)
       .def(nb::init<const gtsam::KeyVector &, const gtsam::DiscreteKeys &, const std::vector<boost::shared_ptr<gtsam::NonlinearFactor>> &, bool>(), nb::arg("keys"), nb::arg("discreteKeys"), nb::arg("factors"), nb::arg("normalized") = false)
       .def("error", [](gtsam::MixtureFactor *self, const gtsam::Values &continuousValues, const gtsam::DiscreteValues &discreteValues) { return self->error(continuousValues, discreteValues); }, nb::arg("continuousValues"), nb::arg("discreteValues"))
       .def("nonlinearFactorLogNormalizingConstant", [](gtsam::MixtureFactor *self, const boost::shared_ptr<gtsam::NonlinearFactor> factor, const gtsam::Values &values) { return self->nonlinearFactorLogNormalizingConstant(factor, values); }, nb::arg("factor"), nb::arg("values"))

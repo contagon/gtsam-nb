@@ -22,6 +22,8 @@
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/string.h>
 
+#include "utils/boost_shared_ptr.h"
+
 // These are the included headers listed in `gtsam.i`
 #include "gtsam/nonlinear/NonlinearFactorGraph.h"
 #include "gtsam/nonlinear/Values.h"
@@ -48,7 +50,6 @@ void sfm(nb::module_ &m_) {
       .def("measurement", [](gtsam::SfmTrack2d *self, size_t idx) { return self->measurement(idx); }, nb::arg("idx"))
       .def("siftIndex", [](gtsam::SfmTrack2d *self, size_t idx) { return self->siftIndex(idx); }, nb::arg("idx"))
       .def("addMeasurement", [](gtsam::SfmTrack2d *self, size_t idx, const gtsam::Point2 &m) { self->addMeasurement(idx, m); }, nb::arg("idx"), nb::arg("m"))
-      .def("measurement", [](gtsam::SfmTrack2d *self, size_t idx) { return self->measurement(idx); }, nb::arg("idx"))
       .def("hasUniqueCameras", [](gtsam::SfmTrack2d *self) { return self->hasUniqueCameras(); })
       .def("measurementMatrix", [](gtsam::SfmTrack2d *self) { return self->measurementMatrix(); })
       .def("indexVector", [](gtsam::SfmTrack2d *self) { return self->indexVector(); })
@@ -69,6 +70,9 @@ void sfm(nb::module_ &m_) {
 
   nb::class_<gtsam::SfmData>(m_, "SfmData")
       .def(nb::init<>())
+      // TODO: These methods are causing issues with nanobind memory management
+      // .def("generalSfmFactors", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model) { return self->generalSfmFactors(model); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0))
+      // .def("sfmFactorGraph", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model, size_t fixedCamera, size_t fixedPoint) { return self->sfmFactorGraph(model, fixedCamera, fixedPoint); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0), nb::arg("fixedCamera") = 0, nb::arg("fixedPoint") = 0)
       .def("trackList", [](gtsam::SfmData *self) { return self->trackList(); })
       .def("cameraList", [](gtsam::SfmData *self) { return self->cameraList(); })
       .def("addTrack", [](gtsam::SfmData *self, const gtsam::SfmTrack &t) { self->addTrack(t); }, nb::arg("t"))
@@ -77,8 +81,6 @@ void sfm(nb::module_ &m_) {
       .def("numberCameras", [](gtsam::SfmData *self) { return self->numberCameras(); })
       .def("track", [](gtsam::SfmData *self, size_t idx) { return self->track(idx); }, nb::arg("idx"))
       .def("camera", [](gtsam::SfmData *self, size_t idx) { return self->camera(idx); }, nb::arg("idx"))
-      .def("generalSfmFactors", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model) { return self->generalSfmFactors(model); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0))
-      .def("sfmFactorGraph", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model, size_t fixedCamera, size_t fixedPoint) { return self->sfmFactorGraph(model, fixedCamera, fixedPoint); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0), nb::arg("fixedCamera") = 0, nb::arg("fixedPoint") = 0)
       // .def("serialize", [](gtsam::SfmData *self) { return gtsam::serialize(*self); })
       // .def("deserialize", [](gtsam::SfmData *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
       // .def(nb::pickle([](const gtsam::SfmData &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::SfmData obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }))
