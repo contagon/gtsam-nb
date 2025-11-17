@@ -1,9 +1,25 @@
+# First thing, we check if vcpkg is installed in .vcpkg and if so, use it for dependencies
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/.vcpkg/scripts/buildsystems/vcpkg.cmake")
+    set(CMAKE_TOOLCHAIN_FILE
+        "${CMAKE_CURRENT_SOURCE_DIR}/.vcpkg/scripts/buildsystems/vcpkg.cmake"
+    )
+endif()
+
 # Can't use cmake > 4.0 b/c GTSAM doesn't support it yet
 cmake_minimum_required(VERSION 3.15...3.31)
-project(${SKBUILD_PROJECT_NAME} LANGUAGES CXX)
+project(${SKBUILD_PROJECT_NAME} VERSION 0.0.1 LANGUAGES CXX) # x-release-please-version
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
+
+# Make build a release build unless otherwise specified
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
+    set_property(
+        CACHE CMAKE_BUILD_TYPE
+        PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo"
+    )
+endif()
 
 # ------------------------- Find Eigen / GTSAM ------------------------- #
 find_package(Eigen3 NO_MODULE)
@@ -31,7 +47,7 @@ FetchContent_Declare(
     GIT_TAG        4.2.0
     GIT_SHALLOW TRUE
     # GIT_PROGRESS   TRUE
-    # FIND_PACKAGE_ARGS # uses find_package first, git if it fails
+    FIND_PACKAGE_ARGS # uses find_package first, git if it fails
 )
 FetchContent_MakeAvailable(GTSAM)
 
@@ -51,7 +67,7 @@ FetchContent_Declare(
     GIT_TAG v2.9.2
     GIT_SHALLOW TRUE
     # GIT_PROGRESS   TRUE
-    # FIND_PACKAGE_ARGS CONFIG # uses find_package first, git if it fails
+    FIND_PACKAGE_ARGS CONFIG # uses find_package first, git if it fails
     # Should always be found though, provided via skbuild
 )
 FetchContent_MakeAvailable(nanobind)

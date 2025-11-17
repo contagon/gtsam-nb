@@ -12,30 +12,21 @@ dependencies = ["numpy>2"]
 keywords = ["gtsam", "bindings", "nanobind", "robotics", "slam", "optimization"]
 license = { file = "LICENSE.BSD" }
 
-[tool.scikit-build]
-minimum-version = "build-system.requires"
-build-dir = "build/{wheel_tag}"
-cmake.version = "<4.0"
-
-[tool.uv]
-cache-keys = [
-    { file = "pyproject.toml" },
-    { file = "cpp/**/*.{h,c,hpp,cpp}" },
-    { file = "CMakeLists.txt" },
-]
+[dependency-groups]
+dev = ["cmake<4.0", "compdb>=0.2.0"]
 
 [build-system]
 requires = ["scikit-build-core>=0.10", "nanobind>=2.9.2", "numpy"]
 build-backend = "scikit_build_core.build"
 
-[dependency-groups]
-dev = ["cmake<4.0", "compdb>=0.2.0"]
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+cmake.version = "<4.0"
 
-[tool.basedpyright]
-include = ["python"]
-typeCheckingMode = "strict"
-reportIncompatibleMethodOverride = "none"
-reportWildcardImportFromLibrary = "none"
+[tool.scikit-build.cmake.define]
+VCPKG_INSTALLED_DIR = "./.vcpkg_installed"
+# VCPKG_INSTALL_OPTIONS = "--debug"
 
 [tool.cibuildwheel]
 skip = [
@@ -48,3 +39,16 @@ skip = [
 # test-requires = "pytest>=8.3.5 scipy>=1.15.2"
 # test-command = "evalio ls pipelines && pytest {project}/tests"
 build-verbosity = 1
+
+[tool.uv]
+cache-keys = [
+    { file = "pyproject.toml" },
+    { file = "cpp/**/*.{h,c,hpp,cpp}" },
+    { file = "CMakeLists.txt" },
+]
+
+[tool.basedpyright]
+include = ["python"]
+typeCheckingMode = "strict"
+reportIncompatibleMethodOverride = "none"
+reportWildcardImportFromLibrary = "none"
