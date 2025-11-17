@@ -23,6 +23,8 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
+      - name: Install boost
+        run: sudo apt-get install -y libboost-all-dev
       - name: Install the project
         run: uv sync --dev --verbose --all-extras
       - name: Copy stubs into place
