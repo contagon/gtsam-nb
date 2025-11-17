@@ -28,7 +28,10 @@ requires = ["scikit-build-core>=0.10", "nanobind>=2.9.2", "numpy"]
 build-backend = "scikit_build_core.build"
 
 [dependency-groups]
-dev = ["compdb>=0.2.0"]
+dev = [
+    "cmake<4.0",
+    "compdb>=0.2.0",
+]
 
 [tool.basedpyright]
 include = ["python"]
