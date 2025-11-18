@@ -13,6 +13,8 @@ wheels/
 compile_commands.json
 .clangd/
 .cache/
+.vcpkg_installed
+.vcpkg
 
 # IDE files
 .vscode/

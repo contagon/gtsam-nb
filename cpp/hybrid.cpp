@@ -125,7 +125,8 @@ void hybrid(nb::module_ &m_) {
       .def("isRoot", [](gtsam::HybridBayesTreeClique *self) { return self->isRoot(); });
 
   nb::class_<gtsam::HybridBayesTree>(m_, "HybridBayesTree")
-      .def(nb::init<>())
+      // TODO: macOS builds error on this stating constructor is protected
+      // .def(nb::init<>())
       .def("print", [](gtsam::HybridBayesTree *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "HybridBayesTree\n", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::HybridBayesTree &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;
