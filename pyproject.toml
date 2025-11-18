@@ -17,6 +17,8 @@ dev = [
     "basedpyright>=1.33.0",
     "cmake<4.0",
     "compdb>=0.2.0",
+    "ipython>=9.7.0",
+    "pytest>=9.0.1",
 ]
 
 [build-system]
