@@ -33,10 +33,7 @@ jobs:
               sudo tar fvxz openmp-19.1.0-darwin20-Release.tar.gz -C /
           # install aws cli for vcpkg caching
           CIBW_BEFORE_ALL_LINUX: >
-              yum -y install curl zip unzip tar &&
-              curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" &&
-              unzip awscliv2.zip &&
-              ./aws/install
+              yum -y install curl zip unzip tar 
 
           CIBW_BUILD: ${{ inputs.CIBW_BUILD }}
           CIBW_ENVIRONMENT_PASS_LINUX: VCPKG_BINARY_SOURCES

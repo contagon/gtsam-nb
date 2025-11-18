@@ -30,7 +30,7 @@ cmake.version = "<4.0"
 
 [tool.scikit-build.cmake.define]
 VCPKG_INSTALLED_DIR = "./.vcpkg_installed"
-# VCPKG_INSTALL_OPTIONS = "--debug"
+VCPKG_INSTALL_OPTIONS = "--debug"
 
 [tool.cibuildwheel]
 skip = [
