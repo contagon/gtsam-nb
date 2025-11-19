@@ -87,10 +87,10 @@ jobs:
       - name: Install the project
         run: uv sync --dev --verbose
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          detached: true
+      # - name: Setup tmate session
+      #   uses: mxschmitt/action-tmate@v3
+      #   with:
+      #     detached: true
 
       - name: Run tests
         run: uv run pytest -v

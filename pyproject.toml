@@ -18,6 +18,7 @@ dev = [
     "cmake<4.0",
     "compdb>=0.2.0",
     "ipython>=9.7.0",
+    "matplotlib>=3.10.7",
     "pytest>=9.0.1",
 ]
 
