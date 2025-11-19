@@ -50,6 +50,10 @@ void basis(nb::module_ &);
 void hybrid(nb::module_ &);
 
 NB_MODULE(_core, m_) {
+  // Disable leak warnings for cleaner output
+  // This should be fixed, but for now we disable it.
+  nb::set_leak_warnings(false);
+
   m_.doc() = "nanobind wrapper of gtsam";
   m_.def(
       "abi_tag",
