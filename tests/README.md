@@ -1,0 +1,18 @@
+These are identical python tests to those found in the gtsam repository to ensure compatibility. The only minor changes are as follows:
+- OrderingType is no longer nested under Ordering, this was changed in `test_DiscreteFactorGraph.py`.
+- Serialization tests have been removed since serialization is not currently supported in gtsam-nb.
+- nanobind does not cast python lists to numpy arrays automatically, so we explicitly create numpy arrays in the following files,
+  - `test_Cal3Unified.py`
+  - `test_Utilities.py`
+  - `test_Sim3.py`
+  - `test_Cal3Fisheye.py`
+  - `test_HybridNonlinearFactorGraph.py`
+  - `test_HybridFactorGraph.py`
+  - `test_HybridBayesNet.py`
+  - `test_GaussianBayesNet.py`
+- Had to expand some tuples in `test_Triangulation.py`
+- Had to flatten a handful of arrays in
+  - `test_Pose3SLAMExample.py`
+  - `test_HybridValues.py`
+  - `test_HybridFactorGraph.py`
+-  `GncLMParams.Verbosity.VALUES` now has a value of 4 instead of 1, changed in `test_NonlinearOptimizer.py`.

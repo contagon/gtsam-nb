@@ -15,9 +15,11 @@ compile_commands.json
 .cache/
 .vcpkg_installed
 .vcpkg
+*.so
 
 # IDE files
 .vscode/
 
 cpp/preamble
 cpp/specializations
+new_versions

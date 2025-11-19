@@ -71,8 +71,8 @@ void sfm(nb::module_ &m_) {
   nb::class_<gtsam::SfmData>(m_, "SfmData")
       .def(nb::init<>())
       // TODO: These methods are causing issues with nanobind memory management
-      // .def("generalSfmFactors", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model) { return self->generalSfmFactors(model); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0))
-      // .def("sfmFactorGraph", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model, size_t fixedCamera, size_t fixedPoint) { return self->sfmFactorGraph(model, fixedCamera, fixedPoint); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0), nb::arg("fixedCamera") = 0, nb::arg("fixedPoint") = 0)
+      .def("generalSfmFactors", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model) { return self->generalSfmFactors(model); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0))
+      .def("sfmFactorGraph", [](gtsam::SfmData *self, const gtsam::SharedNoiseModel &model, size_t fixedCamera, size_t fixedPoint) { return self->sfmFactorGraph(model, fixedCamera, fixedPoint); }, nb::arg("model") = gtsam::noiseModel::Isotropic::Sigma(2, 1.0), nb::arg("fixedCamera") = 0, nb::arg("fixedPoint") = 0)
       .def("trackList", [](gtsam::SfmData *self) { return self->trackList(); })
       .def("cameraList", [](gtsam::SfmData *self) { return self->cameraList(); })
       .def("addTrack", [](gtsam::SfmData *self, const gtsam::SfmTrack &t) { self->addTrack(t); }, nb::arg("t"))

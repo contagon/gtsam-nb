@@ -17,6 +17,9 @@ dev = [
     "basedpyright>=1.33.0",
     "cmake<4.0",
     "compdb>=0.2.0",
+    "ipython>=9.7.0",
+    "matplotlib>=3.10.7",
+    "pytest>=9.0.1",
 ]
 
 [build-system]
@@ -51,8 +54,16 @@ cache-keys = [
     { file = "CMakeLists.txt" },
 ]
 
+[tool.ruff]
+# We try to touch tests as little as possible to ensure they still work
+exclude = ["tests"]
+
 [tool.basedpyright]
 include = ["python"]
 typeCheckingMode = "strict"
 reportIncompatibleMethodOverride = "none"
 reportWildcardImportFromLibrary = "none"
+
+[tool.pytest.ini_options]
+addopts = "--import-mode=importlib"
+testpaths = ["tests"]
