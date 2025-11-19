@@ -33,8 +33,8 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
         dk = DiscreteKeys()
         dk.push_back((C(0), 2))
 
-        jf1 = JacobianFactor(X(0), np.eye(3), np.zeros((3, 1)), model)
-        jf2 = JacobianFactor(X(0), np.eye(3), np.ones((3, 1)), model)
+        jf1 = JacobianFactor(X(0), np.eye(3), np.zeros(3), model)
+        jf2 = JacobianFactor(X(0), np.eye(3), np.ones(3), model)
 
         gmf = GaussianMixtureFactor([X(0)], dk, [jf1, jf2])
 
@@ -60,8 +60,8 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
         dk = DiscreteKeys()
         dk.push_back((C(0), 2))
 
-        jf1 = JacobianFactor(X(0), np.eye(3), np.zeros((3, 1)), model)
-        jf2 = JacobianFactor(X(0), np.eye(3), np.ones((3, 1)), model)
+        jf1 = JacobianFactor(X(0), np.eye(3), np.zeros(3), model)
+        jf2 = JacobianFactor(X(0), np.eye(3), np.ones(3), model)
 
         gmf = GaussianMixtureFactor([X(0)], dk, [jf1, jf2])
 
@@ -100,18 +100,18 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
         for i in range(num_measurements):
             conditional0 = GaussianConditional.FromMeanAndStddev(Z(i),
                                                                  I_1x1,
-                                                                 X(0), [0],
+                                                                 X(0), np.array([0]),
                                                                  sigma=0.5)
             conditional1 = GaussianConditional.FromMeanAndStddev(Z(i),
                                                                  I_1x1,
-                                                                 X(0), [0],
+                                                                 X(0), np.array([0]),
                                                                  sigma=3)
             bayesNet.push_back(GaussianMixture([Z(i)], [X(0)], keys,
                                                [conditional0, conditional1]))
 
         # Create prior on X(0).
         prior_on_x0 = GaussianConditional.FromMeanAndStddev(
-            X(0), [prior_mean], prior_sigma)
+            X(0), np.array([prior_mean]), prior_sigma)
         bayesNet.push_back(prior_on_x0)
 
         # Add prior on mode.
@@ -130,16 +130,16 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
         expected_ratio = np.sqrt(2 * np.pi * 5.0**2) / np.sqrt(
             2 * np.pi * 0.5**2)
         mean0 = HybridValues()
-        mean0.insert(X(0), [5.0])
-        mean0.insert(Z(0), [5.0])
+        mean0.insert(X(0), np.array([5.0]))
+        mean0.insert(Z(0), np.array([5.0]))
         mean0.insert(M(0), 0)
         self.assertAlmostEqual(bayesNet1.evaluate(mean0) /
                                bayesNet2.evaluate(mean0),
                                expected_ratio,
                                delta=1e-9)
         mean1 = HybridValues()
-        mean1.insert(X(0), [5.0])
-        mean1.insert(Z(0), [5.0])
+        mean1.insert(X(0), np.array([5.0]))
+        mean1.insert(Z(0), np.array([5.0]))
         mean1.insert(M(0), 1)
         self.assertAlmostEqual(bayesNet1.evaluate(mean1) /
                                bayesNet2.evaluate(mean1),
@@ -182,10 +182,10 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
 
         # Deterministic values exactly at the mean, for both x and Z:
         values = HybridValues()
-        values.insert(X(0), [5.0])
+        values.insert(X(0), np.array([5.0]))
         values.insert(M(0), 0)  # low-noise, standard deviation 0.5
         measurements = gtsam.VectorValues()
-        measurements.insert(Z(0), [5.0])
+        measurements.insert(Z(0), np.array([5.0]))
         values.insert(measurements)
 
         def unnormalized_posterior(x):
@@ -264,11 +264,11 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
 
         # Deterministic values exactly at the mean, for both x and Z:
         values = HybridValues()
-        values.insert(X(0), [5.0])
+        values.insert(X(0), np.array([5.0]))
         values.insert(M(0), 0)  # high-noise, standard deviation 3
         measurements = gtsam.VectorValues()
-        measurements.insert(Z(0), [4.0])
-        measurements.insert(Z(1), [6.0])
+        measurements.insert(Z(0), np.array([4.0]))
+        measurements.insert(Z(1), np.array([6.0]))
         values.insert(measurements)
 
         def unnormalized_posterior(x):

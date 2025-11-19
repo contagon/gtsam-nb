@@ -42,8 +42,8 @@ class TestCal3Fisheye(GtsamTestCase):
         cls.obj_point = np.array([x, y, z])
         cls.img_point = np.array([u, v])
 
-        p1 = [-1.0, 0.0, -1.0]
-        p2 = [ 1.0, 0.0, -1.0]
+        p1 = np.array([-1.0, 0.0, -1.0])
+        p2 = np.array([ 1.0, 0.0, -1.0])
         q1 = gtsam.Rot3(1.0, 0.0, 0.0, 0.0)
         q2 = gtsam.Rot3(1.0, 0.0, 0.0, 0.0)
         pose1 = gtsam.Pose3(q1, p1)

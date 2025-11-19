@@ -29,10 +29,10 @@ class TestHybridGaussianFactorGraph(GtsamTestCase):
         dk = gtsam.DiscreteKeys()
         dk.push_back((10, 2))
         nlfg.push_back(BetweenFactorPoint3(1, 2, Point3(
-            1, 2, 3), noiseModel.Diagonal.Variances([1, 1, 1])))
+            1, 2, 3), noiseModel.Diagonal.Variances(np.array([1, 1, 1]))))
         nlfg.push_back(
             PriorFactorPoint3(2, Point3(1, 2, 3),
-                              noiseModel.Diagonal.Variances([0.5, 0.5, 0.5])))
+                              noiseModel.Diagonal.Variances(np.array([0.5, 0.5, 0.5]))))
         nlfg.push_back(
             gtsam.MixtureFactor([1], dk, [
                 PriorFactorPoint3(1, Point3(0, 0, 0),

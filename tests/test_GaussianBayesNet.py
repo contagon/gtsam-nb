@@ -28,8 +28,8 @@ def smallBayesNet():
     """Create a small Bayes Net for testing"""
     bayesNet = GaussianBayesNet()
     I_1x1 = np.eye(1, dtype=float)
-    bayesNet.push_back(GaussianConditional(_x_, [9.0], I_1x1, _y_, I_1x1))
-    bayesNet.push_back(GaussianConditional(_y_, [5.0], I_1x1))
+    bayesNet.push_back(GaussianConditional(_x_, np.array([9.0]), I_1x1, _y_, I_1x1))
+    bayesNet.push_back(GaussianConditional(_y_, np.array([5.0]), I_1x1))
     return bayesNet
 
 

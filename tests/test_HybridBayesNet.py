@@ -31,16 +31,16 @@ class TestHybridBayesNet(GtsamTestCase):
 
         # Create the continuous conditional
         I_1x1 = np.eye(1)
-        conditional = GaussianConditional.FromMeanAndStddev(X(0), 2 * I_1x1, X(1), [-4],
+        conditional = GaussianConditional.FromMeanAndStddev(X(0), 2 * I_1x1, X(1), np.array([-4]),
                                                             5.0)
 
         # Create the noise models
-        model0 = noiseModel.Diagonal.Sigmas([2.0])
-        model1 = noiseModel.Diagonal.Sigmas([3.0])
+        model0 = noiseModel.Diagonal.Sigmas(np.array([2.0]))
+        model1 = noiseModel.Diagonal.Sigmas(np.array([3.0]))
 
         # Create the conditionals
-        conditional0 = GaussianConditional(X(1), [5], I_1x1, model0)
-        conditional1 = GaussianConditional(X(1), [2], I_1x1, model1)
+        conditional0 = GaussianConditional(X(1), np.array([5]), I_1x1, model0)
+        conditional1 = GaussianConditional(X(1), np.array([2]), I_1x1, model1)
         discrete_keys = DiscreteKeys()
         discrete_keys.push_back(Asia)
 
@@ -54,8 +54,8 @@ class TestHybridBayesNet(GtsamTestCase):
         # Create values at which to evaluate.
         values = HybridValues()
         continuous = VectorValues()
-        continuous.insert(X(0), [-6])
-        continuous.insert(X(1), [1])
+        continuous.insert(X(0), np.array([-6]))
+        continuous.insert(X(1), np.array([1]))
         values.insert(continuous)
         discrete = DiscreteValues()
         discrete[asiaKey] = 0

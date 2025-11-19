@@ -16,7 +16,8 @@ import unittest
 from gtsam import DiscreteFactorGraph, DiscreteKeys, DiscreteValues, Ordering
 from gtsam.utils.test_case import GtsamTestCase
 
-OrderingType = Ordering.OrderingType
+# OrderingType = Ordering.OrderingType
+from gtsam import OrderingType
 
 
 class TestDiscreteFactorGraph(GtsamTestCase):

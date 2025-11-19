@@ -89,7 +89,7 @@ class TestTriangulationExample(GtsamTestCase):
             cal_params=(sharedCal, sharedCal))
 
         triangulated_landmark = gtsam.triangulatePoint3(self.poses,
-                                                        Cal3_S2(sharedCal),
+                                                        Cal3_S2(*sharedCal),
                                                         measurements,
                                                         rank_tol=1e-9,
                                                         optimize=True)
@@ -101,7 +101,7 @@ class TestTriangulationExample(GtsamTestCase):
         measurements_noisy.append(measurements[1] - np.array([-0.2, 0.3]))
 
         triangulated_landmark = gtsam.triangulatePoint3(self.poses,
-                                                        Cal3_S2(sharedCal),
+                                                        Cal3_S2(*sharedCal),
                                                         measurements_noisy,
                                                         rank_tol=1e-9,
                                                         optimize=True)

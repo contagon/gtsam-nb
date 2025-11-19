@@ -120,7 +120,7 @@ class TestScenario(GtsamTestCase):
         for weights_tol in (1e-4, 1e-3, 1e-2):
             params.setWeightsTol(weights_tol)
             self.assertEqual(params.weightsTol, weights_tol)
-        for i in (0, 1, 2):
+        for i in (0, 1, 4):
             verb = GncLMParams.Verbosity(i)
             params.setVerbosityGNC(verb)
             self.assertEqual(params.verbosity, verb)
@@ -137,7 +137,7 @@ class TestScenario(GtsamTestCase):
         optimizer = GncLMOptimizer(self.fg, self.initial_values, params)
         for ict_factor in (0.9, 1.1):
             new_ict = ict_factor * optimizer.getInlierCostThresholds()
-            optimizer.setInlierCostThresholds(new_ict)
+            optimizer.setInlierCostThresholds(new_ict[0])
             self.assertAlmostEqual(optimizer.getInlierCostThresholds(), new_ict)
         for w_factor in (0.8, 0.9):
             new_weights = w_factor * optimizer.getWeights()

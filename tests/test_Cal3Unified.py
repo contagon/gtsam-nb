@@ -39,8 +39,8 @@ class TestCal3Unified(GtsamTestCase):
         xi = 1
         cls.stereographic = gtsam.Cal3Unified(fx, fy, s, u0, v0, k1, k2, p1, p2, xi)
 
-        p1 = [-1.0, 0.0, -1.0]
-        p2 = [ 1.0, 0.0, -1.0]
+        p1 = np.array([-1.0, 0.0, -1.0])
+        p2 = np.array([ 1.0, 0.0, -1.0])
         q1 = gtsam.Rot3(1.0, 0.0, 0.0, 0.0)
         q2 = gtsam.Rot3(1.0, 0.0, 0.0, 0.0)
         pose1 = gtsam.Pose3(q1, p1)
