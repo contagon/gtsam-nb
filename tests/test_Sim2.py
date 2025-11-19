@@ -8,13 +8,12 @@ See LICENSE for the license information
 Sim3 unit tests.
 Author: John Lambert
 """
-
 # pylint: disable=no-name-in-module
 import unittest
 
 import numpy as np
 from gtsam import Pose2, Pose2Pairs, Rot2, Similarity2
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestSim2(GtsamTestCase):

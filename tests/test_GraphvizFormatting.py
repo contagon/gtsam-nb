@@ -13,7 +13,7 @@ import textwrap
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestGraphvizFormatting(GtsamTestCase):
@@ -23,14 +23,15 @@ class TestGraphvizFormatting(GtsamTestCase):
         self.graph = gtsam.NonlinearFactorGraph()
 
         odometry = gtsam.Pose2(2.0, 0.0, 0.0)
-        odometryNoise = gtsam.noiseModel.Diagonal.Sigmas(np.array([0.2, 0.2, 0.1]))
+        odometryNoise = gtsam.noiseModel.Diagonal.Sigmas(
+            np.array([0.2, 0.2, 0.1]))
         self.graph.add(gtsam.BetweenFactorPose2(0, 1, odometry, odometryNoise))
         self.graph.add(gtsam.BetweenFactorPose2(1, 2, odometry, odometryNoise))
 
         self.values = gtsam.Values()
-        self.values.insert_pose2(0, gtsam.Pose2(0.0, 0.0, 0.0))
-        self.values.insert_pose2(1, gtsam.Pose2(2.0, 0.0, 0.0))
-        self.values.insert_pose2(2, gtsam.Pose2(4.0, 0.0, 0.0))
+        self.values.insert_pose2(0, gtsam.Pose2(0., 0., 0.))
+        self.values.insert_pose2(1, gtsam.Pose2(2., 0., 0.))
+        self.values.insert_pose2(2, gtsam.Pose2(4., 0., 0.))
 
     def test_default(self):
         """Test with default GraphvizFormatting"""
@@ -51,7 +52,8 @@ class TestGraphvizFormatting(GtsamTestCase):
             }
         """
 
-        self.assertEqual(self.graph.dot(self.values), textwrap.dedent(expected_result))
+        self.assertEqual(self.graph.dot(self.values),
+                         textwrap.dedent(expected_result))
 
     def test_swapped_axes(self):
         """Test with user-defined GraphvizFormatting swapping x and y"""
@@ -75,10 +77,9 @@ class TestGraphvizFormatting(GtsamTestCase):
         graphviz_formatting = gtsam.GraphvizFormatting()
         graphviz_formatting.paperHorizontalAxis = gtsam.GraphvizFormatting.Axis.X
         graphviz_formatting.paperVerticalAxis = gtsam.GraphvizFormatting.Axis.Y
-        self.assertEqual(
-            self.graph.dot(self.values, writer=graphviz_formatting),
-            textwrap.dedent(expected_result),
-        )
+        self.assertEqual(self.graph.dot(self.values,
+                                        writer=graphviz_formatting),
+                         textwrap.dedent(expected_result))
 
     def test_factor_points(self):
         """Test with user-defined GraphvizFormatting without factor points"""
@@ -98,10 +99,9 @@ class TestGraphvizFormatting(GtsamTestCase):
         graphviz_formatting = gtsam.GraphvizFormatting()
         graphviz_formatting.plotFactorPoints = False
 
-        self.assertEqual(
-            self.graph.dot(self.values, writer=graphviz_formatting),
-            textwrap.dedent(expected_result),
-        )
+        self.assertEqual(self.graph.dot(self.values,
+                                        writer=graphviz_formatting),
+                         textwrap.dedent(expected_result))
 
     def test_width_height(self):
         """Test with user-defined GraphvizFormatting for width and height"""
@@ -126,10 +126,9 @@ class TestGraphvizFormatting(GtsamTestCase):
         graphviz_formatting.figureWidthInches = 20
         graphviz_formatting.figureHeightInches = 10
 
-        self.assertEqual(
-            self.graph.dot(self.values, writer=graphviz_formatting),
-            textwrap.dedent(expected_result),
-        )
+        self.assertEqual(self.graph.dot(self.values,
+                                        writer=graphviz_formatting),
+                         textwrap.dedent(expected_result))
 
 
 if __name__ == "__main__":

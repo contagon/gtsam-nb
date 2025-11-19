@@ -8,18 +8,16 @@ See LICENSE for the license information
 visual_isam unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 
-import visual_data_generator as generator
-import visual_isam
+import gtsam.utils.visual_data_generator as generator
+import gtsam.utils.visual_isam as visual_isam
 from gtsam import symbol
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestVisualISAMExample(GtsamTestCase):
     """Test class for ISAM2 with visual landmarks."""
-
     def test_VisualISAMExample(self):
         """Test to see if ISAM works as expected for a simple visual SLAM example."""
         # Data Options
@@ -39,18 +37,20 @@ class TestVisualISAMExample(GtsamTestCase):
         data, truth = generator.generate_data(options)
 
         # Initialize iSAM with the first pose and points
-        isam, result, nextPose = visual_isam.initialize(data, truth, isamOptions)
+        isam, result, nextPose = visual_isam.initialize(
+            data, truth, isamOptions)
 
         # Main loop for iSAM: stepping through all poses
         for currentPose in range(nextPose, options.nrCameras):
-            isam, result = visual_isam.step(data, isam, result, truth, currentPose)
+            isam, result = visual_isam.step(data, isam, result, truth,
+                                            currentPose)
 
         for i, _ in enumerate(truth.cameras):
-            pose_i = result.atPose3(symbol("x", i))
+            pose_i = result.atPose3(symbol('x', i))
             self.gtsamAssertEquals(pose_i, truth.cameras[i].pose(), 1e-5)
 
         for j, _ in enumerate(truth.points):
-            point_j = result.atPoint3(symbol("l", j))
+            point_j = result.atPoint3(symbol('l', j))
             self.gtsamAssertEquals(point_j, truth.points[j], 1e-5)
 
 

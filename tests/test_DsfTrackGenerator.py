@@ -8,17 +8,11 @@ from typing import Dict, Tuple
 
 import numpy as np
 from gtsam.gtsfm import Keypoints
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 import gtsam
-from gtsam import (
-    IndexPair,
-    KeypointsVector,
-    MatchIndicesMap,
-    Point2,
-    SfmMeasurementVector,
-    SfmTrack2d,
-)
+from gtsam import (IndexPair, KeypointsVector, MatchIndicesMap, Point2,
+                   SfmMeasurementVector, SfmTrack2d)
 
 
 class TestDsfTrackGenerator(GtsamTestCase):
@@ -127,10 +121,10 @@ class TestSfmTrack2d(GtsamTestCase):
 
 def get_dummy_keypoints_list() -> KeypointsVector:
     """Generate a list of dummy keypoints for testing."""
-    img1_kp_coords = np.array([[1, 1], [2, 2], [3, 3.0]])
+    img1_kp_coords = np.array([[1, 1], [2, 2], [3, 3.]])
     img2_kp_coords = np.array(
         [
-            [1, 1.0],
+            [1, 1.],
             [2, 2],
             [3, 3],
             [4, 4],
@@ -142,7 +136,7 @@ def get_dummy_keypoints_list() -> KeypointsVector:
     )
     img3_kp_coords = np.array(
         [
-            [1, 1.0],
+            [1, 1.],
             [2, 2],
             [3, 3],
             [4, 4],
@@ -156,7 +150,7 @@ def get_dummy_keypoints_list() -> KeypointsVector:
     )
     img4_kp_coords = np.array(
         [
-            [1, 1.0],
+            [1, 1.],
             [2, 2],
             [3, 3],
             [4, 4],

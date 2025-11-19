@@ -8,17 +8,17 @@ See LICENSE for the license information
 PlanarSLAM unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 from math import pi
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestPlanarSLAM(GtsamTestCase):
+
     def test_PlanarSLAM(self):
         # Assumptions
         #  - All values are axis aligned
@@ -39,18 +39,14 @@ class TestPlanarSLAM(GtsamTestCase):
         # Add odometry
         # general noisemodel for odometry
         odometryNoise = gtsam.noiseModel.Diagonal.Sigmas(np.array([0.2, 0.2, 0.1]))
-        graph.add(
-            gtsam.BetweenFactorPose2(1, 2, gtsam.Pose2(2.0, 0.0, 0.0), odometryNoise)
-        )
-        graph.add(
-            gtsam.BetweenFactorPose2(2, 3, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise)
-        )
-        graph.add(
-            gtsam.BetweenFactorPose2(3, 4, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise)
-        )
-        graph.add(
-            gtsam.BetweenFactorPose2(4, 5, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise)
-        )
+        graph.add(gtsam.BetweenFactorPose2(
+            1, 2, gtsam.Pose2(2.0, 0.0, 0.0), odometryNoise))
+        graph.add(gtsam.BetweenFactorPose2(
+            2, 3, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise))
+        graph.add(gtsam.BetweenFactorPose2(
+            3, 4, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise))
+        graph.add(gtsam.BetweenFactorPose2(
+            4, 5, gtsam.Pose2(2.0, 0.0, pi / 2), odometryNoise))
 
         # Add pose constraint
         model = gtsam.noiseModel.Diagonal.Sigmas(np.array([0.2, 0.2, 0.1]))
@@ -75,6 +71,7 @@ class TestPlanarSLAM(GtsamTestCase):
 
         pose_1 = result.atPose2(1)
         self.gtsamAssertEquals(pose_1, gtsam.Pose2(), 1e-4)
+
 
 
 if __name__ == "__main__":

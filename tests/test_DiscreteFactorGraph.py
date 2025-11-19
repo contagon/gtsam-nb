@@ -13,13 +13,10 @@ Author: Frank Dellaert
 
 import unittest
 
-from gtsam import (
-    DiscreteFactorGraph,
-    DiscreteKeys,
-    DiscreteValues,
-    OrderingType,
-)
-from utils import GtsamTestCase
+from gtsam import DiscreteFactorGraph, DiscreteKeys, DiscreteValues, Ordering
+from gtsam.utils.test_case import GtsamTestCase
+
+OrderingType = Ordering.OrderingType
 
 
 class TestDiscreteFactorGraph(GtsamTestCase):

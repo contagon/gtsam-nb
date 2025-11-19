@@ -17,7 +17,7 @@ import unittest
 import gtsam
 import numpy as np
 from gtsam import Point2, Point3, SfmData, SfmTrack
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestSfmData(GtsamTestCase):
@@ -52,7 +52,8 @@ class TestSfmData(GtsamTestCase):
         cam_idx, img_measurement = self.tracks.measurement(0)
         self.assertEqual(cam_idx, i1)
         np.testing.assert_array_almost_equal(
-            Point3(0.0, 0.0, 0.0), self.tracks.point3()
+            Point3(0., 0., 0.),
+            self.tracks.point3()
         )
 
     def test_data(self):
@@ -83,8 +84,8 @@ class TestSfmData(GtsamTestCase):
         self.assertEqual(cam_idx, i1)
 
     def test_Balbianello(self):
-        """Check that we can successfully read a bundler file and create a
-        factor graph from it
+        """ Check that we can successfully read a bundler file and create a 
+            factor graph from it
         """
         # The structure where we will save the SfM data
         filename = gtsam.findExampleDataFile("Balbianello.out")
@@ -104,7 +105,8 @@ class TestSfmData(GtsamTestCase):
         self.gtsamAssertEquals(expected, actual, 1)
 
         # We share *one* noiseModel between all projection factors
-        model = gtsam.noiseModel.Isotropic.Sigma(2, 1.0)  # one pixel in u and v
+        model = gtsam.noiseModel.Isotropic.Sigma(
+            2, 1.0)  # one pixel in u and v
 
         # Convert to NonlinearFactorGraph
         graph = sfm_data.sfmFactorGraph(model)
@@ -115,5 +117,5 @@ class TestSfmData(GtsamTestCase):
         self.assertEqual(549, values.size())  # regression
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

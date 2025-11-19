@@ -14,7 +14,7 @@ Author: Frank Dellaert
 import unittest
 
 from gtsam import DecisionTreeFactor, DiscreteValues, DiscreteDistribution, Ordering
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestDecisionTreeFactor(GtsamTestCase):
@@ -27,7 +27,7 @@ class TestDecisionTreeFactor(GtsamTestCase):
 
     def test_from_floats(self):
         """Test whether we can construct a factor from floats."""
-        actual = DecisionTreeFactor([self.A, self.B], [1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        actual = DecisionTreeFactor([self.A, self.B], [1., 2.,  3., 4.,  5., 6.])
         self.gtsamAssertEquals(actual, self.factor)
 
     def test_enumerate(self):
@@ -83,16 +83,15 @@ class TestDecisionTreeFactor(GtsamTestCase):
     def test_markdown(self):
         """Test whether the _repr_markdown_ method."""
 
-        expected = (
-            "|A|B|value|\n"
-            "|:-:|:-:|:-:|\n"
-            "|0|0|1|\n"
-            "|0|1|2|\n"
-            "|1|0|3|\n"
-            "|1|1|4|\n"
-            "|2|0|5|\n"
+        expected = \
+            "|A|B|value|\n" \
+            "|:-:|:-:|:-:|\n" \
+            "|0|0|1|\n" \
+            "|0|1|2|\n" \
+            "|1|0|3|\n" \
+            "|1|1|4|\n" \
+            "|2|0|5|\n" \
             "|2|1|6|\n"
-        )
 
         def formatter(x: int):
             return "A" if x == 12 else "B"

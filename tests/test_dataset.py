@@ -16,7 +16,7 @@ import unittest
 
 import gtsam
 from gtsam import BetweenFactorPose3
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestDataset(GtsamTestCase):
@@ -24,7 +24,8 @@ class TestDataset(GtsamTestCase):
 
     def setUp(self):
         """Get some common paths."""
-        self.pose3_example_g2o_file = gtsam.findExampleDataFile("pose3example.txt")
+        self.pose3_example_g2o_file = gtsam.findExampleDataFile(
+            "pose3example.txt")
 
     def test_readG2o3D(self):
         """Test reading directly into factor graph."""
@@ -40,5 +41,5 @@ class TestDataset(GtsamTestCase):
         self.assertIsInstance(factors[0], BetweenFactorPose3)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

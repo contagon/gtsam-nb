@@ -16,24 +16,12 @@ import unittest
 
 import gtsam
 from gtsam import (
-    DoglegOptimizer,
-    DoglegParams,
-    DummyPreconditionerParameters,
-    GaussNewtonOptimizer,
-    GaussNewtonParams,
-    GncLMParams,
-    GncLossType,
-    GncLMOptimizer,
-    LevenbergMarquardtOptimizer,
-    LevenbergMarquardtParams,
-    NonlinearFactorGraph,
-    Ordering,
-    PCGSolverParameters,
-    Point2,
-    PriorFactorPoint2,
-    Values,
+    DoglegOptimizer, DoglegParams, DummyPreconditionerParameters, GaussNewtonOptimizer,
+    GaussNewtonParams, GncLMParams, GncLossType, GncLMOptimizer, LevenbergMarquardtOptimizer,
+    LevenbergMarquardtParams, NonlinearFactorGraph, Ordering, PCGSolverParameters, Point2,
+    PriorFactorPoint2, Values
 )
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 KEY1 = 1
 KEY2 = 2
@@ -41,7 +29,6 @@ KEY2 = 2
 
 class TestScenario(GtsamTestCase):
     """Do trivial test with three optimizer variants."""
-
     def setUp(self):
         """Set up the optimization problem and ordering"""
         # create graph
@@ -74,9 +61,7 @@ class TestScenario(GtsamTestCase):
     def test_levenberg_marquardt(self):
         lmParams = LevenbergMarquardtParams.CeresDefaults()
         lmParams.setOrdering(self.ordering)
-        actual = LevenbergMarquardtOptimizer(
-            self.fg, self.initial_values, lmParams
-        ).optimize()
+        actual = LevenbergMarquardtOptimizer(self.fg, self.initial_values, lmParams).optimize()
         self.assertAlmostEqual(0, self.fg.error(actual))
 
     def test_levenberg_marquardt_pcg(self):
@@ -85,9 +70,7 @@ class TestScenario(GtsamTestCase):
         cgParams = PCGSolverParameters()
         cgParams.setPreconditionerParams(DummyPreconditionerParameters())
         lmParams.setIterativeParams(cgParams)
-        actual = LevenbergMarquardtOptimizer(
-            self.fg, self.initial_values, lmParams
-        ).optimize()
+        actual = LevenbergMarquardtOptimizer(self.fg, self.initial_values, lmParams).optimize()
         self.assertAlmostEqual(0, self.fg.error(actual))
 
     def test_dogleg(self):
@@ -107,9 +90,7 @@ class TestScenario(GtsamTestCase):
         for base_max_iters in (50, 100):
             base_params.setMaxIterations(base_max_iters)
             params = GncLMParams(base_params)
-            self.assertEqual(
-                params.baseOptimizerParams.getMaxIterations(), base_max_iters
-            )
+            self.assertEqual(params.baseOptimizerParams.getMaxIterations(), base_max_iters)
 
         # Test printing
         params_str = str(params)

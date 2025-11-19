@@ -8,19 +8,19 @@ See LICENSE for the license information
 SFM unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 
 import numpy as np
 
 import gtsam
-import visual_data_generator as generator
+import gtsam.utils.visual_data_generator as generator
+from gtsam import symbol
 from gtsam.noiseModel import Isotropic, Diagonal
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 from gtsam.symbol_shorthand import X, P
 
-
 class TestSFMExample(GtsamTestCase):
+
     def test_SFMExample(self):
         options = generator.Options()
         options.triangle = False
@@ -39,16 +39,16 @@ class TestSFMExample(GtsamTestCase):
         for i in range(len(data.Z)):
             for k in range(len(data.Z[i])):
                 j = data.J[i][k]
-                graph.add(
-                    gtsam.GenericProjectionFactorCal3_S2(
-                        data.Z[i][k], measurementNoise, X(i), P(j), data.K
-                    )
-                )
+                graph.add(gtsam.GenericProjectionFactorCal3_S2(
+                    data.Z[i][k], measurementNoise,
+                    X(i), P(j), data.K))
 
         posePriorNoise = Diagonal.Sigmas(poseNoiseSigmas)
-        graph.add(gtsam.PriorFactorPose3(X(0), truth.cameras[0].pose(), posePriorNoise))
+        graph.add(gtsam.PriorFactorPose3(X(0),
+                                   truth.cameras[0].pose(), posePriorNoise))
         pointPriorNoise = Isotropic.Sigma(3, pointNoiseSigma)
-        graph.add(gtsam.PriorFactorPoint3(P(0), truth.points[0], pointPriorNoise))
+        graph.add(gtsam.PriorFactorPoint3(P(0),
+                                    truth.points[0], pointPriorNoise))
 
         # Initial estimate
         initialEstimate = gtsam.Values()
@@ -78,7 +78,6 @@ class TestSFMExample(GtsamTestCase):
         for j in range(len(truth.points)):
             point_j = result.atPoint3(P(j))
             self.gtsamAssertEquals(point_j, truth.points[j], 1e-5)
-
 
 if __name__ == "__main__":
     unittest.main()

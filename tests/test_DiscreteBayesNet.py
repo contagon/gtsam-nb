@@ -15,18 +15,11 @@ import math
 import textwrap
 import unittest
 
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 import gtsam
-from gtsam import (
-    DiscreteBayesNet,
-    DiscreteConditional,
-    DiscreteDistribution,
-    DiscreteFactorGraph,
-    DiscreteKeys,
-    DiscreteValues,
-    Ordering,
-)
+from gtsam import (DiscreteBayesNet, DiscreteConditional, DiscreteDistribution,
+                   DiscreteFactorGraph, DiscreteKeys, DiscreteValues, Ordering)
 
 # Some keys:
 Asia = (0, 2)
@@ -92,18 +85,10 @@ class TestDiscreteBayesNet(GtsamTestCase):
         # solve
         actualMPE = fg.optimize()
         expectedMPE = DiscreteValues()
-        for key in [
-            Asia,
-            Dyspnea,
-            XRay,
-            Tuberculosis,
-            Smoking,
-            Either,
-            LungCancer,
-            Bronchitis,
-        ]:
+        for key in [Asia, Dyspnea, XRay, Tuberculosis, Smoking, Either, LungCancer, Bronchitis]:
             expectedMPE[key[0]] = 0
-        self.assertEqual(list(actualMPE.items()), list(expectedMPE.items()))
+        self.assertEqual(list(actualMPE.items()),
+                         list(expectedMPE.items()))
 
         # Check value for MPE is the same
         self.assertAlmostEqual(asia(actualMPE), fg(actualMPE))
@@ -119,7 +104,8 @@ class TestDiscreteBayesNet(GtsamTestCase):
             expectedMPE2[key[0]] = 0
         for key in [Asia, Dyspnea, Smoking, Bronchitis]:
             expectedMPE2[key[0]] = 1
-        self.assertEqual(list(actualMPE2.items()), list(expectedMPE2.items()))
+        self.assertEqual(list(actualMPE2.items()),
+                         list(expectedMPE2.items()))
 
         # now sample from it
         chordal2 = fg.eliminateSequential(ordering)
@@ -145,26 +131,23 @@ class TestDiscreteBayesNet(GtsamTestCase):
         self.assertEqual(len(values), 5)
 
         for i in [0, 1, 2]:
-            self.assertAlmostEqual(
-                fragment.at(i).logProbability(values),
-                math.log(fragment.at(i).evaluate(values)),
-            )
-        self.assertAlmostEqual(
-            fragment.logProbability(values), math.log(fragment.evaluate(values))
-        )
+            self.assertAlmostEqual(fragment.at(i).logProbability(values),
+                                   math.log(fragment.at(i).evaluate(values)))
+        self.assertAlmostEqual(fragment.logProbability(values),
+                               math.log(fragment.evaluate(values)))
 
     def test_dot(self):
         """Check that dot works with position hints."""
         fragment = DiscreteBayesNet()
         fragment.add(Either, [Tuberculosis, LungCancer], "F T T T")
-        MyAsia = gtsam.symbol("a", 0), 2  # use a symbol!
+        MyAsia = gtsam.symbol('a', 0), 2  # use a symbol!
         fragment.add(Tuberculosis, [MyAsia], "99/1 95/5")
         fragment.add(LungCancer, [Smoking], "99/1 90/10")
 
         # Make sure we can *update* position hints
         writer = gtsam.DotWriter()
         ph: dict = writer.positionHints
-        ph["a"] = 2  # hint at symbol position
+        ph['a'] = 2  # hint at symbol position
         writer.positionHints = ph
 
         # Check the output of dot

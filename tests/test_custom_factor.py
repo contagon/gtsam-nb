@@ -8,7 +8,6 @@ See LICENSE for the license information
 CustomFactor unit tests.
 Author: Fan Jiang
 """
-
 from typing import List
 import unittest
 from gtsam import Values, Pose2, CustomFactor
@@ -16,7 +15,7 @@ from gtsam import Values, Pose2, CustomFactor
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestCustomFactor(GtsamTestCase):
@@ -44,9 +43,7 @@ class TestCustomFactor(GtsamTestCase):
         """Test if calling the factor works (only error)"""
         expected_pose = Pose2(1, 1, 0)
 
-        def error_func(
-            this: CustomFactor, v: gtsam.Values, H: List[np.ndarray]
-        ) -> np.ndarray:
+        def error_func(this: CustomFactor, v: gtsam.Values, H: List[np.ndarray]) -> np.ndarray:
             """Minimal error function with no Jacobian"""
             key0 = this.keys()[0]
             error = -v.atPose2(key0).localCoordinates(expected_pose)
@@ -113,7 +110,6 @@ class TestCustomFactor(GtsamTestCase):
 
         noise_model = gtsam.noiseModel.Unit.Create(3)
         from gtsam.symbol_shorthand import X
-
         cf = CustomFactor(noise_model, [X(0), X(1)], error_func)
 
         cf_string = """CustomFactor on x0, x1

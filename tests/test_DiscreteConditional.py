@@ -14,7 +14,7 @@ Author: Varun Agrawal
 import unittest
 
 from gtsam import DecisionTreeFactor, DiscreteConditional, DiscreteKeys
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 # Some DiscreteKeys for binary variables:
 A = 0, 2
@@ -71,14 +71,15 @@ class TestDiscreteConditional(GtsamTestCase):
         A_given_B = DiscreteConditional(A, [B], "1/3 3/1")
         B_given_D = DiscreteConditional(B, [D], "1/3 3/1")
         AB_given_D = A_given_B * B_given_D
-        C_given_DE = DiscreteConditional(C, [D, E], "4/1 1/1 1/1 1/4")
+        C_given_DE = DiscreteConditional(C, [D,  E], "4/1 1/1 1/1 1/4")
 
         # P(A,B,C|D,E) = P(A,B|D) P(C|D,E) = P(C|D,E) P(A,B|D)
         for actual in [AB_given_D * C_given_DE, C_given_DE * AB_given_D]:
             self.assertEqual(3, actual.nrFrontals())
             self.assertEqual(2, actual.nrParents())
             for v, value in actual.enumerate():
-                self.assertAlmostEqual(actual(v), AB_given_D(v) * C_given_DE(v))
+                self.assertAlmostEqual(
+                    actual(v), AB_given_D(v) * C_given_DE(v))
 
     def test_marginals(self):
         conditional = DiscreteConditional(A, [B], "1/2 2/1")
@@ -99,18 +100,17 @@ class TestDiscreteConditional(GtsamTestCase):
         parents.push_back(B)
         parents.push_back(C)
 
-        conditional = DiscreteConditional(A, parents, "0/1 1/3  1/1 3/1  0/1 1/0")
-        expected = (
-            " *P(A|B,C):*\n\n"
-            "|*B*|*C*|0|1|\n"
-            "|:-:|:-:|:-:|:-:|\n"
-            "|0|0|0|1|\n"
-            "|0|1|0.25|0.75|\n"
-            "|0|2|0.5|0.5|\n"
-            "|1|0|0.75|0.25|\n"
-            "|1|1|0|1|\n"
+        conditional = DiscreteConditional(A, parents,
+                                          "0/1 1/3  1/1 3/1  0/1 1/0")
+        expected = " *P(A|B,C):*\n\n" \
+            "|*B*|*C*|0|1|\n" \
+            "|:-:|:-:|:-:|:-:|\n" \
+            "|0|0|0|1|\n" \
+            "|0|1|0.25|0.75|\n" \
+            "|0|2|0.5|0.5|\n" \
+            "|1|0|0.75|0.25|\n" \
+            "|1|1|0|1|\n" \
             "|1|2|1|0|\n"
-        )
 
         def formatter(x: int):
             names = ["C", "B", "A"]

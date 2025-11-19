@@ -8,7 +8,6 @@ See LICENSE for the license information
 Sim3 unit tests.
 Author: John Lambert
 """
-
 # pylint: disable=no-name-in-module
 import unittest
 from typing import List, Optional
@@ -17,7 +16,7 @@ import numpy as np
 
 import gtsam
 from gtsam import Point3, Pose3, Pose3Pairs, Rot3, Similarity3
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestSim3(GtsamTestCase):
@@ -637,15 +636,11 @@ class TestSim3(GtsamTestCase):
             wTi = unaligned_pose_dict.get(i, None)
             unaligned_pose_list.append(wTi)
         # GT poses are the reference/target
-        rSe = align_poses_sim3_ignore_missing(
-            aTi_list=poses_gt, bTi_list=unaligned_pose_list
-        )
+        rSe = align_poses_sim3_ignore_missing(aTi_list=poses_gt, bTi_list=unaligned_pose_list)
         assert rSe.scale() >= 0
 
 
-def align_poses_sim3_ignore_missing(
-    aTi_list: List[Optional[Pose3]], bTi_list: List[Optional[Pose3]]
-) -> Similarity3:
+def align_poses_sim3_ignore_missing(aTi_list: List[Optional[Pose3]], bTi_list: List[Optional[Pose3]]) -> Similarity3:
     """Align by similarity transformation, but allow missing estimated poses in the input.
 
     Note: this is a wrapper for align_poses_sim3() that allows for missing poses/dropped cameras.
@@ -709,9 +704,7 @@ def align_poses_sim3(aTi_list: List[Pose3], bTi_list: List[Pose3]) -> Similarity
 
         # fit a single translation motion to the centroid
         aTi_centroid = np.array([aTi.translation() for aTi in aTi_list]).mean(axis=0)
-        aTi_rot_aligned_centroid = np.array(
-            [aTi.translation() for aTi in aTi_list_rot_aligned]
-        ).mean(axis=0)
+        aTi_rot_aligned_centroid = np.array([aTi.translation() for aTi in aTi_list_rot_aligned]).mean(axis=0)
 
         # construct the final SIM3 transform
         aSb = Similarity3(aSb.rotation(), aTi_centroid - aTi_rot_aligned_centroid, 1.0)

@@ -8,7 +8,6 @@ See LICENSE for the license information
 Unit tests for 3D SLAM initialization, using rotation relaxation.
 Author: Luca Carlone and Frank Dellaert (Python)
 """
-
 # pylint: disable=invalid-name, E1101, E0611
 import unittest
 
@@ -16,13 +15,15 @@ import numpy as np
 
 import gtsam
 from gtsam import NonlinearFactorGraph, Point3, Pose3, Rot3, Values
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 x0, x1, x2, x3 = 0, 1, 2, 3
 
 
 class TestValues(GtsamTestCase):
+
     def setUp(self):
+
         model = gtsam.noiseModel.Isotropic.Sigma(6, 0.1)
 
         # We consider a small graph:
@@ -64,7 +65,7 @@ class TestValues(GtsamTestCase):
     def test_orientations(self):
         pose3Graph = gtsam.InitializePose3.buildPose3graph(self.graph)
         initial = gtsam.InitializePose3.computeOrientationsChordal(pose3Graph)
-
+    
         # comparison is up to M_PI, that's why we add some multiples of 2*M_PI
         self.gtsamAssertEquals(initial.atRot3(x0), self.R0, 1e-6)
         self.gtsamAssertEquals(initial.atRot3(x1), self.R1, 1e-6)

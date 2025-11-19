@@ -8,14 +8,13 @@ See LICENSE for the license information
 ScenarioRunner unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import math
 import unittest
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestScenarioRunner(GtsamTestCase):
@@ -34,15 +33,15 @@ class TestScenarioRunner(GtsamTestCase):
         dt = 0.1
         params = gtsam.PreintegrationParams.MakeSharedU(self.g)
         bias = gtsam.imuBias.ConstantBias()
-        runner = gtsam.ScenarioRunner(scenario, params, dt, bias)
+        runner = gtsam.ScenarioRunner(
+            scenario, params, dt, bias)
 
         # Test specific force at time 0: a is pointing up
         t = 0.0
         a = w * v
         np.testing.assert_almost_equal(
-            np.array([0, 0, a + self.g]), runner.actualSpecificForce(t)
-        )
+            np.array([0, 0, a + self.g]), runner.actualSpecificForce(t))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

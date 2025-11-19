@@ -8,16 +8,16 @@ See LICENSE for the license information
 Odometry unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestOdometryExample(GtsamTestCase):
+
     def test_OdometryExample(self):
         # Create the graph (defined in pose2SLAM.h, derived from
         # NonlinearFactorGraph)
@@ -26,8 +26,7 @@ class TestOdometryExample(GtsamTestCase):
         # Add a Gaussian prior on pose x_1
         priorMean = gtsam.Pose2(0.0, 0.0, 0.0)  # prior mean is at origin
         priorNoise = gtsam.noiseModel.Diagonal.Sigmas(
-            np.array([0.3, 0.3, 0.1])
-        )  # 30cm std on x,y, 0.1 rad on theta
+            np.array([0.3, 0.3, 0.1]))  # 30cm std on x,y, 0.1 rad on theta
         # add directly to graph
         graph.add(gtsam.PriorFactorPose2(1, priorMean, priorNoise))
 
@@ -35,8 +34,7 @@ class TestOdometryExample(GtsamTestCase):
         # create a measurement for both factors (the same in this case)
         odometry = gtsam.Pose2(2.0, 0.0, 0.0)
         odometryNoise = gtsam.noiseModel.Diagonal.Sigmas(
-            np.array([0.2, 0.2, 0.1])
-        )  # 20cm std on x,y, 0.1 rad on theta
+            np.array([0.2, 0.2, 0.1]))  # 20cm std on x,y, 0.1 rad on theta
         graph.add(gtsam.BetweenFactorPose2(1, 2, odometry, odometryNoise))
         graph.add(gtsam.BetweenFactorPose2(2, 3, odometry, odometryNoise))
 
@@ -56,7 +54,6 @@ class TestOdometryExample(GtsamTestCase):
         # Check first pose equality
         pose_1 = result.atPose2(1)
         self.gtsamAssertEquals(pose_1, gtsam.Pose2(), 1e-4)
-
 
 if __name__ == "__main__":
     unittest.main()

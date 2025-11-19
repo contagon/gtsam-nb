@@ -17,7 +17,7 @@ import unittest
 import gtsam
 import numpy as np
 from gtsam.symbol_shorthand import C, X
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestHybridValues(GtsamTestCase):

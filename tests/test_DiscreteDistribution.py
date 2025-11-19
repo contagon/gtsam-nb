@@ -15,7 +15,7 @@ import unittest
 
 import numpy as np
 from gtsam import DecisionTreeFactor, DiscreteKeys, DiscreteDistribution
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 X = 0, 2
 
@@ -55,7 +55,12 @@ class TestDiscreteDistribution(GtsamTestCase):
         """Test the _repr_markdown_ method."""
 
         prior = DiscreteDistribution(X, "2/3")
-        expected = " *P(0):*\n\n|0|value|\n|:-:|:-:|\n|0|0.4|\n|1|0.6|\n"
+        expected = " *P(0):*\n\n" \
+            "|0|value|\n" \
+            "|:-:|:-:|\n" \
+            "|0|0.4|\n" \
+            "|1|0.6|\n" \
+
         actual = prior._repr_markdown_()
         self.assertEqual(actual, expected)
 

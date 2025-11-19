@@ -5,7 +5,6 @@ Author: Jing Wu and Frank Dellaert
 # pylint: disable=invalid-name
 
 import sys
-
 if sys.version_info.major >= 3:
     from io import StringIO
 else:
@@ -17,9 +16,9 @@ from datetime import datetime
 import gtsam
 import numpy as np
 from gtsam import Rot3
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
-from logging_optimizer import gtsam_optimize, optimize_using
+from gtsam.utils.logging_optimizer import gtsam_optimize, optimize_using
 
 KEY = 0
 MODEL = gtsam.noiseModel.Unit.Create(3)
@@ -39,10 +38,9 @@ class TestOptimizeComet(GtsamTestCase):
             # Check that optimizing yields the identity
             self.gtsamAssertEquals(actual.atRot3(KEY), self.expected, tol=1e-6)
             # Check that logging output prints out 3 lines (exact intermediate values differ by OS)
-            self.assertEqual(self.capturedOutput.getvalue().count("\n"), 3)
+            self.assertEqual(self.capturedOutput.getvalue().count('\n'), 3)
             # reset stdout catcher
             self.capturedOutput.truncate(0)
-
         self.check = check
 
         self.graph = gtsam.NonlinearFactorGraph()
@@ -68,73 +66,51 @@ class TestOptimizeComet(GtsamTestCase):
 
         # Wrapper function sets the hook and calls optimizer.optimize() for us.
         params = gtsam.GaussNewtonParams()
-        actual = optimize_using(
-            gtsam.GaussNewtonOptimizer, hook, self.graph, self.initial
-        )
+        actual = optimize_using(gtsam.GaussNewtonOptimizer, hook, self.graph, self.initial)
         self.check(actual)
-        actual = optimize_using(
-            gtsam.GaussNewtonOptimizer, hook, self.graph, self.initial, params
-        )
+        actual = optimize_using(gtsam.GaussNewtonOptimizer, hook, self.graph, self.initial, params)
         self.check(actual)
-        actual = gtsam_optimize(
-            gtsam.GaussNewtonOptimizer(self.graph, self.initial, params), params, hook
-        )
+        actual = gtsam_optimize(gtsam.GaussNewtonOptimizer(self.graph, self.initial, params),
+                                params, hook)
         self.check(actual)
 
     def test_lm_simple_printing(self):
         """Make sure we are properly terminating LM"""
-
         def hook(_, error):
             print(error)
 
         params = gtsam.LevenbergMarquardtParams()
-        actual = optimize_using(
-            gtsam.LevenbergMarquardtOptimizer, hook, self.graph, self.initial
-        )
+        actual = optimize_using(gtsam.LevenbergMarquardtOptimizer, hook, self.graph, self.initial)
         self.check(actual)
-        actual = optimize_using(
-            gtsam.LevenbergMarquardtOptimizer, hook, self.graph, self.initial, params
-        )
+        actual = optimize_using(gtsam.LevenbergMarquardtOptimizer, hook, self.graph, self.initial,
+                                params)
         self.check(actual)
-        actual = gtsam_optimize(
-            gtsam.LevenbergMarquardtOptimizer(self.graph, self.initial, params),
-            params,
-            hook,
-        )
+        actual = gtsam_optimize(gtsam.LevenbergMarquardtOptimizer(self.graph, self.initial, params),
+                                params, hook)
 
     @unittest.skip("Not a test we want run every time, as needs comet.ml account")
     def test_comet(self):
         """Test with a comet hook."""
         from comet_ml import Experiment
-
-        comet = Experiment(project_name="Testing", auto_output_logging="native")
+        comet = Experiment(project_name="Testing",
+                           auto_output_logging="native")
         comet.log_dataset_info(name="Karcher", path="shonan")
         comet.add_tag("GaussNewton")
         comet.log_parameter("method", "GaussNewton")
         time = datetime.now()
-        comet.set_name(
-            "GaussNewton-"
-            + str(time.month)
-            + "/"
-            + str(time.day)
-            + " "
-            + str(time.hour)
-            + ":"
-            + str(time.minute)
-            + ":"
-            + str(time.second)
-        )
+        comet.set_name("GaussNewton-" + str(time.month) + "/" + str(time.day) + " "
+                       + str(time.hour)+":"+str(time.minute)+":"+str(time.second))
 
         # I want to do some comet thing here
         def hook(optimizer, error):
-            comet.log_metric("Karcher error", error, optimizer.iterations())
+            comet.log_metric("Karcher error",
+                             error, optimizer.iterations())
 
         gtsam_optimize(self.optimizer, self.params, hook)
         comet.end()
 
         actual = self.optimizer.values()
         self.gtsamAssertEquals(actual.atRot3(KEY), self.expected)
-
 
 if __name__ == "__main__":
     unittest.main()

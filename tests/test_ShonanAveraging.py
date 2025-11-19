@@ -24,7 +24,7 @@ from gtsam import (
     ShonanAveraging3,
     ShonanAveragingParameters3,
 )
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 DEFAULT_PARAMS = ShonanAveragingParameters3(
     gtsam.LevenbergMarquardtParams.CeresDefaults()
@@ -64,9 +64,8 @@ class TestShonanAveraging(GtsamTestCase):
     def test_checkOptimality(self):
         random = self.shonan.initializeRandomlyAt(4)
         lambdaMin = self.shonan.computeMinEigenValue(random)
-        self.assertAlmostEqual(
-            -414.87376657555996, lambdaMin, places=3
-        )  # Regression test
+        self.assertAlmostEqual(-414.87376657555996,
+                               lambdaMin, places=3)  # Regression test
         self.assertFalse(self.shonan.checkOptimality(random))
 
     def test_tryOptimizingAt3(self):
@@ -75,9 +74,8 @@ class TestShonanAveraging(GtsamTestCase):
         result = self.shonan.tryOptimizingAt(3, initial)
         self.assertTrue(self.shonan.checkOptimality(result))
         lambdaMin = self.shonan.computeMinEigenValue(result)
-        self.assertAlmostEqual(
-            -5.427688831332745e-07, lambdaMin, places=3
-        )  # Regression test
+        self.assertAlmostEqual(-5.427688831332745e-07,
+                               lambdaMin, places=3)  # Regression test
         self.assertAlmostEqual(0, self.shonan.costAt(3, result), places=3)
         SO3Values = self.shonan.roundSolution(result)
         self.assertAlmostEqual(0, self.shonan.cost(SO3Values), places=3)
@@ -88,9 +86,8 @@ class TestShonanAveraging(GtsamTestCase):
         self.assertTrue(self.shonan.checkOptimality(result))
         self.assertAlmostEqual(0, self.shonan.costAt(4, result), places=2)
         lambdaMin = self.shonan.computeMinEigenValue(result)
-        self.assertAlmostEqual(
-            -5.427688831332745e-07, lambdaMin, places=3
-        )  # Regression test
+        self.assertAlmostEqual(-5.427688831332745e-07,
+                               lambdaMin, places=3)  # Regression test
         SO3Values = self.shonan.roundSolution(result)
         self.assertAlmostEqual(0, self.shonan.cost(SO3Values), places=3)
 
@@ -99,17 +96,15 @@ class TestShonanAveraging(GtsamTestCase):
         Qstar3 = self.shonan.tryOptimizingAt(3, random)
         lambdaMin, minEigenVector = self.shonan.computeMinEigenVector(Qstar3)
         initialQ4 = self.shonan.initializeWithDescent(
-            4, Qstar3, minEigenVector, lambdaMin
-        )
+            4, Qstar3, minEigenVector, lambdaMin)
         self.assertAlmostEqual(5, initialQ4.size())
 
     def test_run(self):
         initial = self.shonan.initializeRandomly()
         result, lambdaMin = self.shonan.run(initial, 5, 10)
         self.assertAlmostEqual(0, self.shonan.cost(result), places=2)
-        self.assertAlmostEqual(
-            -5.427688831332745e-07, lambdaMin, places=3
-        )  # Regression test
+        self.assertAlmostEqual(-5.427688831332745e-07,
+                               lambdaMin, places=3)  # Regression test
 
     def test_runKlausKarcher(self):
         # Load 2D toy example
@@ -151,6 +146,7 @@ class TestShonanAveraging(GtsamTestCase):
         self.assertAlmostEqual(3.0756, shonan.cost(initial), places=3)
         result, _lambdaMin = shonan.run(initial, 3, 3)
         self.assertAlmostEqual(0.0015, shonan.cost(result), places=3)
+    
 
     def test_constructorBetweenFactorPose2s(self) -> None:
         """Check if ShonanAveraging2 constructor works when not initialized from g2o file.
@@ -190,7 +186,9 @@ class TestShonanAveraging(GtsamTestCase):
         between_factors = gtsam.BetweenFactorPose2s()
         for (i1, i2), i2Ri1 in i2Ri1_dict.items():
             i2Ti1 = Pose2(i2Ri1, np.zeros(2))
-            between_factors.append(BetweenFactorPose2(i2, i1, i2Ti1, noise_model))
+            between_factors.append(
+                BetweenFactorPose2(i2, i1, i2Ti1, noise_model)
+            )
 
         obj = ShonanAveraging2(between_factors, shonan_params)
         initial = obj.initializeRandomly()
@@ -198,11 +196,11 @@ class TestShonanAveraging(GtsamTestCase):
 
         wRi_list = [result_values.atRot2(i) for i in range(num_images)]
         thetas_deg = np.array([wRi.degrees() for wRi in wRi_list])
-
+        
         # map all angles to [0,360)
         thetas_deg = thetas_deg % 360
         thetas_deg -= thetas_deg[0]
-
+        
         expected_thetas_deg = np.array([0.0, 90.0, 0.0])
         np.testing.assert_allclose(thetas_deg, expected_thetas_deg, atol=0.1)
 

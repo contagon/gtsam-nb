@@ -13,7 +13,7 @@ Author: Frank Dellaert
 import unittest
 
 import numpy as np
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 import gtsam
 from gtsam import GaussianBayesNet, GaussianConditional
@@ -51,13 +51,10 @@ class TestGaussianBayesNet(GtsamTestCase):
         values.insert(_x_, np.array([9.0]))
         values.insert(_y_, np.array([5.0]))
         for i in [0, 1]:
-            self.assertAlmostEqual(
-                bayesNet.at(i).logProbability(values),
-                np.log(bayesNet.at(i).evaluate(values)),
-            )
-        self.assertAlmostEqual(
-            bayesNet.logProbability(values), np.log(bayesNet.evaluate(values))
-        )
+            self.assertAlmostEqual(bayesNet.at(i).logProbability(values),
+                                   np.log(bayesNet.at(i).evaluate(values)))
+        self.assertAlmostEqual(bayesNet.logProbability(values),
+                               np.log(bayesNet.evaluate(values)))
 
     def test_sample(self):
         """Test sample method"""

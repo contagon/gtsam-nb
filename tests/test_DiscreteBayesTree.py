@@ -15,17 +15,12 @@ import unittest
 
 import numpy as np
 from gtsam.symbol_shorthand import A, X
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 import gtsam
-from gtsam import (
-    DiscreteBayesNet,
-    DiscreteBayesTreeClique,
-    DiscreteConditional,
-    DiscreteFactorGraph,
-    DiscreteValues,
-    Ordering,
-)
+from gtsam import (DiscreteBayesNet, DiscreteBayesTreeClique,
+                   DiscreteConditional, DiscreteFactorGraph,
+                   DiscreteValues, Ordering)
 
 
 class TestDiscreteBayesNet(GtsamTestCase):
@@ -118,28 +113,11 @@ class TestDiscreteBayesNet(GtsamTestCase):
         # Should I stay or should I go?
         # "Reward" (exp(-cost)) for an action is 10, and rewards multiply:
         r = 10
-        table = np.array(
-            [
-                r,
-                0,
-                0,
-                0,
-                r,
-                0,  # x1 = 0
-                0,
-                r,
-                0,
-                0,
-                0,
-                r,  # x1 = 1
-                0,
-                0,
-                r,
-                0,
-                0,
-                r,  # x1 = 2
-            ]
-        )
+        table = np.array([
+            r, 0, 0, 0, r, 0,  # x1 = 0
+            0, r, 0, 0, 0, r,  # x1 = 1
+            0, 0, r, 0, 0, r   # x1 = 2
+        ])
         graph.add([x1, a1, x2], table)
         graph.add([x2, a2, x3], table)
 
@@ -191,7 +169,6 @@ class TestDiscreteBayesNet(GtsamTestCase):
         values[A(2)] = 1
         values[X(3)] = 2
         self.assertAlmostEqual(lookup_a2_x3(values), 10)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,16 +8,16 @@ See LICENSE for the license information
 Localization unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestLocalizationExample(GtsamTestCase):
+
     def test_LocalizationExample(self):
         # Create the graph (defined in pose2SLAM.h, derived from
         # NonlinearFactorGraph)
@@ -27,8 +27,7 @@ class TestLocalizationExample(GtsamTestCase):
         # create a measurement for both factors (the same in this case)
         odometry = gtsam.Pose2(2.0, 0.0, 0.0)
         odometryNoise = gtsam.noiseModel.Diagonal.Sigmas(
-            np.array([0.2, 0.2, 0.1])
-        )  # 20cm std on x,y, 0.1 rad on theta
+            np.array([0.2, 0.2, 0.1]))  # 20cm std on x,y, 0.1 rad on theta
         graph.add(gtsam.BetweenFactorPose2(0, 1, odometry, odometryNoise))
         graph.add(gtsam.BetweenFactorPose2(1, 2, odometry, odometryNoise))
 
@@ -38,7 +37,7 @@ class TestLocalizationExample(GtsamTestCase):
         groundTruth.insert(0, gtsam.Pose2(0.0, 0.0, 0.0))
         groundTruth.insert(1, gtsam.Pose2(2.0, 0.0, 0.0))
         groundTruth.insert(2, gtsam.Pose2(4.0, 0.0, 0.0))
-        model = gtsam.noiseModel.Diagonal.Sigmas(np.array([0.1, 0.1, 10.0]))
+        model = gtsam.noiseModel.Diagonal.Sigmas(np.array([0.1, 0.1, 10.]))
         for i in range(3):
             graph.add(gtsam.PriorFactorPose2(i, groundTruth.atPose2(i), model))
 
@@ -60,7 +59,6 @@ class TestLocalizationExample(GtsamTestCase):
             pose_i = result.atPose2(i)
             self.gtsamAssertEquals(pose_i, groundTruth.atPose2(i), 1e-4)
             P[i] = marginals.marginalCovariance(i)
-
 
 if __name__ == "__main__":
     unittest.main()

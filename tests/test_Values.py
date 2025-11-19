@@ -8,32 +8,19 @@ See LICENSE for the license information
 Values unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 # pylint: disable=invalid-name, E1101, E0611
 import unittest
 
 import numpy as np
 
 import gtsam
-from gtsam import (
-    Cal3_S2,
-    Cal3Bundler,
-    Cal3DS2,
-    EssentialMatrix,
-    Point2,
-    Point3,
-    Pose2,
-    Pose3,
-    Rot2,
-    Rot3,
-    Unit3,
-    Values,
-    imuBias,
-)
-from utils import GtsamTestCase
+from gtsam import (Cal3_S2, Cal3Bundler, Cal3DS2, EssentialMatrix, Point2,
+                   Point3, Pose2, Pose3, Rot2, Rot3, Unit3, Values, imuBias)
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestValues(GtsamTestCase):
+
     def test_values(self):
         values = Values()
         E = EssentialMatrix(Rot3(), Unit3())
@@ -62,26 +49,18 @@ class TestValues(GtsamTestCase):
         # but for performance reasons, it's recommended to specify the correct
         # type and storage order.
         # for vectors, the order is not important, but dtype still is
-        vec = np.array([1.0, 2.0, 3.0])
+        vec = np.array([1., 2., 3.])
         values.insert(11, vec)
-        mat = np.array([[1.0, 2.0], [3.0, 4.0]], order="F")
+        mat = np.array([[1., 2.], [3., 4.]], order='F')
         values.insert(12, mat)
         # Test with dtype int and the default order='C'
         # This still works as the wrapper converts to the correct type and order for you
         # but is nornally not recommended!
-        mat2 = np.array(
-            [
-                [
-                    1,
-                    2,
-                ],
-                [3, 5],
-            ]
-        )
+        mat2 = np.array([[1, 2, ], [3, 5]])
         values.insert(13, mat2)
 
-        self.gtsamAssertEquals(values.atPoint2(0), Point2(0, 0), tol)
-        self.gtsamAssertEquals(values.atPoint3(1), Point3(0, 0, 0), tol)
+        self.gtsamAssertEquals(values.atPoint2(0), Point2(0,0), tol)
+        self.gtsamAssertEquals(values.atPoint3(1), Point3(0,0,0), tol)
         self.gtsamAssertEquals(values.atRot2(2), Rot2(), tol)
         self.gtsamAssertEquals(values.atPose2(3), Pose2(), tol)
         self.gtsamAssertEquals(values.atRot3(4), Rot3(), tol)
@@ -90,7 +69,8 @@ class TestValues(GtsamTestCase):
         self.gtsamAssertEquals(values.atCal3DS2(7), Cal3DS2(), tol)
         self.gtsamAssertEquals(values.atCal3Bundler(8), Cal3Bundler(), tol)
         self.gtsamAssertEquals(values.atEssentialMatrix(9), E, tol)
-        self.gtsamAssertEquals(values.atConstantBias(10), imuBias.ConstantBias(), tol)
+        self.gtsamAssertEquals(values.atConstantBias(
+            10), imuBias.ConstantBias(), tol)
 
         # special cases for Vector and Matrix:
         actualVector = values.atVector(11)

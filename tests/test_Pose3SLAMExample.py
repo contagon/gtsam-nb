@@ -8,17 +8,18 @@ See LICENSE for the license information
 PoseSLAM unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
+from math import pi
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
-from circlePose3 import circlePose3
+from gtsam.utils.test_case import GtsamTestCase
+from gtsam.utils.circlePose3 import circlePose3
 
 
 class TestPose3SLAMExample(GtsamTestCase):
+
     def test_Pose3SLAMExample(self) -> None:
         # Create a hexagon of poses
         hexagon = circlePose3(numPoses=6, radius=1.0)
@@ -30,10 +31,7 @@ class TestPose3SLAMExample(GtsamTestCase):
         fg.add(gtsam.NonlinearEqualityPose3(0, p0))
         delta = p0.between(p1)
         covariance = gtsam.noiseModel.Diagonal.Sigmas(
-            np.array(
-                [0.05, 0.05, 0.05, np.deg2rad(5.0), np.deg2rad(5.0), np.deg2rad(5.0)]
-            )
-        )
+            np.array([0.05, 0.05, 0.05, np.deg2rad(5.), np.deg2rad(5.), np.deg2rad(5.)]))
         fg.add(gtsam.BetweenFactorPose3(0, 1, delta, covariance))
         fg.add(gtsam.BetweenFactorPose3(1, 2, delta, covariance))
         fg.add(gtsam.BetweenFactorPose3(2, 3, delta, covariance))
@@ -57,7 +55,6 @@ class TestPose3SLAMExample(GtsamTestCase):
 
         pose_1 = result.atPose3(1)
         self.gtsamAssertEquals(pose_1, p1, 1e-4)
-
 
 if __name__ == "__main__":
     unittest.main()

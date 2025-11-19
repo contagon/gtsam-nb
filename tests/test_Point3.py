@@ -8,12 +8,11 @@ See LICENSE for the license information
 Point3 unit tests.
 Author: Frank Dellaert & Fan Jiang
 """
-
 import unittest
 
 import gtsam
 import numpy as np
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestPoint3(GtsamTestCase):

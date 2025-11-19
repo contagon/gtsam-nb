@@ -16,7 +16,7 @@ import unittest
 from typing import Tuple
 
 from gtsam import DSFMapIndexPair, IndexPair, IndexPairSetAsArray
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestDSFMap(GtsamTestCase):

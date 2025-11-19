@@ -8,27 +8,20 @@ See LICENSE for the license information
 SimpleCamera unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import math
 import unittest
 
 import numpy as np
 
 import gtsam
-from gtsam import (
-    Cal3_S2,
-    Point3,
-    Pose2,
-    Pose3,
-    Rot3,
-    PinholeCameraCal3_S2 as SimpleCamera,
-)
-from utils import GtsamTestCase
+from gtsam import Cal3_S2, Point3, Pose2, Pose3, Rot3, PinholeCameraCal3_S2 as SimpleCamera
+from gtsam.utils.test_case import GtsamTestCase
 
 K = Cal3_S2(625, 625, 0, 0, 0)
 
 
 class TestSimpleCamera(GtsamTestCase):
+
     def test_constructor(self):
         pose1 = Pose3(Rot3(np.diag([1, -1, -1])), Point3(0, 0, 0.5))
         camera = SimpleCamera(pose1, K)
@@ -37,7 +30,7 @@ class TestSimpleCamera(GtsamTestCase):
 
     def test_level2(self):
         # Create a level camera, looking in Y-direction
-        pose2 = Pose2(0.4, 0.3, math.pi / 2.0)
+        pose2 = Pose2(0.4, 0.3, math.pi/2.0)
         camera = SimpleCamera.Level(K, pose2, 0.1)
 
         # expected

@@ -8,30 +8,18 @@ See LICENSE for the license information
 Test Triangulation
 Authors: Frank Dellaert & Fan Jiang (Python) & Sushmita Warrier & John Lambert
 """
-
 # pylint: disable=no-name-in-module, invalid-name, no-member
 import unittest
 from typing import Iterable, List, Optional, Tuple, Union
 import numpy as np
 
 import gtsam
-from gtsam import (
-    Cal3_S2,
-    Cal3Bundler,
-    CameraSetCal3_S2,
-    CameraSetCal3Bundler,
-    PinholeCameraCal3_S2,
-    PinholeCameraCal3Bundler,
-    Point2,
-    Point2Vector,
-    Point3,
-    Pose3,
-    Pose3Vector,
-    Rot3,
-    TriangulationParameters,
-    TriangulationResult,
-)
-from utils import GtsamTestCase
+from gtsam import (Cal3_S2, Cal3Bundler, CameraSetCal3_S2,
+                   CameraSetCal3Bundler, PinholeCameraCal3_S2,
+                   PinholeCameraCal3Bundler, Point2, Point2Vector, Point3,
+                   Pose3, Pose3Vector, Rot3, TriangulationParameters,
+                   TriangulationResult)
+from gtsam.utils.test_case import GtsamTestCase
 
 UPRIGHT = Rot3.Ypr(-np.pi / 2, 0.0, -np.pi / 2)
 
@@ -59,11 +47,10 @@ class TestTriangulationExample(GtsamTestCase):
         calibration: Union[Cal3Bundler, Cal3_S2],
         camera_model: Union[PinholeCameraCal3Bundler, PinholeCameraCal3_S2],
         cal_params: Iterable[Iterable[Union[int, float]]],
-        camera_set: Optional[Union[CameraSetCal3Bundler, CameraSetCal3_S2]] = None,
-    ) -> Tuple[
-        Point2Vector,
-        Union[CameraSetCal3Bundler, CameraSetCal3_S2, List[Cal3Bundler], List[Cal3_S2]],
-    ]:
+        camera_set: Optional[Union[CameraSetCal3Bundler,
+                                   CameraSetCal3_S2]] = None,
+    ) -> Tuple[Point2Vector, Union[CameraSetCal3Bundler, CameraSetCal3_S2,
+                                   List[Cal3Bundler], List[Cal3_S2]]]:
         """
         Generate vector of measurements for given calibration and camera model.
 
@@ -99,12 +86,13 @@ class TestTriangulationExample(GtsamTestCase):
         measurements, _ = self.generate_measurements(
             calibration=Cal3_S2,
             camera_model=PinholeCameraCal3_S2,
-            cal_params=(sharedCal, sharedCal),
-        )
+            cal_params=(sharedCal, sharedCal))
 
-        triangulated_landmark = gtsam.triangulatePoint3(
-            self.poses, Cal3_S2(sharedCal), measurements, rank_tol=1e-9, optimize=True
-        )
+        triangulated_landmark = gtsam.triangulatePoint3(self.poses,
+                                                        Cal3_S2(sharedCal),
+                                                        measurements,
+                                                        rank_tol=1e-9,
+                                                        optimize=True)
         self.gtsamAssertEquals(self.landmark, triangulated_landmark, 1e-9)
 
         # Add some noise and try again: result should be ~ (4.995, 0.499167, 1.19814)
@@ -112,13 +100,11 @@ class TestTriangulationExample(GtsamTestCase):
         measurements_noisy.append(measurements[0] - np.array([0.1, 0.5]))
         measurements_noisy.append(measurements[1] - np.array([-0.2, 0.3]))
 
-        triangulated_landmark = gtsam.triangulatePoint3(
-            self.poses,
-            Cal3_S2(sharedCal),
-            measurements_noisy,
-            rank_tol=1e-9,
-            optimize=True,
-        )
+        triangulated_landmark = gtsam.triangulatePoint3(self.poses,
+                                                        Cal3_S2(sharedCal),
+                                                        measurements_noisy,
+                                                        rank_tol=1e-9,
+                                                        optimize=True)
 
         self.gtsamAssertEquals(self.landmark, triangulated_landmark, 1e-2)
 
@@ -132,12 +118,12 @@ class TestTriangulationExample(GtsamTestCase):
             calibration=Cal3_S2,
             camera_model=PinholeCameraCal3_S2,
             cal_params=(K1, K2),
-            camera_set=CameraSetCal3_S2,
-        )
+            camera_set=CameraSetCal3_S2)
 
-        triangulated_landmark = gtsam.triangulatePoint3(
-            cameras, measurements, rank_tol=1e-9, optimize=True
-        )
+        triangulated_landmark = gtsam.triangulatePoint3(cameras,
+                                                        measurements,
+                                                        rank_tol=1e-9,
+                                                        optimize=True)
         self.gtsamAssertEquals(self.landmark, triangulated_landmark, 1e-9)
 
     def test_distinct_Ks_Bundler(self) -> None:
@@ -150,12 +136,12 @@ class TestTriangulationExample(GtsamTestCase):
             calibration=Cal3Bundler,
             camera_model=PinholeCameraCal3Bundler,
             cal_params=(K1, K2),
-            camera_set=CameraSetCal3Bundler,
-        )
+            camera_set=CameraSetCal3Bundler)
 
-        triangulated_landmark = gtsam.triangulatePoint3(
-            cameras, measurements, rank_tol=1e-9, optimize=True
-        )
+        triangulated_landmark = gtsam.triangulatePoint3(cameras,
+                                                        measurements,
+                                                        rank_tol=1e-9,
+                                                        optimize=True)
         self.gtsamAssertEquals(self.landmark, triangulated_landmark, 1e-9)
 
     def test_triangulation_robust_three_poses(self) -> None:
@@ -181,37 +167,45 @@ class TestTriangulationExample(GtsamTestCase):
         measurements = Point2Vector([z1, z2, z3])
 
         # noise free, so should give exactly the landmark
-        actual = gtsam.triangulatePoint3(
-            poses, sharedCal, measurements, rank_tol=1e-9, optimize=False
-        )
+        actual = gtsam.triangulatePoint3(poses,
+                                         sharedCal,
+                                         measurements,
+                                         rank_tol=1e-9,
+                                         optimize=False)
         self.assertTrue(np.allclose(landmark, actual, atol=1e-2))
 
         # Add outlier
         measurements[0] += Point2(100, 120)  # very large pixel noise!
 
         # now estimate does not match landmark
-        actual2 = gtsam.triangulatePoint3(
-            poses, sharedCal, measurements, rank_tol=1e-9, optimize=False
-        )
+        actual2 = gtsam.triangulatePoint3(poses,
+                                          sharedCal,
+                                          measurements,
+                                          rank_tol=1e-9,
+                                          optimize=False)
         # DLT is surprisingly robust, but still off (actual error is around 0.26m)
         self.assertTrue(np.linalg.norm(landmark - actual2) >= 0.2)
         self.assertTrue(np.linalg.norm(landmark - actual2) <= 0.5)
 
         # Again with nonlinear optimization
-        actual3 = gtsam.triangulatePoint3(
-            poses, sharedCal, measurements, rank_tol=1e-9, optimize=True
-        )
+        actual3 = gtsam.triangulatePoint3(poses,
+                                          sharedCal,
+                                          measurements,
+                                          rank_tol=1e-9,
+                                          optimize=True)
         # result from nonlinear (but non-robust optimization) is close to DLT and still off
         self.assertTrue(np.allclose(actual2, actual3, atol=0.1))
 
         # Again with nonlinear optimization, this time with robust loss
         model = gtsam.noiseModel.Robust.Create(
             gtsam.noiseModel.mEstimator.Huber.Create(1.345),
-            gtsam.noiseModel.Unit.Create(2),
-        )
-        actual4 = gtsam.triangulatePoint3(
-            poses, sharedCal, measurements, rank_tol=1e-9, optimize=True, model=model
-        )
+            gtsam.noiseModel.Unit.Create(2))
+        actual4 = gtsam.triangulatePoint3(poses,
+                                          sharedCal,
+                                          measurements,
+                                          rank_tol=1e-9,
+                                          optimize=True,
+                                          model=model)
         # using the Huber loss we now have a quite small error!! nice!
         self.assertTrue(np.allclose(landmark, actual4, atol=0.05))
 
@@ -240,22 +234,22 @@ class TestTriangulationExample(GtsamTestCase):
         measurements.append(z2)
 
         landmarkDistanceThreshold = 10  # landmark is closer than that
-        # all default except landmarkDistanceThreshold:
+        # all default except landmarkDistanceThreshold: 
         params = TriangulationParameters(1.0, False, landmarkDistanceThreshold)
         actual: TriangulationResult = gtsam.triangulateSafe(
-            cameras, measurements, params
-        )
+            cameras, measurements, params)
         self.gtsamAssertEquals(actual.get(), self.landmark, 1e-2)
         self.assertTrue(actual.valid())
 
         landmarkDistanceThreshold = 4  # landmark is farther than that
-        params2 = TriangulationParameters(1.0, False, landmarkDistanceThreshold)
+        params2 = TriangulationParameters(
+            1.0, False, landmarkDistanceThreshold)
         actual = gtsam.triangulateSafe(cameras, measurements, params2)
         self.assertTrue(actual.farPoint())
 
         # 3. Add a slightly rotated third camera above with a wrong measurement
         # (OUTLIER)
-        pose3 = pose1 * Pose3(Rot3.Ypr(0.1, 0.2, 0.1), Point3(0.1, -2, -0.1))
+        pose3 = pose1 * Pose3(Rot3.Ypr(0.1, 0.2, 0.1), Point3(0.1, -2, -.1))
         K3 = Cal3_S2(700, 500, 0, 640, 480)
         camera3 = PinholeCameraCal3_S2(pose3, K3)
         z3 = camera3.project(self.landmark)
@@ -264,18 +258,16 @@ class TestTriangulationExample(GtsamTestCase):
         measurements.append(z3 + Point2(10, -10))
 
         landmarkDistanceThreshold = 10  # landmark is closer than that
-        outlierThreshold = 100  # loose, the outlier is going to pass
-        params3 = TriangulationParameters(
-            1.0, False, landmarkDistanceThreshold, outlierThreshold
-        )
+        outlierThreshold = 100   # loose, the outlier is going to pass
+        params3 = TriangulationParameters(1.0, False, landmarkDistanceThreshold,
+                                          outlierThreshold)
         actual = gtsam.triangulateSafe(cameras, measurements, params3)
         self.assertTrue(actual.valid())
 
         # now set stricter threshold for outlier rejection
         outlierThreshold = 5  # tighter, the outlier is not going to pass
-        params4 = TriangulationParameters(
-            1.0, False, landmarkDistanceThreshold, outlierThreshold
-        )
+        params4 = TriangulationParameters(1.0, False, landmarkDistanceThreshold,
+                                          outlierThreshold)
         actual = gtsam.triangulateSafe(cameras, measurements, params4)
         self.assertTrue(actual.outlier())
 

@@ -14,7 +14,7 @@ import numpy as np
 
 import gtsam
 from gtsam import Point3, Rot3, Unit3
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 R1_R2_pairs = [
@@ -2022,7 +2022,7 @@ class TestRot3(GtsamTestCase):
 
     def test_axis_angle_stress_test(self) -> None:
         """Test that .axisAngle() yields angles less than 180 degrees for specific inputs."""
-        for R1, R2 in R1_R2_pairs:
+        for (R1, R2) in R1_R2_pairs:
             R1 = Rot3(np.array(R1))
             R2 = Rot3(np.array(R2))
 
@@ -2035,7 +2035,7 @@ class TestRot3(GtsamTestCase):
     def test_rotate(self) -> None:
         """Test that rotate() works for both Point3 and Unit3."""
         R = Rot3(np.array([[1, 0, 0], [0, -1, 0], [0, 0, 1]]))
-        p = Point3(1.0, 1.0, 1.0)
+        p = Point3(1., 1., 1.)
         u = Unit3(np.array([1, 1, 1]))
         actual_p = R.rotate(p)
         actual_u = R.rotate(u)
@@ -2047,7 +2047,7 @@ class TestRot3(GtsamTestCase):
     def test_unrotate(self) -> None:
         """Test that unrotate() after rotate() yields original Point3/Unit3."""
         wRc = Rot3(np.array(R1_R2_pairs[0][0]))
-        c_p = Point3(1.0, 1.0, 1.0)
+        c_p = Point3(1., 1., 1.)
         c_u = Unit3(np.array([1, 1, 1]))
         w_p = wRc.rotate(c_p)
         w_u = wRc.rotate(c_u)

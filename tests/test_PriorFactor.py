@@ -8,16 +8,16 @@ See LICENSE for the license information
 PriorFactor unit tests.
 Author: Frank Dellaert & Duy Nguyen Ta (Python)
 """
-
 import unittest
 
 import numpy as np
 
 import gtsam
-from utils import GtsamTestCase
+from gtsam.utils.test_case import GtsamTestCase
 
 
 class TestPriorFactor(GtsamTestCase):
+
     def test_PriorFactor(self):
         values = gtsam.Values()
 
@@ -29,7 +29,7 @@ class TestPriorFactor(GtsamTestCase):
         self.assertEqual(factor.error(values), 0)
 
         key = 3
-        priorVector = np.array([0.0, 0.0, 0.0])
+        priorVector = np.array([0., 0., 0.])
         model = gtsam.noiseModel.Unit.Create(3)
         factor = gtsam.PriorFactorVector(key, priorVector, model)
         values.insert(key, priorVector)
@@ -51,7 +51,7 @@ class TestPriorFactor(GtsamTestCase):
 
         # define and add Vector prior
         key = 3
-        priorVector = np.array([0.0, 0.0, 0.0])
+        priorVector = np.array([0., 0., 0.])
         model = gtsam.noiseModel.Unit.Create(3)
         graph.addPriorVector(key, priorVector, model)
         self.assertEqual(graph.size(), 2)
