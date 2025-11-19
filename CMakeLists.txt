@@ -98,7 +98,6 @@ nanobind_add_stub(
   INSTALL_TIME
   MODULE gtsam._core
   RECURSIVE
-  INCLUDE_PRIVATE
 
   OUTPUT_PATH gtsam
   OUTPUT

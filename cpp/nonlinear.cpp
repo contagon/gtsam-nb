@@ -532,7 +532,8 @@ void nonlinear(nb::module_ &m_) {
   nb::class_<gtsam::LevenbergMarquardtOptimizer, gtsam::NonlinearOptimizer>(m_, "LevenbergMarquardtOptimizer")
       .def(nb::init<const gtsam::NonlinearFactorGraph &, const gtsam::Values &>(), nb::arg("graph"), nb::arg("initialValues"))
       .def(nb::init<const gtsam::NonlinearFactorGraph &, const gtsam::Values &, const gtsam::LevenbergMarquardtParams &>(), nb::arg("graph"), nb::arg("initialValues"), nb::arg("params"))
-      .def("lambda_", [](gtsam::LevenbergMarquardtOptimizer *self) { return self->lambda(); })
+      // The previous lambda_ name got hidden by nanobind private naming.
+      .def("lambda_a", [](gtsam::LevenbergMarquardtOptimizer *self) { return self->lambda(); })
       .def("print", [](gtsam::LevenbergMarquardtOptimizer *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")
       .def("__repr__", [](const gtsam::LevenbergMarquardtOptimizer &self, string s) {
                         gtsam::RedirectCout redirect;

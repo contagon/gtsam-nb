@@ -137,7 +137,7 @@ def gtsam_optimize(
         elif (
             isinstance(optimizer, gtsam.LevenbergMarquardtOptimizer)
             and isinstance(params, gtsam.LevenbergMarquardtParams)
-            and optimizer.lambda_() > params.getlambdaUpperBound()
+            and optimizer.lambda_a() > params.getlambdaUpperBound()
         ):
             return True
         else:

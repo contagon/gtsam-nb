@@ -2,10 +2,12 @@
 
 # pylint: disable=no-member, invalid-name
 
-from typing import Iterable, Optional, Tuple, cast
+from typing import Iterable, Optional, Tuple
 
 import matplotlib.pyplot as plt
 from matplotlib.axes import Axes
+from matplotlib.figure import Figure
+from mpl_toolkits.mplot3d import Axes3D  # type: ignore
 import numpy as np
 from numpy.typing import NDArray
 from matplotlib import patches
@@ -14,6 +16,8 @@ import gtsam
 from gtsam import Marginals, Pose2, Pose3, Values
 
 Array = NDArray[np.float64]
+
+# Unfortunately Axes3D is not typed, so we have to add a lot of ignores.
 
 # For translation between a scaling of the uncertainty ellipse and the
 # percentage of inliers see discussion in
@@ -45,27 +49,27 @@ def set_axes_equal(fignum: int) -> None:
     Args:
       fignum: An integer representing the figure number for Matplotlib.
     """
-    fig = plt.figure(fignum)
+    fig: Figure
+    fig = plt.figure(fignum)  # type: ignore
     if not fig.axes:
         ax = fig.add_subplot(projection="3d")  # type: ignore
-        ax = cast(Axes, ax)
     else:
         ax = fig.axes[0]
 
-    limits = np.array(
+    limits: Array = np.array(
         [
-            ax.get_xlim3d(),
-            ax.get_ylim3d(),
-            ax.get_zlim3d(),
+            ax.get_xlim3d(),  # type: ignore
+            ax.get_ylim3d(),  # type: ignore
+            ax.get_zlim3d(),  # type: ignore
         ]
     )
 
     origin = np.mean(limits, axis=1)
     radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
 
-    ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
-    ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
-    ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
+    ax.set_xlim3d([origin[0] - radius, origin[0] + radius])  # type: ignore
+    ax.set_ylim3d([origin[1] - radius, origin[1] + radius])  # type: ignore
+    ax.set_zlim3d([origin[2] - radius, origin[2] + radius])  # type: ignore
 
 
 def ellipsoid(
@@ -93,7 +97,7 @@ def ellipsoid(
 
 
 def plot_covariance_ellipse_3d(
-    axes: plt.Axes,
+    axes: Axes3D,
     origin: Array,
     P: Array,
     scale: float = 1,
@@ -133,12 +137,10 @@ def plot_covariance_ellipse_3d(
     y = data[n : 2 * n, :] + origin[1]
     z = data[2 * n :, :] + origin[2]
 
-    axes.plot_surface(x, y, z, alpha=alpha, cmap="hot")
+    axes.plot_surface(x, y, z, alpha=alpha, cmap="hot")  # type: ignore
 
 
-def plot_covariance_ellipse_2d(
-    axes: plt.Axes, origin: Array, covariance: Array
-) -> None:
+def plot_covariance_ellipse_2d(axes: Axes, origin: Array, covariance: Array) -> None:
     """
     Plots a Gaussian as an uncertainty ellipse
 
@@ -164,7 +166,7 @@ def plot_covariance_ellipse_2d(
         origin,
         np.sqrt(w[0]) * 2 * k,
         np.sqrt(w[1]) * 2 * k,
-        np.rad2deg(angle),
+        np.rad2deg(angle),  # type: ignore
         fill=False,
     )
     axes.add_patch(e1)
@@ -186,7 +188,7 @@ def plot_point2_on_axes(
         linespec: String representing formatting options for Matplotlib.
         P: Marginal covariance matrix to plot the uncertainty of the estimation.
     """
-    axes.plot([point[0]], [point[1]], linespec, marker=".", markersize=10)
+    axes.plot([point[0]], [point[1]], linespec, marker=".", markersize=10)  # type: ignore
     if P is not None:
         plot_covariance_ellipse_2d(axes, point, P)
 
@@ -197,7 +199,7 @@ def plot_point2(
     linespec: str,
     P: Optional[Array] = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis"),
-) -> plt.Figure:
+) -> Figure:
     """
     Plot a 2D point on given figure with given `linespec`.
 
@@ -215,18 +217,19 @@ def plot_point2(
         fig: The matplotlib figure.
 
     """
-    fig = plt.figure(fignum)
+    fig: Figure
+    fig = plt.figure(fignum)  # type: ignore
     axes = fig.gca()
     plot_point2_on_axes(axes, point, linespec, P)
 
-    axes.set_xlabel(axis_labels[0])
-    axes.set_ylabel(axis_labels[1])
+    axes.set_xlabel(axis_labels[0])  # type: ignore
+    axes.set_ylabel(axis_labels[1])  # type: ignore
 
     return fig
 
 
 def plot_pose2_on_axes(
-    axes: plt.Axes,
+    axes: Axes,
     pose: Pose2,
     axis_length: float = 0.1,
     covariance: Optional[Array] = None,
@@ -252,11 +255,11 @@ def plot_pose2_on_axes(
     # draw the camera axes
     x_axis = origin + gRp[:, 0] * axis_length
     line = np.append(origin[np.newaxis], x_axis[np.newaxis], axis=0)
-    axes.plot(line[:, 0], line[:, 1], "r-")
+    axes.plot(line[:, 0], line[:, 1], "r-")  # type: ignore
 
     y_axis = origin + gRp[:, 1] * axis_length
     line = np.append(origin[np.newaxis], y_axis[np.newaxis], axis=0)
-    axes.plot(line[:, 0], line[:, 1], "g-")
+    axes.plot(line[:, 0], line[:, 1], "g-")  # type: ignore
 
     if covariance is not None:
         pPp = covariance[0:2, 0:2]
@@ -269,8 +272,8 @@ def plot_pose2(
     pose: Pose2,
     axis_length: float = 0.1,
     covariance: Optional[Array] = None,
-    axis_labels=("X axis", "Y axis", "Z axis"),
-) -> plt.Figure:
+    axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
+) -> Figure:
     """
     Plot a 2D pose on given figure with given `axis_length`.
 
@@ -286,18 +289,18 @@ def plot_pose2(
         axis_labels (iterable[string]): List of axis labels to set.
     """
     # get figure object
-    fig = plt.figure(fignum)
+    fig = plt.figure(fignum)  # type: ignore
     axes = fig.gca()
     plot_pose2_on_axes(axes, pose, axis_length=axis_length, covariance=covariance)
 
-    axes.set_xlabel(axis_labels[0])
-    axes.set_ylabel(axis_labels[1])
+    axes.set_xlabel(axis_labels[0])  # type: ignore
+    axes.set_ylabel(axis_labels[1])  # type: ignore
 
     return fig
 
 
 def plot_point3_on_axes(
-    axes: plt.Axes, point: Array, linespec: str, P: Optional[Array] = None
+    axes: Axes3D, point: Array, linespec: str, P: Optional[Array] = None
 ) -> None:
     """
     Plot a 3D point on given axis `axes` with given `linespec`.
@@ -311,7 +314,7 @@ def plot_point3_on_axes(
         linespec: String representing formatting options for Matplotlib.
         P: Marginal covariance matrix to plot the uncertainty of the estimation.
     """
-    axes.plot([point[0]], [point[1]], [point[2]], linespec)
+    axes.plot([point[0]], [point[1]], [point[2]], linespec)  # type: ignore
     if P is not None:
         plot_covariance_ellipse_3d(axes, point, P)
 
@@ -322,7 +325,7 @@ def plot_point3(
     linespec: str,
     P: Optional[Array] = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
-) -> plt.Figure:
+) -> Figure:
     """
     Plot a 3D point on given figure with given `linespec`.
 
@@ -340,23 +343,23 @@ def plot_point3(
         fig: The matplotlib figure.
 
     """
-    fig = plt.figure(fignum)
+    fig = plt.figure(fignum)  # type: ignore
     if not fig.axes:
         axes = fig.add_subplot(projection="3d")
     else:
         axes = fig.axes[0]
-    plot_point3_on_axes(axes, point, linespec, P)
+    plot_point3_on_axes(axes, point, linespec, P)  # type: ignore
 
-    axes.set_xlabel(axis_labels[0])
-    axes.set_ylabel(axis_labels[1])
-    axes.set_zlabel(axis_labels[2])
+    axes.set_xlabel(axis_labels[0])  # type: ignore
+    axes.set_ylabel(axis_labels[1])  # type: ignore
+    axes.set_zlabel(axis_labels[2])  # type: ignore
 
     return fig
 
 
 def plot_3d_points(
     fignum: int,
-    values,
+    values: gtsam.Values,
     linespec: str = "g*",
     marginals: Optional[Marginals] = None,
     title: str = "3D Points",
@@ -397,13 +400,13 @@ def plot_3d_points(
             continue
             # I guess it's not a Point3
 
-    fig = plt.figure(fignum)
-    fig.suptitle(title)
-    fig.canvas.manager.set_window_title(title.lower())
+    fig = plt.figure(fignum)  # type: ignore
+    fig.suptitle(title)  # type: ignore
+    fig.canvas.manager.set_window_title(title.lower())  # type: ignore
 
 
 def plot_pose3_on_axes(
-    axes: plt.Axes,
+    axes: Axes3D,
     pose: Pose3,
     axis_length: float = 0.1,
     P: Optional[Array] = None,
@@ -428,15 +431,15 @@ def plot_pose3_on_axes(
     # draw the camera axes
     x_axis = origin + gRp[:, 0] * axis_length
     line = np.append(origin[np.newaxis], x_axis[np.newaxis], axis=0)
-    axes.plot(line[:, 0], line[:, 1], line[:, 2], "r-")
+    axes.plot(line[:, 0], line[:, 1], line[:, 2], "r-")  # type: ignore
 
     y_axis = origin + gRp[:, 1] * axis_length
     line = np.append(origin[np.newaxis], y_axis[np.newaxis], axis=0)
-    axes.plot(line[:, 0], line[:, 1], line[:, 2], "g-")
+    axes.plot(line[:, 0], line[:, 1], line[:, 2], "g-")  # type: ignore
 
     z_axis = origin + gRp[:, 2] * axis_length
     line = np.append(origin[np.newaxis], z_axis[np.newaxis], axis=0)
-    axes.plot(line[:, 0], line[:, 1], line[:, 2], "b-")
+    axes.plot(line[:, 0], line[:, 1], line[:, 2], "b-")  # type: ignore
 
     # plot the covariance
     if P is not None:
@@ -453,7 +456,7 @@ def plot_pose3(
     axis_length: float = 0.1,
     P: Optional[Array] = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
-) -> plt.Figure:
+) -> Figure:
     """
     Plot a 3D pose on given figure with given `axis_length`.
 
@@ -471,17 +474,17 @@ def plot_pose3(
         fig: The matplotlib figure.
     """
     # get figure object
-    fig = plt.figure(fignum)
+    fig = plt.figure(fignum)  # type: ignore
     if not fig.axes:
         axes = fig.add_subplot(projection="3d")
     else:
         axes = fig.axes[0]
 
-    plot_pose3_on_axes(axes, pose, P=P, axis_length=axis_length)
+    plot_pose3_on_axes(axes, pose, P=P, axis_length=axis_length)  # type: ignore
 
-    axes.set_xlabel(axis_labels[0])
-    axes.set_ylabel(axis_labels[1])
-    axes.set_zlabel(axis_labels[2])
+    axes.set_xlabel(axis_labels[0])  # type: ignore
+    axes.set_ylabel(axis_labels[1])  # type: ignore
+    axes.set_zlabel(axis_labels[2])  # type: ignore
 
     return fig
 
@@ -506,15 +509,15 @@ def plot_trajectory(
         title: The title of the plot.
         axis_labels (iterable[string]): List of axis labels to set.
     """
-    fig = plt.figure(fignum)
+    fig = plt.figure(fignum)  # type: ignore
     if not fig.axes:
         axes = fig.add_subplot(projection="3d")
     else:
         axes = fig.axes[0]
 
-    axes.set_xlabel(axis_labels[0])
-    axes.set_ylabel(axis_labels[1])
-    axes.set_zlabel(axis_labels[2])
+    axes.set_xlabel(axis_labels[0])  # type: ignore
+    axes.set_ylabel(axis_labels[1])  # type: ignore
+    axes.set_zlabel(axis_labels[2])  # type: ignore
 
     # Plot 2D poses, if any
     poses = gtsam.utilities.allPose2s(values)
@@ -536,10 +539,10 @@ def plot_trajectory(
         else:
             covariance = None
 
-        plot_pose3_on_axes(axes, pose, P=covariance, axis_length=scale)
+        plot_pose3_on_axes(axes, pose, P=covariance, axis_length=scale)  # type: ignore
 
-    fig.suptitle(title)
-    fig.canvas.manager.set_window_title(title.lower())
+    fig.suptitle(title)  # type: ignore
+    fig.canvas.manager.set_window_title(title.lower())  # type: ignore
 
 
 def plot_incremental_trajectory(
@@ -563,7 +566,7 @@ def plot_incremental_trajectory(
         time_interval: Time in seconds to pause between each rendering.
             Used to create animation effect.
     """
-    fig = plt.figure(fignum)
+    fig = plt.figure(fignum)  # type: ignore
     if not fig.axes:
         axes = fig.add_subplot(projection="3d")
     else:
