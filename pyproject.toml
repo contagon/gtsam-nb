@@ -54,6 +54,10 @@ cache-keys = [
     { file = "CMakeLists.txt" },
 ]
 
+[tool.ruff]
+# We try to touch tests as little as possible to ensure they still work
+exclude = ["tests"]
+
 [tool.basedpyright]
 include = ["python"]
 typeCheckingMode = "strict"
