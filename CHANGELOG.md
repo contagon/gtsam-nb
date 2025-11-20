@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/contagon/gtsam-nb/compare/v0.1.1...v0.1.2) (2025-11-20)
+
+
+### Features
+
+* Add missing methods to PreintegratedCombinedMeasurements ([#8](https://github.com/contagon/gtsam-nb/issues/8)) ([d6cbc0b](https://github.com/contagon/gtsam-nb/commit/d6cbc0b0b9c5be9482c8d9c8e383424a0b51a5f8))
+
+
+### Bug Fixes
+
+* Release to github before pypi to avoid pypi result files ([a5396c7](https://github.com/contagon/gtsam-nb/commit/a5396c7bca6d14e08e32fe1f3dbb0b65fb06fc73))
+
 ## [0.1.1](https://github.com/contagon/gtsam-nb/compare/v0.1.0...v0.1.1) (2025-11-20)
 
 

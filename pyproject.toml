@@ -1,6 +1,6 @@
 [project]
 name = "gtsam-nb"
-version = "0.1.1"
+version = "0.1.2"
 description = "nanobind bindings for GTSAM"
 authors = [
     { name = "Easton Potokar", email = "contagon6@gmail.com" },
