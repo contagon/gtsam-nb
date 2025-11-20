@@ -7,7 +7,7 @@ endif()
 
 # Can't use cmake > 4.0 b/c GTSAM doesn't support it yet
 cmake_minimum_required(VERSION 3.15...3.31)
-project(${SKBUILD_PROJECT_NAME} VERSION 0.1.0 LANGUAGES CXX) # x-release-please-version
+project(${SKBUILD_PROJECT_NAME} VERSION 0.1.1 LANGUAGES CXX) # x-release-please-version
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include(FetchContent)
