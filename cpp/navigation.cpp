@@ -192,6 +192,9 @@ void navigation(nb::module_ &m_) {
       .def("deltaPij", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->deltaPij(); })
       .def("deltaVij", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->deltaVij(); })
       .def("biasHat", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->biasHat(); })
+      .def("biasCorrectedDelta", [](gtsam::PreintegratedCombinedMeasurements *self, const gtsam::imuBias::ConstantBias &bias) { return self->biasCorrectedDelta(bias); }, nb::arg("bias"))
+      .def("preintegrated_H_biasAcc", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasAcc(); })
+      .def("preintegrated_H_biasOmega", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasOmega(); })
       .def("biasHatVector", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->biasHatVector(); })
       .def("predict", [](gtsam::PreintegratedCombinedMeasurements *self, const gtsam::NavState &state_i, const gtsam::imuBias::ConstantBias &bias) { return self->predict(state_i, bias); }, nb::arg("state_i"), nb::arg("bias"));
 
