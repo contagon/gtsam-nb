@@ -59,12 +59,13 @@ jobs:
           path: dist
           merge-multiple: true
       
-      # upload to pypi
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        name: Pypi
-
       # upload to GitHub Release
       - name: Github Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_PLEASE_GITHUB_TOKEN }}
         run: gh release upload -R ${{ github.repository }} ${{ needs.release.outputs.tag_name }} ./dist/*
+
+      # upload to pypi
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        name: Pypi
+
