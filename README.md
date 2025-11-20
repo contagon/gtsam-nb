@@ -1,8 +1,13 @@
 # gtsam-nb: nanobind bindings for GTSAM
 
-This repository provides Python bindings for [GTSAM](https://gtsam.org/) 4.2 using [nanobind](https://github.com/wjakob/nanobind).
+![PyPI - Version](https://img.shields.io/pypi/v/gtsam-nb)
+![Static Badge](https://img.shields.io/badge/gtsam-4.2-green)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/contagon/gtsam-nb/on_main.yml)
 
-The bindings are all slightly modified versions of the official GTSAM Python bindings, but simply built using nanobind instead of pybind11. Most of the code, tests, data, etc are from the official GTSAM repository, just slightly modified to work with nanobind and clean up type stubs.
+
+This repository provides Python bindings for [GTSAM](https://gtsam.org/) using [nanobind](https://github.com/wjakob/nanobind).
+
+Most of the code, tests, data, etc. are originally from the official GTSAM repository, just slightly modified to work with nanobind and clean up python typing.
 
 ## Installation
 
@@ -13,17 +18,18 @@ pip install gtsam-nb  # if using pip
 uv add gtsam-nb       # if using uv
 ```
 
-Then just use as you would the official gtsam Python bindings:
+Then use as you would the official gtsam Python bindings:
 
 ```python
 import gtsam
 ```
 
-`gtsam-nb` should be a near drop-in replacement for the official `gtsam` python package, with the following exceptions:
-- nanobind doesn't accept python lists in place of numpy arrays for function arguments. So wrapping lists in `np.array(...)` is necessary.
+`gtsam-nb` should be a near drop-in replacement for the official `gtsam` python package, with the following (mostly minor) exceptions:
+- Unlike pybind11, nanobind doesn't accept python lists in place of numpy arrays for function arguments. So wrapping lists in `np.array(...)` is necessary.
 - `OrderingType` enum values are now accessed as `gtsam.OrderingType.XXX` instead of `gtsam.Ordering.OrderingType.XXX`.
+- `lambda_` is now `lambda_a` in `gtsam.LevenbergMarquardtOptimizer` due to how nanobind handles private methods.
 
-There are likely other small changes (please let us know if you find any), but they should all be fairly minor. 
+There are likely other tweaks required (please let us know if you find any), but they should all be fairly minor. 
 
 ## Why?
 
@@ -41,5 +47,23 @@ There's a handful of reasons why I decided to make this (most of which should *h
 
 Hopefully in the future these issues will be resolved in the official `gtsam` bindings, and this repository will no longer be necessary. But for now, this is a useful stopgap.
 
-## Extending
-TODO
+## Building
+
+Building is all piped through [scikit-build-core](https://scikit-build-core.readthedocs.io/en/latest/) (which we use behind uv). The only dependency is GTSAM 4.2, which will be resolved in the following order:
+1. If `vcpkg.sh` was ran to clone vcpkg into the `.vcpkg` folder, then GTSAM will be built and installed via vcpkg.
+2. If not, GTSAM is searched for in the system paths.
+3. If not found, GTSAM will be cloned and built from source in the build process.
+
+To actually perform the building from source, clone the repository and run:
+
+```bash
+pip install -e .   # if using pip
+uv sync --verbose  # if using uv
+```
+
+This will build the C++ extension and install the package in editable mode in whatever environment you have activated.
+
+
+## Contributing
+
+There is likely a hidden bug or two, and definitely still some missing methods. Please feel free to open issues or PRs! I imagine most PRs will be to add missing methods or classes from GTSAM so they can be merged and released quickly (especially since it's all automated through the our CI setup).
