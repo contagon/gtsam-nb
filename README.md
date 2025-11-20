@@ -66,4 +66,4 @@ This will build the C++ extension and install the package in editable mode in wh
 
 ## Contributing
 
-There is likely a hidden bug or two, and definitely still some missing methods. Please feel free to open issues or PRs! I imagine most PRs will be to add missing methods or classes from GTSAM so they can be merged and released quickly (especially since it's all automated through the our CI setup).
+There is likely a hidden bug or two, and definitely still some missing methods. Please feel free to open issues or PRs! I imagine most PRs will be to add missing methods or classes from GTSAM so they can be merged and released quickly (especially since it's all automated through our CI setup).
