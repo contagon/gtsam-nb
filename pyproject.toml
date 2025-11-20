@@ -1,5 +1,5 @@
 [project]
-name = "gtsam"
+name = "gtsam-nb"
 version = "0.1.0"
 description = "nanobind bindings for GTSAM"
 authors = [
@@ -30,6 +30,7 @@ build-backend = "scikit_build_core.build"
 minimum-version = "build-system.requires"
 build-dir = "build/{wheel_tag}"
 cmake.version = "<4.0"
+wheel.packages = ["python/gtsam"]
 
 [tool.scikit-build.cmake.define]
 VCPKG_INSTALLED_DIR = "./.vcpkg_installed"

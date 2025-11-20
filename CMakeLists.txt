@@ -91,7 +91,7 @@ nanobind_add_module(_core
         cpp/hybrid.cpp
 )
 target_link_libraries(_core PRIVATE Eigen3::Eigen gtsam)
-install(TARGETS _core DESTINATION ${SKBUILD_PROJECT_NAME})
+install(TARGETS _core DESTINATION gtsam)
 
 nanobind_add_stub(
   gtsam_stubs
