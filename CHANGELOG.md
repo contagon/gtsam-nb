@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/contagon/gtsam-nb/compare/v0.1.0...v0.1.1) (2025-11-20)
+
+
+### Bug Fixes
+
+* Package name on pypi ([#6](https://github.com/contagon/gtsam-nb/issues/6)) ([0c4bfd7](https://github.com/contagon/gtsam-nb/commit/0c4bfd7c11911540d4a9305e414926bca510f5ca))
+
 ## [0.1.0](https://github.com/contagon/gtsam-nb/compare/v0.0.1...v0.1.0) (2025-11-19)
 
 
