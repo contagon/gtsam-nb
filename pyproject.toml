@@ -1,5 +1,5 @@
 [project]
-name = "gtsam"
+name = "gtsam-nb"
 version = "0.1.0"
 description = "nanobind bindings for GTSAM"
 authors = [
