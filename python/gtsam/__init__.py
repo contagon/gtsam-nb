@@ -56,4 +56,4 @@ def Point3(
         return np.array([x, y, z], dtype=float)
 
 
-__version__ = "0.1.1"  # x-release-please-version
+__version__ = "0.1.2"  # x-release-please-version
