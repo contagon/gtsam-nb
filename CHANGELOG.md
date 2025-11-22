@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/contagon/gtsam-nb/compare/v0.1.2...v0.1.3) (2025-11-22)
+
+
+### Bug Fixes
+
+* small typo in readme ([#10](https://github.com/contagon/gtsam-nb/issues/10)) ([8de4247](https://github.com/contagon/gtsam-nb/commit/8de4247662f957c00b513641a44f3c9e6d1528c3))
+
 ## [0.1.2](https://github.com/contagon/gtsam-nb/compare/v0.1.1...v0.1.2) (2025-11-20)
 
 
