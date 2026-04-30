@@ -47,6 +47,7 @@ void navigation(nb::module_ &m_) {
 
   nb::class_<gtsam::imuBias::ConstantBias>(m_imuBias, "ConstantBias")
       .def(nb::init<>())
+      .def(nb::init<const gtsam::imuBias::ConstantBias &>(), nb::arg("other"))
       .def(nb::init<const gtsam::Vector &, const gtsam::Vector &>(), nb::arg("biasAcc"), nb::arg("biasGyro"))
       .def("print", [](gtsam::imuBias::ConstantBias *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "")
       .def("__repr__", [](const gtsam::imuBias::ConstantBias &self, string s) {
@@ -139,6 +140,8 @@ void navigation(nb::module_ &m_) {
       .def("resetIntegrationAndSetBias", [](gtsam::PreintegratedImuMeasurements *self, const gtsam::imuBias::ConstantBias &biasHat) { self->resetIntegrationAndSetBias(biasHat); }, nb::arg("biasHat"))
       .def("preintMeasCov", [](gtsam::PreintegratedImuMeasurements *self) { return self->preintMeasCov(); })
       .def("preintegrated", [](gtsam::PreintegratedImuMeasurements *self) { return self->preintegrated(); })
+      .def("preintegrated_H_biasAcc", [](gtsam::PreintegratedImuMeasurements *self) { return self->preintegrated_H_biasAcc(); })
+      .def("preintegrated_H_biasOmega", [](gtsam::PreintegratedImuMeasurements *self) { return self->preintegrated_H_biasOmega(); })
       .def("deltaTij", [](gtsam::PreintegratedImuMeasurements *self) { return self->deltaTij(); })
       .def("deltaRij", [](gtsam::PreintegratedImuMeasurements *self) { return self->deltaRij(); })
       .def("deltaPij", [](gtsam::PreintegratedImuMeasurements *self) { return self->deltaPij(); })
@@ -193,6 +196,7 @@ void navigation(nb::module_ &m_) {
       .def("deltaVij", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->deltaVij(); })
       .def("biasHat", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->biasHat(); })
       .def("biasCorrectedDelta", [](gtsam::PreintegratedCombinedMeasurements *self, const gtsam::imuBias::ConstantBias &bias) { return self->biasCorrectedDelta(bias); }, nb::arg("bias"))
+      .def("preintegrated", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated(); })
       .def("preintegrated_H_biasAcc", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasAcc(); })
       .def("preintegrated_H_biasOmega", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasOmega(); })
       .def("biasHatVector", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->biasHatVector(); })
