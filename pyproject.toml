@@ -23,7 +23,7 @@ dev = [
 ]
 
 [build-system]
-requires = ["scikit-build-core>=0.10", "nanobind>=2.9.2", "numpy"]
+requires = ["scikit-build-core>=0.12", "nanobind>=2.12", "numpy>2"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
@@ -44,8 +44,6 @@ skip = [
     "*macosx_x86_64",     # skip intel mac builds
     "*macosx_universal2", # skip universal2 mac builds
 ]
-# test-requires = "pytest>=8.3.5 scipy>=1.15.2"
-# test-command = "evalio ls pipelines && pytest {project}/tests"
 build-verbosity = 1
 
 [tool.uv]
