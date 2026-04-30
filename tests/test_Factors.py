@@ -47,6 +47,20 @@ class TestJacobianFactor(GtsamTestCase):
         jf = gtsam.JacobianFactor(gfg)
         self.assertIsInstance(jf, gtsam.JacobianFactor)
 
+class TestNonlinearFactorGraphIter(GtsamTestCase):
+    def test_iter(self):
+        nfg = gtsam.NonlinearFactorGraph()
+        f1 = gtsam.PriorFactorDouble(1, 0.0, gtsam.noiseModel.Isotropic.Sigma(1, 1.0))
+        f2 = gtsam.PriorFactorDouble(2, 1.0, gtsam.noiseModel.Isotropic.Sigma(1, 1.0))
+        nfg.add(f1)
+        nfg.add(f2)
+
+        factors = [f1, f2]
+        self.assertEqual(len(factors), nfg.size())
+        for exp, actual in zip(factors, nfg):
+            assert exp == actual
+
+
 
 if __name__ == "__main__":
     unittest.main()

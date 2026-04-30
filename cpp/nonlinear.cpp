@@ -15,6 +15,7 @@
 #include "gtsam/config.h"
 
 #include <nanobind/eigen/dense.h>
+#include <nanobind/make_iterator.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
 #include <nanobind/stl/function.h>
@@ -135,6 +136,9 @@ void nonlinear(nb::module_ &m_) {
       .def("orderingCOLAMD", [](gtsam::NonlinearFactorGraph *self) { return self->orderingCOLAMD(); })
       .def("linearize", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values) { return self->linearize(values); }, nb::arg("values"))
       .def("clone", [](gtsam::NonlinearFactorGraph *self) { return self->clone(); })
+      .def("__iter__", [](gtsam::NonlinearFactorGraph &self) { return nb::make_iterator(nb::type<gtsam::NonlinearFactorGraph>(),
+                                                                                        "NonlinearFactorGraphIterator",
+                                                                                        self.begin(), self.end()); }, nb::keep_alive<0, 1>(), nb::is_operator())
       .def("dot", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { return self->dot(values, keyFormatter, writer); }, nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting())
       .def("saveGraph", [](gtsam::NonlinearFactorGraph *self, const string &s, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { self->saveGraph(s, values, keyFormatter, writer); }, nb::arg("s"), nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting());
   // .def("serialize", [](gtsam::NonlinearFactorGraph *self) { return gtsam::serialize(*self); })
