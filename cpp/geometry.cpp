@@ -93,6 +93,7 @@ void geometry(nb::module_ &m_) {
 
   nb::class_<gtsam::Rot2>(m_, "Rot2")
       .def(nb::init<>())
+      .def(nb::init<const gtsam::Rot2 &>(), nb::arg("other"))
       .def(nb::init<double>(), nb::arg("theta"))
       .def("print", [](gtsam::Rot2 *self, string s) { /* nb::scoped_ostream_redirect output; */ self->print(s); }, nb::arg("s") = "theta")
       .def("__repr__", [](const gtsam::Rot2 &self, string s) {
@@ -203,6 +204,7 @@ void geometry(nb::module_ &m_) {
 
   nb::class_<gtsam::Rot3>(m_, "Rot3")
       .def(nb::init<>())
+      .def(nb::init<const gtsam::Rot3 &>(), nb::arg("R"))
       .def(nb::init<const gtsam::Matrix &>(), nb::arg("R"))
       .def(nb::init<const gtsam::Point3 &, const gtsam::Point3 &, const gtsam::Point3 &>(), nb::arg("col1"), nb::arg("col2"), nb::arg("col3"))
       .def(nb::init<double, double, double, double, double, double, double, double, double>(), nb::arg("R11"), nb::arg("R12"), nb::arg("R13"), nb::arg("R21"), nb::arg("R22"), nb::arg("R23"), nb::arg("R31"), nb::arg("R32"), nb::arg("R33"))
