@@ -180,6 +180,12 @@ void base(nb::module_ &m_) {
   // .def("deserialize", [](gtsam::GenericValue<gtsam::imuBias::ConstantBias> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
   // .def(nb::pickle([](const gtsam::GenericValue<gtsam::imuBias::ConstantBias> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
+  nb::class_<gtsam::GenericValue<double>, gtsam::Value>(m_, "GenericValueDouble")
+      .def("value", [](gtsam::GenericValue<double> *self) { return self->value(); });
+  // .def("serialize", [](gtsam::GenericValue<double> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<double> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<double> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::imuBias::ConstantBias> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+
   m_.def("isDebugVersion", []() { return gtsam::isDebugVersion(); });
   m_.def("IndexPairSetAsArray", [](gtsam::IndexPairSet &set) { return gtsam::IndexPairSetAsArray(set); }, nb::arg("set"));
   m_.def("linear_independent", [](const gtsam::Matrix &A, const gtsam::Matrix &B, double tol) { return gtsam::linear_independent(A, B, tol); }, nb::arg("A"), nb::arg("B"), nb::arg("tol"));
