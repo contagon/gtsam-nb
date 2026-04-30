@@ -69,6 +69,34 @@ using namespace std;
 
 namespace nb = nanobind;
 
+namespace {
+template <typename BaseIterator>
+struct ValuesKeyValueIterator {
+  explicit ValuesKeyValueIterator(BaseIterator it) : it_(it) {}
+
+  ValuesKeyValueIterator &operator++() {
+    ++it_;
+    return *this;
+  }
+
+  bool operator==(const ValuesKeyValueIterator &other) const {
+    return it_ == other.it_;
+  }
+
+  bool operator!=(const ValuesKeyValueIterator &other) const {
+    return it_ != other.it_;
+  }
+
+  std::pair<gtsam::Key, const gtsam::Value *> operator*() const {
+    const auto key_value = *it_;
+    return {key_value.key, &key_value.value};
+  }
+
+private:
+  BaseIterator it_;
+};
+} // namespace
+
 void nonlinear(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of nonlinear";
 
@@ -185,6 +213,26 @@ void nonlinear(nb::module_ &m_) {
       .def("swap", [](gtsam::Values *self, gtsam::Values &values) { self->swap(values); }, nb::arg("values"))
       .def("exists", [](gtsam::Values *self, size_t j) { return self->exists(j); }, nb::arg("j"))
       .def("keys", [](gtsam::Values *self) { return self->keys(); })
+      .def("__iter__", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_key_iterator(nb::type<gtsam::Values>(),
+                                     "ValuesKeyIterator",
+                                     ValuesKeyValueIterator<Iterator>(self.begin()),
+                                     ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>(), nb::is_operator())
+      .def("_items", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_iterator(nb::type<gtsam::Values>(),
+                                 "ValuesItemIterator",
+                                 ValuesKeyValueIterator<Iterator>(self.begin()),
+                                 ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>())
+      .def("items", [](gtsam::Values &self) {}, nb::sig("def items(self) -> typing.Iterator[tuple[int, typing.Any]]"))
+      .def("_values", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_value_iterator(nb::type<gtsam::Values>(),
+                                       "ValuesValueIterator",
+                                       ValuesKeyValueIterator<Iterator>(self.begin()),
+                                       ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>())
+      .def("values", [](gtsam::Values &self) {}, nb::sig("def values(self) -> typing.Iterator[typing.Any]"))
       .def("zeroVectors", [](gtsam::Values *self) { return self->zeroVectors(); })
       .def("retract", [](gtsam::Values *self, const gtsam::VectorValues &delta) { return self->retract(delta); }, nb::arg("delta"))
       .def("localCoordinates", [](gtsam::Values *self, const gtsam::Values &cp) { return self->localCoordinates(cp); }, nb::arg("cp"))

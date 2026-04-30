@@ -80,6 +80,21 @@ class TestValues(GtsamTestCase):
         actualMatrix2 = values.atMatrix(13)
         np.testing.assert_allclose(mat2, actualMatrix2, tol)
 
+    def test_iteration_views(self):
+        values = Values()
+        values.insert(1, 2.0)
+        values.insert(2, 3.0)
+
+        keys = list(values)
+        self.assertEqual(keys, list(values.keys()))
+
+        items = list(values.items())
+        self.assertEqual([key for key, _ in items], keys)
+
+        vals = list(values.values())
+        self.assertEqual(len(vals), len(keys))
+        self.assertEqual(vals, [2.0, 3.0])
+
 
 if __name__ == "__main__":
     unittest.main()
