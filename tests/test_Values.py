@@ -101,6 +101,15 @@ class TestValues(GtsamTestCase):
             else:
                 self.gtsamAssertEquals(v_expected, v_actual, tol=1e-9)
 
+    def test_get_set(self):
+        values = Values()
+        values[1] = gtsam.Pose3.Identity()
+        values[2] = 3.0
+        values[3] = np.array([1., 2., 3.])
+
+        self.gtsamAssertEquals(values[1], gtsam.Pose3.Identity(), tol=1e-9)
+        np.testing.assert_allclose(values[2], 3.0, rtol=1e-9)
+        np.testing.assert_allclose(values[3], np.array([1., 2., 3.]), rtol=1e-9)
 
 if __name__ == "__main__":
     unittest.main()

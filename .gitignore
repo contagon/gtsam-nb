@@ -23,3 +23,5 @@ compile_commands.json
 cpp/preamble
 cpp/specializations
 new_versions
+.agents
+skills-lock.json

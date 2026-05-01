@@ -33,7 +33,7 @@ namespace nb = nanobind;
 void custom(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of custom";
 
-  nb::class_<gtsam::CustomFactor, gtsam::NoiseModelFactor>(m_, "CustomFactor")
+  nb::class_<gtsam::CustomFactor, gtsam::NoiseModelFactor>(m_, "CustomFactor", nb::dynamic_attr())
       .def(nb::init<>())
       .def(nb::init<const gtsam::SharedNoiseModel &, const gtsam::KeyVector &, const gtsam::CustomErrorFunction &>(), nb::arg("noiseModel"), nb::arg("keys"), nb::arg("errorFunction"))
       .def("print", [](gtsam::CustomFactor *self, string s, gtsam::KeyFormatter keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)

@@ -14,6 +14,7 @@
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
 
+#include <boost/smart_ptr/make_shared_array.hpp>
 #include <nanobind/eigen/dense.h>
 #include <nanobind/make_iterator.h>
 #include <nanobind/nanobind.h>
@@ -21,6 +22,7 @@
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
 #include "utils/boost_shared_ptr.h"
 
@@ -214,6 +216,8 @@ void nonlinear(nb::module_ &m_) {
       .def("erase", [](gtsam::Values *self, size_t j) { self->erase(j); }, nb::arg("j"))
       .def("swap", [](gtsam::Values *self, gtsam::Values &values) { self->swap(values); }, nb::arg("values"))
       .def("exists", [](gtsam::Values *self, size_t j) { return self->exists(j); }, nb::arg("j"))
+      .def("__getitem__", [](gtsam::Values *self, size_t j) {}, nb::arg("j"), nb::sig("def __getitem__(self, j: int) -> typing.Any"))
+      .def("__setitem__", [](gtsam::Values *self, size_t j, const gtsam::Value &other) {}, nb::arg("j"), nb::arg("other"), nb::sig("def __setitem__(self, j: int, other: typing.Any) -> None"))
       .def("keys", [](gtsam::Values *self) { return self->keys(); })
       .def("__iter__", [](gtsam::Values &self) {
         using Iterator = decltype(self.begin());
@@ -419,6 +423,7 @@ void nonlinear(nb::module_ &m_) {
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<13> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<14> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<15> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
+      .def("at", [](gtsam::Values *self, size_t j) { return self->at(j).clone(); }, nb::arg("j"))
       .def("atPoint2", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Point2>(j); }, nb::arg("j"))
       .def("atPoint3", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Point3>(j); }, nb::arg("j"))
       .def("atRot2", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Rot2>(j); }, nb::arg("j"))

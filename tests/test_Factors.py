@@ -60,6 +60,17 @@ class TestNonlinearFactorGraphIter(GtsamTestCase):
         for exp, actual in zip(factors, nfg):
             assert exp == actual
 
+    def test_construction(self):
+        f1 = gtsam.PriorFactorDouble(1, 0.0, gtsam.noiseModel.Isotropic.Sigma(1, 1.0))
+        f2 = gtsam.PriorFactorDouble(2, 1.0, gtsam.noiseModel.Isotropic.Sigma(1, 1.0))
+        factors = [f1, f2]
+        nfg = gtsam.NonlinearFactorGraph(factors)
+
+        factors = [f1, f2]
+        nfg2 = gtsam.NonlinearFactorGraph(factors)
+        self.assertEqual(nfg.size(), nfg2.size())
+        for exp, actual in zip(nfg, nfg2):
+            assert exp == actual
 
 
 if __name__ == "__main__":

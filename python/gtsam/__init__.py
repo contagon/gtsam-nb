@@ -69,8 +69,16 @@ def _install_iterable_api() -> None:
         for v in self._values():  # type: ignore
             yield v.value()  # type: ignore
 
+    def __getitem__(self: Values, key):  # type: ignore
+        return self.at(key).value()  # type: ignore
+
+    def __setitem__(self: Values, key, value):  # type: ignore
+        self.insert_or_assign(key, value)  # type: ignore
+
     _core.Values.items = _values_items  # type: ignore
     _core.Values.values = _values_values  # type: ignore
+    _core.Values.__getitem__ = __getitem__  # type: ignore
+    _core.Values.__setitem__ = __setitem__  # type: ignore
 
 
 _install_iterable_api()
