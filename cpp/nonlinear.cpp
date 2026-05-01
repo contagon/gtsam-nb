@@ -200,16 +200,12 @@ void nonlinear(nb::module_ &m_) {
   nb::class_<gtsam::Values>(m_, "Values")
       .def(nb::init<>())
       .def(nb::init<const gtsam::Values &>(), nb::arg("other"))
-      .def("__init__",
-           [](gtsam::Values *self, nb::dict /*values*/) {
+      .def("__init__", [](gtsam::Values *self, nb::dict /*values*/) {
              // Body is intentionally a no-op default construction.
              // Python-side __init__ (see python/gtsam/__init__.py) shadows this
              // and performs the real dict -> insert_or_assign dispatch using
              // nanobind's existing overload resolution for insert_or_assign.
-             new (self) gtsam::Values();
-           },
-           nb::arg("values"),
-           nb::sig("def __init__(self, values: dict[int, typing.Any]) -> None"))
+             new (self) gtsam::Values(); }, nb::arg("values"), nb::sig("def __init__(self, values: dict[int, typing.Any]) -> None"))
       .def("size", [](gtsam::Values *self) { return self->size(); })
       .def("empty", [](gtsam::Values *self) { return self->empty(); })
       .def("clear", [](gtsam::Values *self) { self->clear(); })
