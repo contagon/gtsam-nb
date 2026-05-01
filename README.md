@@ -28,6 +28,7 @@ import gtsam
 - Unlike pybind11, nanobind doesn't accept python lists in place of numpy arrays for function arguments. So wrapping lists in `np.array(...)` is necessary.
 - `OrderingType` enum values are now accessed as `gtsam.OrderingType.XXX` instead of `gtsam.Ordering.OrderingType.XXX`.
 - `lambda_` is now `lambda_a` in `gtsam.LevenbergMarquardtOptimizer` due to how nanobind handles private methods.
+- [FEAT] `NonlinearFactorGraph` and `Values` interface more like a python list and dict, respectively including constructors and `[]` usage.
 
 There are likely other tweaks required (please let us know if you find any), but they should all be fairly minor. 
 

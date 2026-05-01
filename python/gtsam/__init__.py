@@ -4,7 +4,7 @@ from gtsam._core import *
 from gtsam.utils import findExampleDataFile  # type: ignore
 
 import numpy as np
-from typing import overload
+from typing import Any, overload
 
 from numpy.typing import NDArray
 
@@ -59,13 +59,32 @@ def Point3(
 
 def _install_iterable_api() -> None:
     # This is a hack to be able to call .value() on all the GenericValue types
+    from collections.abc import Mapping
+
     from gtsam import Values
 
-    def _values_items(self: Values):  # type: ignore
+    _orig_init = _core.Values.__init__  # C++ bound overload set
+
+    def __init__(self: Values, arg: None | Values | Mapping[int, Any]):  # type: ignore
+        if arg is None:
+            _orig_init(self)
+        elif isinstance(arg, _core.Values):
+            _orig_init(self, arg)
+        elif isinstance(arg, Mapping):  # type: ignore
+            _orig_init(self)  # default-construct
+            for k, v in arg.items():
+                self.insert_or_assign(k, v)  # type: ignore
+        else:
+            raise TypeError(
+                "Values() takes no args, a Values, or a Mapping[int, value]; "
+                f"got {type(arg).__name__}"
+            )
+
+    def items(self: Values):  # type: ignore
         for k, v in self._items():  # type: ignore
             yield k, v.value()  # type: ignore
 
-    def _values_values(self: Values):  # type: ignore
+    def values(self: Values):  # type: ignore
         for v in self._values():  # type: ignore
             yield v.value()  # type: ignore
 
@@ -75,8 +94,9 @@ def _install_iterable_api() -> None:
     def __setitem__(self: Values, key, value):  # type: ignore
         self.insert_or_assign(key, value)  # type: ignore
 
-    _core.Values.items = _values_items  # type: ignore
-    _core.Values.values = _values_values  # type: ignore
+    _core.Values.__init__ = __init__  # type: ignore
+    _core.Values.items = items  # type: ignore
+    _core.Values.values = values  # type: ignore
     _core.Values.__getitem__ = __getitem__  # type: ignore
     _core.Values.__setitem__ = __setitem__  # type: ignore
 

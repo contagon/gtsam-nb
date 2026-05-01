@@ -111,5 +111,23 @@ class TestValues(GtsamTestCase):
         np.testing.assert_allclose(values[2], 3.0, rtol=1e-9)
         np.testing.assert_allclose(values[3], np.array([1., 2., 3.]), rtol=1e-9)
 
+    def test_dict_constructor(self):
+        my_values = {
+            1: gtsam.Pose3.Identity(),
+            2: 3.0,
+            3: np.array([1., 2., 3.])
+        }
+        values = Values(my_values)
+
+        for (k_actual, v_actual) in values.items():
+            v_expected = my_values[k_actual]
+
+            if isinstance(v_expected, float):
+                np.testing.assert_allclose(v_expected, v_actual, rtol=1e-9)
+            elif isinstance(v_expected, np.ndarray):
+                np.testing.assert_allclose(v_expected, v_actual, rtol=1e-9)
+            else:
+                self.gtsamAssertEquals(v_expected, v_actual, tol=1e-9)
+
 if __name__ == "__main__":
     unittest.main()
