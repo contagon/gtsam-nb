@@ -119,6 +119,7 @@ void nonlinear(nb::module_ &m_) {
   nb::class_<gtsam::NonlinearFactorGraph>(m_, "NonlinearFactorGraph")
       .def(nb::init<>())
       .def(nb::init<const gtsam::NonlinearFactorGraph &>(), nb::arg("graph"))
+      .def(nb::init<const std::vector<boost::shared_ptr<gtsam::NonlinearFactor>> &>(), nb::arg("factors"))
       .def("print", [](gtsam::NonlinearFactorGraph *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "NonlinearFactorGraph: ", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::NonlinearFactorGraph &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;
@@ -132,6 +133,7 @@ void nonlinear(nb::module_ &m_) {
       .def("resize", [](gtsam::NonlinearFactorGraph *self, size_t size) { self->resize(size); }, nb::arg("size"))
       .def("nrFactors", [](gtsam::NonlinearFactorGraph *self) { return self->nrFactors(); })
       .def("at", [](gtsam::NonlinearFactorGraph *self, size_t idx) { return self->at(idx); }, nb::arg("idx"))
+      .def("__getitem__", [](gtsam::NonlinearFactorGraph *self, size_t idx) { return self->at(idx); }, nb::arg("idx"))
       .def("push_back", [](gtsam::NonlinearFactorGraph *self, const gtsam::NonlinearFactorGraph &factors) { self->push_back(factors); }, nb::arg("factors"))
       .def("push_back", [](gtsam::NonlinearFactorGraph *self, boost::shared_ptr<gtsam::NonlinearFactor> factor) { self->push_back(factor); }, nb::arg("factor"))
       .def("add", [](gtsam::NonlinearFactorGraph *self, boost::shared_ptr<gtsam::NonlinearFactor> factor) { self->add(factor); }, nb::arg("factor"))
