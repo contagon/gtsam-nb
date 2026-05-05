@@ -118,6 +118,7 @@ class TestValues(GtsamTestCase):
             3: np.array([1., 2., 3.])
         }
         values = Values(my_values)
+        assert len(values) == len(my_values)
 
         for (k_actual, v_actual) in values.items():
             v_expected = my_values[k_actual]
