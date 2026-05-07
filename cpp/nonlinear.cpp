@@ -14,12 +14,15 @@
 #include "gtsam/base/utilities.h" // for RedirectCout.
 #include "gtsam/config.h"
 
+#include <boost/smart_ptr/make_shared_array.hpp>
 #include <nanobind/eigen/dense.h>
+#include <nanobind/make_iterator.h>
 #include <nanobind/nanobind.h>
 #include <nanobind/operators.h>
 #include <nanobind/stl/function.h>
 #include <nanobind/stl/pair.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/vector.h>
 
 #include "utils/boost_shared_ptr.h"
 
@@ -68,6 +71,34 @@ using namespace std;
 
 namespace nb = nanobind;
 
+namespace {
+template <typename BaseIterator>
+struct ValuesKeyValueIterator {
+  explicit ValuesKeyValueIterator(BaseIterator it) : it_(it) {}
+
+  ValuesKeyValueIterator &operator++() {
+    ++it_;
+    return *this;
+  }
+
+  bool operator==(const ValuesKeyValueIterator &other) const {
+    return it_ == other.it_;
+  }
+
+  bool operator!=(const ValuesKeyValueIterator &other) const {
+    return it_ != other.it_;
+  }
+
+  std::pair<gtsam::Key, const gtsam::Value *> operator*() const {
+    const auto key_value = *it_;
+    return {key_value.key, &key_value.value};
+  }
+
+private:
+  BaseIterator it_;
+};
+} // namespace
+
 void nonlinear(nb::module_ &m_) {
   m_.doc() = "pybind11 wrapper of nonlinear";
 
@@ -90,6 +121,7 @@ void nonlinear(nb::module_ &m_) {
   nb::class_<gtsam::NonlinearFactorGraph>(m_, "NonlinearFactorGraph")
       .def(nb::init<>())
       .def(nb::init<const gtsam::NonlinearFactorGraph &>(), nb::arg("graph"))
+      .def(nb::init<const std::vector<boost::shared_ptr<gtsam::NonlinearFactor>> &>(), nb::arg("factors"))
       .def("print", [](gtsam::NonlinearFactorGraph *self, string s, const gtsam::KeyFormatter &keyFormatter) { /* nb::scoped_ostream_redirect output; */ self->print(s, keyFormatter); }, nb::arg("s") = "NonlinearFactorGraph: ", nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter)
       .def("__repr__", [](const gtsam::NonlinearFactorGraph &self, string s, const gtsam::KeyFormatter &keyFormatter) {
                         gtsam::RedirectCout redirect;
@@ -103,6 +135,7 @@ void nonlinear(nb::module_ &m_) {
       .def("resize", [](gtsam::NonlinearFactorGraph *self, size_t size) { self->resize(size); }, nb::arg("size"))
       .def("nrFactors", [](gtsam::NonlinearFactorGraph *self) { return self->nrFactors(); })
       .def("at", [](gtsam::NonlinearFactorGraph *self, size_t idx) { return self->at(idx); }, nb::arg("idx"))
+      .def("__getitem__", [](gtsam::NonlinearFactorGraph *self, size_t idx) { return self->at(idx); }, nb::arg("idx"))
       .def("push_back", [](gtsam::NonlinearFactorGraph *self, const gtsam::NonlinearFactorGraph &factors) { self->push_back(factors); }, nb::arg("factors"))
       .def("push_back", [](gtsam::NonlinearFactorGraph *self, boost::shared_ptr<gtsam::NonlinearFactor> factor) { self->push_back(factor); }, nb::arg("factor"))
       .def("add", [](gtsam::NonlinearFactorGraph *self, boost::shared_ptr<gtsam::NonlinearFactor> factor) { self->add(factor); }, nb::arg("factor"))
@@ -135,6 +168,9 @@ void nonlinear(nb::module_ &m_) {
       .def("orderingCOLAMD", [](gtsam::NonlinearFactorGraph *self) { return self->orderingCOLAMD(); })
       .def("linearize", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values) { return self->linearize(values); }, nb::arg("values"))
       .def("clone", [](gtsam::NonlinearFactorGraph *self) { return self->clone(); })
+      .def("__iter__", [](gtsam::NonlinearFactorGraph &self) { return nb::make_iterator(nb::type<gtsam::NonlinearFactorGraph>(),
+                                                                                        "NonlinearFactorGraphIterator",
+                                                                                        self.begin(), self.end()); }, nb::keep_alive<0, 1>(), nb::is_operator())
       .def("dot", [](gtsam::NonlinearFactorGraph *self, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { return self->dot(values, keyFormatter, writer); }, nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting())
       .def("saveGraph", [](gtsam::NonlinearFactorGraph *self, const string &s, const gtsam::Values &values, const gtsam::KeyFormatter &keyFormatter, const gtsam::GraphvizFormatting &writer) { self->saveGraph(s, values, keyFormatter, writer); }, nb::arg("s"), nb::arg("values"), nb::arg("keyFormatter") = gtsam::DefaultKeyFormatter, nb::arg("writer") = gtsam::GraphvizFormatting());
   // .def("serialize", [](gtsam::NonlinearFactorGraph *self) { return gtsam::serialize(*self); })
@@ -164,7 +200,14 @@ void nonlinear(nb::module_ &m_) {
   nb::class_<gtsam::Values>(m_, "Values")
       .def(nb::init<>())
       .def(nb::init<const gtsam::Values &>(), nb::arg("other"))
+      .def("__init__", [](nb::object self, nb::dict values) {
+             new (nb::inst_ptr<gtsam::Values>(self)) gtsam::Values();
+             nb::inst_mark_ready(self);
+             for (auto [k, v] : values) {
+               self.attr("insert_or_assign")(k, v);
+             } }, nb::arg("values"), nb::sig("def __init__(self, values: dict[int, typing.Any]) -> None"))
       .def("size", [](gtsam::Values *self) { return self->size(); })
+      .def("__len__", [](gtsam::Values *self) { return self->size(); })
       .def("empty", [](gtsam::Values *self) { return self->empty(); })
       .def("clear", [](gtsam::Values *self) { self->clear(); })
       .def("dim", [](gtsam::Values *self) { return self->dim(); })
@@ -180,7 +223,29 @@ void nonlinear(nb::module_ &m_) {
       .def("erase", [](gtsam::Values *self, size_t j) { self->erase(j); }, nb::arg("j"))
       .def("swap", [](gtsam::Values *self, gtsam::Values &values) { self->swap(values); }, nb::arg("values"))
       .def("exists", [](gtsam::Values *self, size_t j) { return self->exists(j); }, nb::arg("j"))
+      .def("__getitem__", [](gtsam::Values *self, size_t j) {}, nb::arg("j"), nb::sig("def __getitem__(self, j: int) -> typing.Any"))
+      .def("__setitem__", [](gtsam::Values *self, size_t j, const gtsam::Value &other) {}, nb::arg("j"), nb::arg("other"), nb::sig("def __setitem__(self, j: int, other: typing.Any) -> None"))
       .def("keys", [](gtsam::Values *self) { return self->keys(); })
+      .def("__iter__", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_key_iterator(nb::type<gtsam::Values>(),
+                                     "ValuesKeyIterator",
+                                     ValuesKeyValueIterator<Iterator>(self.begin()),
+                                     ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>(), nb::is_operator())
+      .def("_items", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_iterator(nb::type<gtsam::Values>(),
+                                 "ValuesItemIterator",
+                                 ValuesKeyValueIterator<Iterator>(self.begin()),
+                                 ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>())
+      .def("items", [](gtsam::Values &self) {}, nb::sig("def items(self) -> typing.Iterator[tuple[int, typing.Any]]"))
+      .def("_values", [](gtsam::Values &self) {
+        using Iterator = decltype(self.begin());
+        return nb::make_value_iterator(nb::type<gtsam::Values>(),
+                                       "ValuesValueIterator",
+                                       ValuesKeyValueIterator<Iterator>(self.begin()),
+                                       ValuesKeyValueIterator<Iterator>(self.end())); }, nb::keep_alive<0, 1>())
+      .def("values", [](gtsam::Values &self) {}, nb::sig("def values(self) -> typing.Iterator[typing.Any]"))
       .def("zeroVectors", [](gtsam::Values *self) { return self->zeroVectors(); })
       .def("retract", [](gtsam::Values *self, const gtsam::VectorValues &delta) { return self->retract(delta); }, nb::arg("delta"))
       .def("localCoordinates", [](gtsam::Values *self, const gtsam::Values &cp) { return self->localCoordinates(cp); }, nb::arg("cp"))
@@ -365,6 +430,7 @@ void nonlinear(nb::module_ &m_) {
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<13> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<14> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
       .def("insert_or_assign", [](gtsam::Values *self, size_t j, const gtsam::ParameterMatrix<15> &X) { self->insert_or_assign(j, X); }, nb::arg("j"), nb::arg("X"))
+      .def("at", [](gtsam::Values *self, size_t j) { return self->at(j).clone(); }, nb::arg("j"))
       .def("atPoint2", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Point2>(j); }, nb::arg("j"))
       .def("atPoint3", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Point3>(j); }, nb::arg("j"))
       .def("atRot2", [](gtsam::Values *self, size_t j) { return self->at<gtsam::Rot2>(j); }, nb::arg("j"))

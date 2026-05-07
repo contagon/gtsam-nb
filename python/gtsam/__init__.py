@@ -1,4 +1,5 @@
 # ruff: noqa: F401, F403
+from gtsam import _core as _core
 from gtsam._core import *
 from gtsam.utils import findExampleDataFile  # type: ignore
 
@@ -55,5 +56,32 @@ def Point3(
     else:
         return np.array([x, y, z], dtype=float)
 
+
+def _install_iterable_api() -> None:
+    # This is a hack to be able to call .value() on all the GenericValue types
+
+    from gtsam import Values
+
+    def items(self: Values):  # type: ignore
+        for k, v in self._items():  # type: ignore
+            yield k, v.value()  # type: ignore
+
+    def values(self: Values):  # type: ignore
+        for v in self._values():  # type: ignore
+            yield v.value()  # type: ignore
+
+    def __getitem__(self: Values, key):  # type: ignore
+        return self.at(key).value()  # type: ignore
+
+    def __setitem__(self: Values, key, value):  # type: ignore
+        self.insert_or_assign(key, value)  # type: ignore
+
+    _core.Values.items = items  # type: ignore
+    _core.Values.values = values  # type: ignore
+    _core.Values.__getitem__ = __getitem__  # type: ignore
+    _core.Values.__setitem__ = __setitem__  # type: ignore
+
+
+_install_iterable_api()
 
 __version__ = "0.1.2"  # x-release-please-version
