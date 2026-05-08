@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.3](https://github.com/contagon/gtsam-nb/compare/v0.1.2...v0.1.3) (2026-05-07)
+
+
+### Features
+
+* Add in missing constructors for variables and methods on preintegration ([#12](https://github.com/contagon/gtsam-nb/issues/12)) ([b75e643](https://github.com/contagon/gtsam-nb/commit/b75e643fd56a59064c8f3b11e8e2a1af947abdea))
+* Iterators for Values and NonlinearFactorGraph ([#14](https://github.com/contagon/gtsam-nb/issues/14)) ([9c90930](https://github.com/contagon/gtsam-nb/commit/9c9093023e5d4fadb8bef0ce2d725943f7a3e394))
+
+
+### Bug Fixes
+
+* Bump nanobind and scikit-build-core versions ([#13](https://github.com/contagon/gtsam-nb/issues/13)) ([ef4d352](https://github.com/contagon/gtsam-nb/commit/ef4d352974d5874812f94e356b054f5d04dfd4ae))
+* small typo in readme ([#10](https://github.com/contagon/gtsam-nb/issues/10)) ([8de4247](https://github.com/contagon/gtsam-nb/commit/8de4247662f957c00b513641a44f3c9e6d1528c3))
+
 ## [0.1.2](https://github.com/contagon/gtsam-nb/compare/v0.1.1...v0.1.2) (2025-11-20)
 
 
