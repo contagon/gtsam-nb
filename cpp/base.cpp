@@ -126,6 +126,12 @@ void base(nb::module_ &m_) {
   // .def("deserialize", [](gtsam::GenericValue<gtsam::Pose3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
   // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Pose3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
 
+  nb::class_<gtsam::GenericValue<gtsam::Unit3>, gtsam::Value>(m_, "GenericValueUnit3")
+      .def("value", [](gtsam::GenericValue<gtsam::Unit3> *self) { return self->value(); });
+  // .def("serialize", [](gtsam::GenericValue<gtsam::Unit3> *self) { return gtsam::serialize(*self); })
+  // .def("deserialize", [](gtsam::GenericValue<gtsam::Unit3> *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))
+  // .def(nb::pickle([](const gtsam::GenericValue<gtsam::Unit3> &a) { /* __getstate__: Returns a string that encodes the state of the object */ return nb::make_tuple(gtsam::serialize(a)); }, [](nb::tuple t) { /* __setstate__ */ gtsam::GenericValue<gtsam::Pose3> obj; gtsam::deserialize(t[0].cast<std::string>(), obj); return obj; }));
+
   nb::class_<gtsam::GenericValue<gtsam::StereoPoint2>, gtsam::Value>(m_, "GenericValueStereoPoint2")
       .def("value", [](gtsam::GenericValue<gtsam::StereoPoint2> *self) { return self->value(); });
   // .def("serialize", [](gtsam::GenericValue<gtsam::StereoPoint2> *self) { return gtsam::serialize(*self); })

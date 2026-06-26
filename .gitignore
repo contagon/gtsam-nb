@@ -19,6 +19,7 @@ compile_commands.json
 
 # IDE files
 .vscode/
+.kiro/
 
 cpp/preamble
 cpp/specializations
