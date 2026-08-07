@@ -84,4 +84,4 @@ def _install_iterable_api() -> None:
 
 _install_iterable_api()
 
-__version__ = "0.1.3"  # x-release-please-version
+__version__ = "0.1.4"  # x-release-please-version

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/contagon/gtsam-nb/compare/v0.1.3...v0.1.4) (2026-08-07)
+
+
+### Features
+
+* bump nanobind, scikit, ci stuff ([#15](https://github.com/contagon/gtsam-nb/issues/15)) ([94f31ad](https://github.com/contagon/gtsam-nb/commit/94f31ad8101f369ea9af3f9e9cfe51ad7f47f73c))
+
 ## [0.1.3](https://github.com/contagon/gtsam-nb/compare/v0.1.2...v0.1.3) (2026-05-07)
 
 
