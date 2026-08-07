@@ -20,6 +20,7 @@ dev = [
     "ipython>=9.7.0",
     "matplotlib>=3.10.7",
     "pytest>=9.0.1",
+    "ruff>=0.16.2",
 ]
 
 [build-system]
