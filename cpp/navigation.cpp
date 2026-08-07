@@ -200,6 +200,7 @@ void navigation(nb::module_ &m_) {
       .def("preintegrated_H_biasAcc", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasAcc(); })
       .def("preintegrated_H_biasOmega", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->preintegrated_H_biasOmega(); })
       .def("biasHatVector", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->biasHatVector(); })
+      .def("p", [](gtsam::PreintegratedCombinedMeasurements *self) { return self->p(); })
       .def("predict", [](gtsam::PreintegratedCombinedMeasurements *self, const gtsam::NavState &state_i, const gtsam::imuBias::ConstantBias &bias) { return self->predict(state_i, bias); }, nb::arg("state_i"), nb::arg("bias"));
 
   nb::class_<gtsam::CombinedImuFactor, gtsam::NonlinearFactor>(m_, "CombinedImuFactor")
