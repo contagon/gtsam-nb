@@ -4,9 +4,10 @@ Author: Jing Wu and Frank Dellaert
 """
 # pylint: disable=invalid-name
 
-import gtsam
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
+import gtsam
 
 Optimizer = (
     type[gtsam.GaussNewtonOptimizer]
@@ -124,24 +125,22 @@ def gtsam_optimize(
     def check_convergence(
         optimizer: gtsam.NonlinearOptimizer, current_error: float, new_error: float
     ) -> bool:
-        if optimizer.iterations() >= params.getMaxIterations():
-            return True
-        elif gtsam.checkConvergence(
-            params.getRelativeErrorTol(),
-            params.getAbsoluteErrorTol(),
-            params.getErrorTol(),
-            current_error,
-            new_error,
-        ):
-            return True
-        elif (
-            isinstance(optimizer, gtsam.LevenbergMarquardtOptimizer)
-            and isinstance(params, gtsam.LevenbergMarquardtParams)
-            and optimizer.lambda_a() > params.getlambdaUpperBound()
-        ):
-            return True
-        else:
-            return False
+        converged = (
+            optimizer.iterations() >= params.getMaxIterations()
+            or gtsam.checkConvergence(
+                params.getRelativeErrorTol(),
+                params.getAbsoluteErrorTol(),
+                params.getErrorTol(),
+                current_error,
+                new_error,
+            )
+            or (
+                isinstance(optimizer, gtsam.LevenbergMarquardtOptimizer)
+                and isinstance(params, gtsam.LevenbergMarquardtParams)
+                and optimizer.lambda_a() > params.getlambdaUpperBound()
+            )
+        )
+        return converged
 
     optimize(optimizer, check_convergence, hook)
     return optimizer.values()

@@ -20,10 +20,11 @@ dev = [
     "ipython>=9.7.0",
     "matplotlib>=3.10.7",
     "pytest>=9.0.1",
+    "ruff>=0.16.2",
 ]
 
 [build-system]
-requires = ["scikit-build-core>=0.12", "nanobind>=2.12", "numpy>2"]
+requires = ["scikit-build-core>=1.0", "nanobind==2.13", "numpy>2"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
@@ -56,6 +57,9 @@ cache-keys = [
 [tool.ruff]
 # We try to touch tests as little as possible to ensure they still work
 exclude = ["tests"]
+lint.ignore = [
+    "N999", # invalid module name
+]
 
 [tool.basedpyright]
 include = ["python"]

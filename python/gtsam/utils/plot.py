@@ -2,15 +2,15 @@
 
 # pylint: disable=no-member, invalid-name
 
-from typing import Iterable, Optional, Tuple
+from collections.abc import Iterable
 
 import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib import patches
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d import Axes3D  # type: ignore
-import numpy as np
 from numpy.typing import NDArray
-from matplotlib import patches
 
 import gtsam
 from gtsam import Marginals, Pose2, Pose3, Values
@@ -74,7 +74,7 @@ def set_axes_equal(fignum: int) -> None:
 
 def ellipsoid(
     rx: float, ry: float, rz: float, n: int
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
     Numpy equivalent of Matlab's ellipsoid function.
 
@@ -173,7 +173,7 @@ def plot_covariance_ellipse_2d(axes: Axes, origin: Array, covariance: Array) -> 
 
 
 def plot_point2_on_axes(
-    axes: Axes, point: Array, linespec: str, P: Optional[Array] = None
+    axes: Axes, point: Array, linespec: str, P: Array | None = None
 ) -> None:
     """
     Plot a 2D point and its corresponding uncertainty ellipse on given axis
@@ -197,7 +197,7 @@ def plot_point2(
     fignum: int,
     point: Array,
     linespec: str,
-    P: Optional[Array] = None,
+    P: Array | None = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis"),
 ) -> Figure:
     """
@@ -232,7 +232,7 @@ def plot_pose2_on_axes(
     axes: Axes,
     pose: Pose2,
     axis_length: float = 0.1,
-    covariance: Optional[Array] = None,
+    covariance: Array | None = None,
 ) -> None:
     """
     Plot a 2D pose on given axis `axes` with given `axis_length`.
@@ -271,7 +271,7 @@ def plot_pose2(
     fignum: int,
     pose: Pose2,
     axis_length: float = 0.1,
-    covariance: Optional[Array] = None,
+    covariance: Array | None = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
 ) -> Figure:
     """
@@ -300,7 +300,7 @@ def plot_pose2(
 
 
 def plot_point3_on_axes(
-    axes: Axes3D, point: Array, linespec: str, P: Optional[Array] = None
+    axes: Axes3D, point: Array, linespec: str, P: Array | None = None
 ) -> None:
     """
     Plot a 3D point on given axis `axes` with given `linespec`.
@@ -323,7 +323,7 @@ def plot_point3(
     fignum: int,
     point: Array,
     linespec: str,
-    P: Optional[Array] = None,
+    P: Array | None = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
 ) -> Figure:
     """
@@ -361,7 +361,7 @@ def plot_3d_points(
     fignum: int,
     values: gtsam.Values,
     linespec: str = "g*",
-    marginals: Optional[Marginals] = None,
+    marginals: Marginals | None = None,
     title: str = "3D Points",
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
 ):
@@ -409,7 +409,7 @@ def plot_pose3_on_axes(
     axes: Axes3D,
     pose: Pose3,
     axis_length: float = 0.1,
-    P: Optional[Array] = None,
+    P: Array | None = None,
     scale: float = 1,
 ):
     """
@@ -454,7 +454,7 @@ def plot_pose3(
     fignum: int,
     pose: Pose3,
     axis_length: float = 0.1,
-    P: Optional[Array] = None,
+    P: Array | None = None,
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
 ) -> Figure:
     """
@@ -493,7 +493,7 @@ def plot_trajectory(
     fignum: int,
     values: Values,
     scale: float = 1,
-    marginals: Optional[Marginals] = None,
+    marginals: Marginals | None = None,
     title: str = "Plot Trajectory",
     axis_labels: Iterable[str] = ("X axis", "Y axis", "Z axis"),
 ) -> None:
@@ -521,7 +521,7 @@ def plot_trajectory(
 
     # Plot 2D poses, if any
     poses = gtsam.utilities.allPose2s(values)
-    for key in poses.keys():
+    for key in poses.keys():  # noqa: SIM118
         pose = poses.atPose2(key)
         if marginals:
             covariance = marginals.marginalCovariance(key)
@@ -532,7 +532,7 @@ def plot_trajectory(
 
     # Then 3D poses, if any
     poses = gtsam.utilities.allPose3s(values)
-    for key in poses.keys():
+    for key in poses.keys():  # noqa: SIM118
         pose = poses.atPose3(key)
         if marginals:
             covariance = marginals.marginalCovariance(key)
@@ -550,7 +550,7 @@ def plot_incremental_trajectory(
     values: Values,
     start: int = 0,
     scale: float = 1,
-    marginals: Optional[Marginals] = None,
+    marginals: Marginals | None = None,
     time_interval: float = 0.0,
 ) -> None:
     """
