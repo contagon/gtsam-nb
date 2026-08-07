@@ -10,8 +10,8 @@ Author: Frank Dellaert
 """
 
 import pickle
-from typing import Any
 import unittest
+from typing import Any
 
 
 class GtsamTestCase(unittest.TestCase):
@@ -32,7 +32,7 @@ class GtsamTestCase(unittest.TestCase):
             equal = actual.equals(expected, tol)
         if not equal:
             raise self.failureException(
-                "Values are not equal:\n{}!={}".format(actual, expected)  # type: ignore
+                f"Values are not equal:\n{actual}!={expected}"  # type: ignore
             )
 
     def assertEqualityOnPickleRoundtrip(self, obj: object, tol: float = 1e-9) -> None:

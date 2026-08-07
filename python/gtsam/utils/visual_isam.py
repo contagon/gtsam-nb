@@ -1,6 +1,6 @@
 import gtsam
-from gtsam import symbol
-from gtsam import ISAM2, Values
+from gtsam import ISAM2, Values, symbol
+
 from .visual_data_generator import Data, GroundTruth
 
 

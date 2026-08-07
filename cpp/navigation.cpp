@@ -148,6 +148,7 @@ void navigation(nb::module_ &m_) {
       .def("deltaVij", [](gtsam::PreintegratedImuMeasurements *self) { return self->deltaVij(); })
       .def("biasHat", [](gtsam::PreintegratedImuMeasurements *self) { return self->biasHat(); })
       .def("biasHatVector", [](gtsam::PreintegratedImuMeasurements *self) { return self->biasHatVector(); })
+      .def("p", [](gtsam::PreintegratedImuMeasurements *self) { return self->p(); })
       .def("predict", [](gtsam::PreintegratedImuMeasurements *self, const gtsam::NavState &state_i, const gtsam::imuBias::ConstantBias &bias) { return self->predict(state_i, bias); }, nb::arg("state_i"), nb::arg("bias"));
   // .def("serialize", [](gtsam::PreintegratedImuMeasurements *self) { return gtsam::serialize(*self); })
   // .def("deserialize", [](gtsam::PreintegratedImuMeasurements *self, string serialized) { gtsam::deserialize(serialized, *self); }, nb::arg("serialized"))

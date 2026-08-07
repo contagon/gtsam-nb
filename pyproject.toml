@@ -57,6 +57,9 @@ cache-keys = [
 [tool.ruff]
 # We try to touch tests as little as possible to ensure they still work
 exclude = ["tests"]
+lint.ignore = [
+    "N999", # invalid module name
+]
 
 [tool.basedpyright]
 include = ["python"]

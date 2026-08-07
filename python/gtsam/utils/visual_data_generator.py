@@ -1,11 +1,9 @@
-from __future__ import print_function
-
 import math
 from math import pi
-from typing import Tuple
+
+import numpy as np
 
 import gtsam
-import numpy as np
 from gtsam import Cal3_S2, PinholeCameraCal3_S2, Point3, Pose3
 
 
@@ -15,7 +13,10 @@ class Options:
     """
 
     def __init__(
-        self, triangle: bool = False, nrCameras: int = 3, K: Cal3_S2 = Cal3_S2()
+        self,
+        triangle: bool = False,
+        nrCameras: int = 3,
+        K: Cal3_S2 = Cal3_S2(),  # noqa: B008
     ) -> None:
         """
         Options to generate test scenario
@@ -34,7 +35,10 @@ class GroundTruth:
     """
 
     def __init__(
-        self, K: Cal3_S2 = Cal3_S2(), nrCameras: int = 3, nrPoints: int = 4
+        self,
+        K: Cal3_S2 = Cal3_S2(),  # noqa: B008
+        nrCameras: int = 3,
+        nrPoints: int = 4,
     ) -> None:
         self.K = K
         self.cameras: list[PinholeCameraCal3_S2] = [PinholeCameraCal3_S2()] * nrCameras
@@ -49,7 +53,6 @@ class GroundTruth:
         print("Points: ", len(self.points))
         for point in self.points:
             print("\t", point)
-        pass
 
 
 class Data:
@@ -64,7 +67,10 @@ class Data:
         measurement: gtsam.noiseModel.Isotropic
 
     def __init__(
-        self, K: Cal3_S2 = Cal3_S2(), nrCameras: int = 3, nrPoints: int = 4
+        self,
+        K: Cal3_S2 = Cal3_S2(),  # noqa: B008
+        nrCameras: int = 3,
+        nrPoints: int = 4,
     ) -> None:
         self.K = K
         self.Z = [x[:] for x in [[gtsam.Point2()] * nrPoints] * nrCameras]
@@ -85,7 +91,7 @@ class Data:
         self.noiseModels.measurement = gtsam.noiseModel.Isotropic.Sigma(2, 1.0)
 
 
-def generate_data(options: Options) -> Tuple[Data, GroundTruth]:
+def generate_data(options: Options) -> tuple[Data, GroundTruth]:
     """Generate ground-truth and measurement data."""
 
     K = Cal3_S2(500, 500, 0, 640.0 / 2.0, 480.0 / 2.0)

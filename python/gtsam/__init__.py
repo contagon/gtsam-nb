@@ -1,12 +1,12 @@
-# ruff: noqa: F401, F403
+# ruff: noqa: F401
+from typing import overload
+
+import numpy as np
+from numpy.typing import NDArray
+
 from gtsam import _core as _core
 from gtsam._core import *
 from gtsam.utils import findExampleDataFile  # type: ignore
-
-import numpy as np
-from typing import overload
-
-from numpy.typing import NDArray
 
 Array = NDArray[np.float64]
 
